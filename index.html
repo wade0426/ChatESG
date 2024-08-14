@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG 報告生成器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="NotoSansTC-normal.js"></script>
+    <!-- 引入字體 -->
+    <link rel="stylesheet" href="Noto_Sans_TC.css">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        #input-section,
+        #preview-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        #input-section {
+            background-color: #f0f0f0;
+        }
+
+        #preview-section {
+            background-color: #ffffff;
+            border-left: 1px solid #ccc;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        #customization,
+        #text-indent {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .preview-area {
+            padding: 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .gallery-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .delete-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        #preview-content {
+            border: 1px solid #000;
+            width: 21cm;
+            height: 29.7cm;
+            margin: 0 auto;
+            padding: 1cm;
+            box-sizing: border-box;
+        }
+
+        #resizer {
+            width: 5px;
+            background-color: #ccc;
+            cursor: col-resize;
+        }
+
+        .group {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .group-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .section {
+            flex: 1;
+            min-width: 200px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="input-section">
+        <h2>ESG 報告編輯器</h2>
+        <div id="text-indent">
+            <h3>文字縮排設定（公分）</h3>
+            <label>上：<input type="number" id="indent-top" value="2" min="0" step="0.1"></label>
+            <label>下：<input type="number" id="indent-bottom" value="2" min="0" step="0.1"></label>
+            <label>左：<input type="number" id="indent-left" value="2" min="0" step="0.1"></label>
+            <label>右：<input type="number" id="indent-right" value="2" min="0" step="0.1"></label>
+        </div>
+        <div id="sections-container">
+            <!-- 章節內容將在這裡動態生成 -->
+        </div>
+        <button onclick="addGroup()">新增群組</button>
+        <button onclick="addSection()">新增章節</button>
+        <div id="customization">
+            <label for="font-select">字體：</label>
+            <select id="font-select">
+                <option value="Noto Sans TC">思源黑體</option>
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <label for="color-select">顏色：</label>
+            <input type="color" id="color-select" value="#000000">
+            <label for="font-size">字體大小：</label>
+            <input type="number" id="font-size" value="16" min="8" max="72">
+            <label for="line-height">行高：</label>
+            <input type="number" id="line-height" value="1.5" min="1" max="3" step="0.1">
+        </div>
+        <h3>圖庫</h3>
+        <input type="file" id="image-upload" accept="image/*" multiple>
+        <button onclick="uploadImages()">上傳圖片</button>
+        <div class="image-gallery" id="image-gallery"></div>
+        <button onclick="generatePDF()">下載 PDF</button>
+    </div>
+    <div id="resizer"></div>
+    <div id="preview-section">
+        <h2 style="text-align: center;">預覽</h2>
+        <div id="preview-content"></div>
+    </div>
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>選擇圖片</h2>
+            <div id="modal-gallery"></div>
+        </div>
+    </div>
+
+    <script>
+        const previewContent = document.getElementById('preview-content');
+        const fontSelect = document.getElementById('font-select');
+        const colorSelect = document.getElementById('color-select');
+        const fontSizeInput = document.getElementById('font-size');
+        const lineHeightInput = document.getElementById('line-height');
+        const indentTop = document.getElementById('indent-top');
+        const indentBottom = document.getElementById('indent-bottom');
+        const indentLeft = document.getElementById('indent-left');
+        const indentRight = document.getElementById('indent-right');
+        const inputSection = document.getElementById('input-section');
+        const previewSection = document.getElementById('preview-section');
+        const resizer = document.getElementById('resizer');
+
+        let images = [];
+        let sectionImages = {};
+        // 用於記錄建立的分組數量
+        let groupCounter = 0;
+        // 用於記錄建立的章節數量
+        let sectionCounter = 0;
+
+        // 新增分組按鈕的點擊事件
+        function addGroup() {
+            groupCounter++;
+            const groupId = `group-${groupCounter}`;
+            const groupHtml = `
+                <div id="${groupId}" class="group">
+                    <h3>群組 ${groupCounter}</h3>
+                    <div class="group-content"></div>
+                    <button onclick="addSectionToGroup('${groupId}')">新增章節到群組</button>
+                    <button onclick="deleteGroup('${groupId}')">刪除群組</button>
+                </div>
+            `;
+            document.getElementById('sections-container').insertAdjacentHTML('beforeend', groupHtml);
+        }
+
+        function deleteGroup(groupId) {
+            if (confirm('確定要刪除這個群組嗎？這將刪除群組中的所有章節。')) {
+                document.getElementById(groupId).remove();
+                updatePreview();
+            }
+        }
+
+        // 新增章節按鈕的點擊事件
+        function addSection(groupId = null) {
+            sectionCounter++;
+            const sectionId = `section-${sectionCounter}`;
+            const sectionHtml = `
+                <div id="${sectionId}" class="section">
+                    <h3>章節 ${sectionCounter}</h3>
+                    <input type="text" id="${sectionId}-title" placeholder="章節標題" oninput="updatePreview()">
+                    <textarea id="${sectionId}-content" placeholder="在此輸入內容..." oninput="updatePreview()"></textarea>
+                    <button onclick="openImageGallery('${sectionId}')">添加圖片到章節</button>
+                    <button onclick="deleteSection('${sectionId}')">刪除章節</button>
+                </div>
+            `;
+            if (groupId) {
+                document.querySelector(`#${groupId} .group-content`).insertAdjacentHTML('beforeend', sectionHtml);
+            } else {
+                document.getElementById('sections-container').insertAdjacentHTML('beforeend', sectionHtml);
+            }
+            sectionImages[sectionId] = [];
+        }
+
+        function deleteSection(sectionId) {
+            if (confirm('確定要刪除這個章節嗎？')) {
+                document.getElementById(sectionId).remove();
+                updatePreview();
+            }
+        }
+
+        function addSectionToGroup(groupId) {
+            addSection(groupId);
+        }
+
+        function updatePreview() {
+            const font = fontSelect.value;
+            const color = colorSelect.value;
+            const fontSize = fontSizeInput.value + 'px';
+            const lineHeight = lineHeightInput.value;
+            const indentStyle = `${indentTop.value}cm ${indentRight.value}cm ${indentBottom.value}cm ${indentLeft.value}cm`;
+
+            let previewHtml = '';
+
+            document.querySelectorAll('#sections-container > div').forEach(element => {
+                if (element.classList.contains('group')) {
+                    previewHtml += '<div class="group-preview" style="display: flex; flex-wrap: wrap;">';
+                    element.querySelectorAll('.section').forEach(section => {
+                        previewHtml += createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle);
+                    });
+                    previewHtml += '</div>';
+                } else if (element.classList.contains('section')) {
+                    previewHtml += createSectionPreview(element, font, color, fontSize, lineHeight, indentStyle);
+                }
+            });
+
+            previewContent.innerHTML = previewHtml;
+        }
+
+        function createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle) {
+            const sectionId = section.id;
+            const title = document.getElementById(`${sectionId}-title`).value;
+            const content = document.getElementById(`${sectionId}-content`).value;
+
+            return `
+                <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}; line-height: ${lineHeight}; padding: ${indentStyle};">
+                    <h2>${title}</h2>
+                    ${content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
+                    ${(sectionImages[sectionId] || []).map((img, index) => `
+                        <div class="image-container" style="width: 200px;">
+                            <img src="${img}" alt="Uploaded image" style="width: 100%; height: auto;">
+                            <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 監聽事件
+        fontSelect.addEventListener('change', updatePreview);
+        colorSelect.addEventListener('input', updatePreview);
+        fontSizeInput.addEventListener('input', updatePreview);
+        lineHeightInput.addEventListener('input', updatePreview);
+        indentTop.addEventListener('input', updatePreview);
+        indentBottom.addEventListener('input', updatePreview);
+        indentLeft.addEventListener('input', updatePreview);
+        indentRight.addEventListener('input', updatePreview);
+
+        // 圖片上傳功能
+        function uploadImages() {
+            const input = document.getElementById('image-upload');
+            const files = input.files;
+            if (files.length === 0) {
+                alert('請選擇圖片後再上傳。');
+                return;
+            }
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    images.push(e.target.result);
+                    updateGallery();
+                }
+                reader.readAsDataURL(file);
+            }
+            input.value = ''; // 清空文件選擇框
+        }
+
+        // 更新網頁上的圖片庫
+        function updateGallery() {
+            // 獲取網頁中 ID 為 image-gallery 的元素
+            const gallery = document.getElementById('image-gallery');
+            // 將 gallery 元素的 HTML 內容替換為新的內容
+            // map 會遍歷 images 陣列中的每一個元素（每一個 src）。對每個 src 進行處理，並生成對應的 HTML 字符串。
+            gallery.innerHTML = images.map(src => `<img src="${src}" class="gallery-image" onclick="selectImage('${src}')">`).join('');
+        }
+
+        function openImageGallery(sectionId) {
+            const modal = document.getElementById('image-modal');
+            const modalGallery = document.getElementById('modal-gallery');
+            modalGallery.innerHTML = images.map(src => `<img src="${src}" class="gallery-image" onclick="addImageToSection('${sectionId}', '${src}')">`).join('');
+            modal.style.display = "block";
+        }
+
+        function addImageToSection(sectionId, src) {
+            if (!sectionImages[sectionId]) {
+                sectionImages[sectionId] = [];
+            }
+            sectionImages[sectionId].push(src);
+            updatePreview();
+            document.getElementById('image-modal').style.display = "none";
+        }
+
+        function deleteImage(sectionId, index) {
+            sectionImages[sectionId].splice(index, 1);
+            updatePreview();
+        }
+
+        document.querySelector('.close').onclick = function () {
+            document.getElementById('image-modal').style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('image-modal')) {
+                document.getElementById('image-modal').style.display = "none";
+            }
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+
+            const doc = new jsPDF('p', 'mm', 'a4');
+            doc.setFont('NotoSansTC', 'normal');
+
+            const content = document.querySelector("#preview-content");
+            const elements = content.children; // 直接獲取所有頂層元素
+
+            let yOffset = 10;
+            const pageWidth = doc.internal.pageSize.width;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 10;
+            const contentWidth = pageWidth - 2 * margin;
+
+            for (let element of elements) {
+                if (element.classList.contains('group-preview')) {
+                    // 處理群組（左右並列的章節）
+                    const sections = element.querySelectorAll(':scope > .preview-area');
+                    const sectionWidth = contentWidth / 2 - 5; // 5mm 間隔
+
+                    let maxHeight = 0;
+                    for (let i = 0; i < sections.length; i++) {
+                        const section = sections[i];
+                        const sectionHeight = await addSectionToPDF(doc, section, margin + (i % 2) * (sectionWidth + 10), yOffset, sectionWidth);
+                        maxHeight = Math.max(maxHeight, sectionHeight);
+
+                        if (i % 2 === 1 || i === sections.length - 1) {
+                            yOffset += maxHeight + 10;
+                            maxHeight = 0;
+
+                            if (yOffset > pageHeight - 20) {
+                                doc.addPage();
+                                yOffset = 10;
+                            }
+                        }
+                    }
+                } else if (element.classList.contains('preview-area')) {
+                    // 處理單獨的章節
+                    yOffset += await addSectionToPDF(doc, element, margin, yOffset, contentWidth);
+
+                    if (yOffset > pageHeight - 20) {
+                        doc.addPage();
+                        yOffset = 10;
+                    }
+                }
+            }
+
+            doc.save("esg-report.pdf");
+        }
+
+        async function addSectionToPDF(doc, section, x, y, width) {
+            const title = section.querySelector(':scope > h2').innerText;
+            const paragraphs = section.querySelectorAll(':scope > p');
+            const images = section.querySelectorAll(':scope > .image-container > img');
+
+            const startY = y;
+            let currentY = y;
+
+            // 添加標題
+            doc.setFontSize(16);
+            doc.text(title, x, currentY);
+            currentY += 10;
+
+            // 添加段落
+            doc.setFontSize(12);
+            for (let p of paragraphs) {
+                const textLines = doc.splitTextToSize(p.innerText, width);
+                for (let line of textLines) {
+                    doc.text(line, x, currentY);
+                    currentY += 5;
+                }
+                currentY += 5; // 每個段落後的額外空間
+            }
+
+            // 添加圖片
+            for (let img of images) {
+                const imgData = img.src;
+                const imgWidth = Math.min(width, 50); // PDF 中的圖片寬度
+                const imgHeight = imgWidth * (img.height / img.width);
+                doc.addImage(imgData, 'PNG', x, currentY, imgWidth, imgHeight);
+                currentY += imgHeight + 10;
+            }
+
+            return currentY - startY;
+        }
+
+        // 實現左右拖動功能
+        let isResizing = false;
+
+        // 目前沒功能，只是讓 resizer 有拖動的感覺
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        });
+
+        function resize(e) {
+            if (isResizing) {
+                const totalWidth = document.body.clientWidth;
+                const newLeftWidth = e.clientX;
+                inputSection.style.width = `${newLeftWidth}px`;
+                previewSection.style.width = `${totalWidth - newLeftWidth - 5}px`;  // 5px 是 resizer 的寬度
+            }
+        }
+
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
+        // 初始化：添加一個群組和一個章節
+        addGroup();
+        addSection('group-1');
+
+        updatePreview();
+    </script>
+</body>
+
+</html>
