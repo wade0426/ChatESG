@@ -156,6 +156,27 @@
             flex-wrap: wrap;
         }
 
+        .group-preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .group-preview .preview-area {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+        }
+
+        .preview-area .image-container {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .preview-area .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
         .section {
             flex: 1;
             min-width: 200px;
@@ -299,7 +320,7 @@
 
             document.querySelectorAll('#sections-container > div').forEach(element => {
                 if (element.classList.contains('group')) {
-                    previewHtml += '<div class="group-preview" style="display: flex; flex-wrap: wrap;">';
+                    previewHtml += '<div class="group-preview">';
                     element.querySelectorAll('.section').forEach(section => {
                         previewHtml += createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle);
                     });
@@ -321,12 +342,14 @@
                 <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}; line-height: ${lineHeight}; padding: ${indentStyle};">
                     <h2>${title}</h2>
                     ${content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
-                    ${(sectionImages[sectionId] || []).map((img, index) => `
-                        <div class="image-container" style="width: 200px;">
-                            <img src="${img}" alt="Uploaded image" style="width: 100%; height: auto;">
-                            <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
-                        </div>
-                    `).join('')}
+                    <div class="images-container">
+                        ${(sectionImages[sectionId] || []).map((img, index) => `
+                            <div class="image-container">
+                                <img src="${img}" alt="Uploaded image">
+                                <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
         }
@@ -454,7 +477,7 @@
         async function addSectionToPDF(doc, section, x, y, width) {
             const title = section.querySelector(':scope > h2').innerText;
             const paragraphs = section.querySelectorAll(':scope > p');
-            const images = section.querySelectorAll(':scope > .image-container > img');
+            const images = section.querySelectorAll(':scope > .images-container > .image-container > img');
 
             const startY = y;
             let currentY = y;
@@ -476,10 +499,17 @@
             }
 
             // 添加圖片
+            const imgWidth = Math.min(width, 50); // PDF 中的圖片寬度
             for (let img of images) {
                 const imgData = img.src;
-                const imgWidth = Math.min(width, 50); // PDF 中的圖片寬度
                 const imgHeight = imgWidth * (img.height / img.width);
+
+                // 檢查是否需要新增頁面
+                if (currentY + imgHeight > doc.internal.pageSize.height - 10) {
+                    doc.addPage();
+                    currentY = 10;
+                }
+
                 doc.addImage(imgData, 'PNG', x, currentY, imgWidth, imgHeight);
                 currentY += imgHeight + 10;
             }
