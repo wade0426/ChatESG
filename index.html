@@ -32,8 +32,12 @@
         }
 
         #preview-section {
-            background-color: #ffffff;
-            border-left: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #f0f0f0;
+            padding: 20px;
+            overflow: auto;
         }
 
         textarea {
@@ -61,9 +65,8 @@
         }
 
         .preview-area {
-            padding: 10px;
-            box-sizing: border-box;
-            position: relative;
+            margin-bottom: 10mm;
+            /* 在章節之間添加一些間距 */
         }
 
         .image-gallery {
@@ -131,12 +134,17 @@
         }
 
         #preview-content {
-            border: 1px solid #000;
-            width: 21cm;
-            height: 29.7cm;
+            width: 210mm;
+            /* A4 紙寬度 */
+            height: 297mm;
+            /* A4 紙高度 */
             margin: 0 auto;
-            padding: 1cm;
+            padding: 20mm;
+            /* 上下左右各 2cm 邊距 */
             box-sizing: border-box;
+            border: 1px solid #000;
+            background-color: white;
+            overflow: auto;
         }
 
         #resizer {
@@ -160,11 +168,12 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            margin-bottom: 10mm;
+            /* 在群組之間添加一些間距 */
         }
 
         .group-preview .preview-area {
-            width: calc(50% - 10px);
-            margin-bottom: 20px;
+            width: calc(50% - 5mm);
         }
 
         .preview-area .image-container {
@@ -190,10 +199,10 @@
         <h2>ESG 報告編輯器</h2>
         <div id="text-indent">
             <h3>文字縮排設定（公分）</h3>
-            <label>上：<input type="number" id="indent-top" value="2" min="0" step="0.1"></label>
-            <label>下：<input type="number" id="indent-bottom" value="2" min="0" step="0.1"></label>
-            <label>左：<input type="number" id="indent-left" value="2" min="0" step="0.1"></label>
-            <label>右：<input type="number" id="indent-right" value="2" min="0" step="0.1"></label>
+            <label>上：<input type="number" id="indent-top" value="0" min="0" step="0.1"></label>
+            <label>下：<input type="number" id="indent-bottom" value="0" min="0" step="0.1"></label>
+            <label>左：<input type="number" id="indent-left" value="0" min="0" step="0.1"></label>
+            <label>右：<input type="number" id="indent-right" value="0" min="0" step="0.1"></label>
         </div>
         <div id="sections-container">
             <!-- 章節內容將在這裡動態生成 -->
@@ -331,6 +340,11 @@
             });
 
             previewContent.innerHTML = previewHtml;
+
+            // 檢查內容是否超出預覽區域
+            if (previewContent.scrollHeight > previewContent.clientHeight) {
+                alert("警告：內容超出了 A4 紙的範圍，可能需要調整內容或字體大小。");
+            }
         }
 
         function createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle) {
