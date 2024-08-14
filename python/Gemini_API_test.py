@@ -7,7 +7,7 @@ for m in genai.list_models():
 import google.generativeai as genai
 import json
 
-genai.configure(api_key='AIzaSyBcAUoYO8pkXxcWoRpwBdlMXjKOopNJVHk')
+genai.configure(api_key='???????????????????')
 
 # 初始化模型
 model = genai.GenerativeModel('gemini-1.0-pro')
