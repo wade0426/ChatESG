@@ -438,36 +438,44 @@
         }
 
         async function generatePDF() {
+            // 初始化 jsPDF
             const { jsPDF } = window.jspdf;
 
+            // 創建一個新的 PDF 文件，頁面方向為 portrait（直向），單位為 mm，大小為 A4
             const doc = new jsPDF('p', 'mm', 'a4');
             doc.setFont('NotoSansTC', 'normal');
 
+            // 獲取 id 為 preview-content 的元素，也就是要轉換的內容
             const content = document.querySelector("#preview-content");
             const elements = content.children; // 直接獲取所有頂層元素
 
-            let yOffset = 10;
-            const pageWidth = doc.internal.pageSize.width;
-            const pageHeight = doc.internal.pageSize.height;
-            const margin = 10;
-            const contentWidth = pageWidth - 2 * margin;
+            // 設置頁面參數
+            let yOffset = 10; // 目前 y 座標的偏移量，用於控制元素在頁面上的位置
+            const pageWidth = doc.internal.pageSize.width; // 獲取頁面寬度
+            const pageHeight = doc.internal.pageSize.height; // 獲取頁面高度
+            const margin = 10; // 上下左右各留 10mm 邊距
+            const contentWidth = pageWidth - 2 * margin; // 內容區域的寬度
 
+            // 遍歷所有元素，根據元素的類型添加到 PDF 中
             for (let element of elements) {
                 if (element.classList.contains('group-preview')) {
                     // 處理群組（左右並列的章節）
-                    const sections = element.querySelectorAll(':scope > .preview-area');
+                    const sections = element.querySelectorAll(':scope > .preview-area'); // 獲取當前群組中的所有章節
                     const sectionWidth = contentWidth / 2 - 5; // 5mm 間隔
+                    let maxHeight = 0; // 紀錄當前行中最高的元素高度
 
-                    let maxHeight = 0;
+                    // 遍歷所有章節
                     for (let i = 0; i < sections.length; i++) {
                         const section = sections[i];
+                        // 將章節添加到 PDF 中，並獲取章節的高度
                         const sectionHeight = await addSectionToPDF(doc, section, margin + (i % 2) * (sectionWidth + 10), yOffset, sectionWidth);
-                        maxHeight = Math.max(maxHeight, sectionHeight);
+                        maxHeight = Math.max(maxHeight, sectionHeight); // 更新最高元素高度
 
+                        // 如果是奇數個章節或者是最後一個章節，則換行
                         if (i % 2 === 1 || i === sections.length - 1) {
                             yOffset += maxHeight + 10;
                             maxHeight = 0;
-
+                            // 如果超過一頁，則新增一頁
                             if (yOffset > pageHeight - 20) {
                                 doc.addPage();
                                 yOffset = 10;
@@ -477,7 +485,7 @@
                 } else if (element.classList.contains('preview-area')) {
                     // 處理單獨的章節
                     yOffset += await addSectionToPDF(doc, element, margin, yOffset, contentWidth);
-
+                    // 如果超過一頁，則新增一頁
                     if (yOffset > pageHeight - 20) {
                         doc.addPage();
                         yOffset = 10;
