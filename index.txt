@@ -179,20 +179,18 @@
         }
 
         .group-preview .preview-area {
-            /* 抓到bug了 */
-            /* width: calc(50% - 5mm);  */
+            /* width: calc(50% - 5mm); */
             width: 100%;
             box-sizing: border-box;
         }
 
         .preview-area .image-container {
-            /* width: 100%; */
-            width: auto;
+            width: 100%;
             /* margin-bottom: 10px; */
         }
 
         .preview-area .image-container img {
-            max-width: 50mm;
+            max-width: 100%;
             height: auto;
         }
 
@@ -383,7 +381,7 @@
                     <div class="images-container">
                         ${(sectionImages[sectionId] || []).map((img, index) => `
                             <div class="image-container">
-                                <img src="${img}" alt="Uploaded image" style="max-width: 50mm; height: auto;">
+                                <img src="${img}" alt="Uploaded image">
                                 <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
                             </div>
                         `).join('')}
@@ -565,7 +563,7 @@
             }
 
             // 添加图片
-            const imgWidth = Math.min(width, 50);  // 最大寬度為50mm，與預覽一致
+            const imgWidth = Math.min(width, 50);
             for (let img of images) {
                 const imgData = img.src;
                 const imgHeight = imgWidth * (img.height / img.width);
