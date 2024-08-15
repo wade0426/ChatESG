@@ -494,6 +494,8 @@
             const fontSize = parseFloat(fontSizeInput.value);
             const lineHeight = parseFloat(lineHeightInput.value);
             const textLineHeight = fontSize * lineHeight;
+
+            // 可能棄用
             const minYOffset = textLineHeight; // 最小的 y 偏移量
 
             // let yOffset = Math.max(0, marginTop - minYOffset); // 確保 yOffset 不會小於 0
@@ -505,18 +507,25 @@
                     const sections = element.querySelectorAll(':scope > .preview-area');
                     const sectionWidth = (contentWidth - 10) / 2;
 
+                    let maxYOffset = yOffset;
                     for (let i = 0; i < sections.length; i++) {
                         const section = sections[i];
                         const sectionX = marginLeft + (i % 2) * (sectionWidth + 10);
-                        yOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
+                        const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
+                        maxYOffset = Math.max(maxYOffset, sectionYOffset);
 
                         if (i % 2 === 1 || i === sections.length - 1) {
-                            yOffset += textLineHeight * 0.5;
+                            yOffset = maxYOffset + textLineHeight * 0.5;
                         }
                     }
                 } else if (element.classList.contains('preview-area')) {
                     yOffset = await addSectionToPDF(doc, element, marginLeft, yOffset, contentWidth, contentHeight, marginTop, marginBottom);
                     yOffset += textLineHeight * 0.5;
+                }
+
+                if (yOffset > contentHeight - marginBottom) {
+                    doc.addPage();
+                    yOffset = marginTop;
                 }
             }
 
