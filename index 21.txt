@@ -70,13 +70,11 @@
             overflow-wrap: normal;
             word-break: break-word;
             hyphens: none;
-            width: 100%;
         }
 
         .preview-area p {
             text-align: justify;
             white-space: pre-wrap;
-            width: 100%;
         }
 
         .image-gallery {
@@ -145,13 +143,16 @@
 
         #preview-content {
             width: 210mm;
+            /* A4 紙寬度 */
             height: 297mm;
+            /* A4 紙高度 */
             margin: 0 auto;
+            /* padding: 20mm; */
+            /* 上下左右各 2cm 邊距 */
             box-sizing: border-box;
             border: 1px solid #000;
             background-color: white;
             overflow: auto;
-            transform-origin: top left;
         }
 
         #resizer {
@@ -175,12 +176,11 @@
             display: flex;
             justify-content: space-between;
             /* 調整200%就可以? */
-            /* width: 207%; */
+            width: 207%;
         }
 
         .group-preview .preview-area {
-            /* width: calc(50% - 5mm); */
-            width: 100%;
+            width: calc(50% - 5mm);
             box-sizing: border-box;
         }
 
@@ -343,11 +343,9 @@
             // 設置預覽區域的寬度
             const pdfWidth = 210; // A4 紙張寬度（毫米）
             const pdfHeight = 297; // A4 紙張高度（毫米）
-            const containerWidth = previewSection.clientWidth;
-            const containerHeight = previewSection.clientHeight;
-            const scaleX = containerWidth / pdfWidth;
-            const scaleY = containerHeight / pdfHeight;
-            const scale = Math.min(scaleX, scaleY) * 0.95; // 使用 95% 的容器大小來留出一些邊距
+            const scale = previewContent.offsetHeight / pdfHeight;
+            const previewWidth = pdfWidth * scale;
+            previewContent.style.width = `${previewWidth}px`;
 
             document.querySelectorAll('#sections-container > div').forEach(element => {
                 if (element.classList.contains('group')) {
