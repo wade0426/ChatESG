@@ -48,6 +48,7 @@
 
         #customization,
         #text-indent {
+            /* 元素的底邊距（margin-bottom）為10像素（px）。 */
             margin-bottom: 10px;
         }
 
@@ -139,7 +140,7 @@
             height: 297mm;
             /* A4 紙高度 */
             margin: 0 auto;
-            padding: 20mm;
+            /* padding: 20mm; */
             /* 上下左右各 2cm 邊距 */
             box-sizing: border-box;
             border: 1px solid #000;
@@ -198,11 +199,14 @@
     <div id="input-section">
         <h2>ESG 報告編輯器</h2>
         <div id="text-indent">
-            <h3>文字縮排設定（公分）</h3>
-            <label>上：<input type="number" id="indent-top" value="0" min="0" step="0.1"></label>
-            <label>下：<input type="number" id="indent-bottom" value="0" min="0" step="0.1"></label>
-            <label>左：<input type="number" id="indent-left" value="0" min="0" step="0.1"></label>
-            <label>右：<input type="number" id="indent-right" value="0" min="0" step="0.1"></label>
+            <h3>邊界設定（公分）：<input type="number" id="indent-top" value="0" min="0" step="0.1"></h3>
+            <!-- <label>上：<input type="number" id="indent-top" value="0" min="0" step="0.1"></label> -->
+            <!-- 暫時關閉功能 隱藏顯示 -->
+            <div style="display: none;">
+                <label>下：<input type="number" id="indent-bottom" value="0" min="0" step="0.1"></label>
+                <label>左：<input type="number" id="indent-left" value="0" min="0" step="0.1"></label>
+                <label>右：<input type="number" id="indent-right" value="0" min="0" step="0.1"></label>
+            </div>
         </div>
         <div id="sections-container">
             <!-- 章節內容將在這裡動態生成 -->
@@ -323,6 +327,8 @@
             const color = colorSelect.value;
             const fontSize = fontSizeInput.value + 'px';
             const lineHeight = lineHeightInput.value;
+            // 暫時關右下左功能，統一用上方邊距。
+            indentRight.value = indentBottom.value = indentLeft.value = indentTop.value;
             const indentStyle = `${indentTop.value}cm ${indentRight.value}cm ${indentBottom.value}cm ${indentLeft.value}cm`;
 
             let previewHtml = '';
@@ -443,6 +449,10 @@
 
             // 創建一個新的 PDF 文件，頁面方向為 portrait（直向），單位為 mm，大小為 A4
             const doc = new jsPDF('p', 'mm', 'a4');
+            // 'l' 代表 landscape（橫向）
+            // const doc = new jsPDF('l', 'mm', 'b3');
+            // fontSizeInput.value
+
             doc.setFont('NotoSansTC', 'normal');
 
             // 獲取 id 為 preview-content 的元素，也就是要轉換的內容
@@ -453,7 +463,7 @@
             let yOffset = 10; // 目前 y 座標的偏移量，用於控制元素在頁面上的位置
             const pageWidth = doc.internal.pageSize.width; // 獲取頁面寬度
             const pageHeight = doc.internal.pageSize.height; // 獲取頁面高度
-            const margin = 10; // 上下左右各留 10mm 邊距
+            const margin = indentTop.value * 10; // 上下左右各留 ?mm 邊距 左右正常上下不會改變
             const contentWidth = pageWidth - 2 * margin; // 內容區域的寬度
 
             // 遍歷所有元素，根據元素的類型添加到 PDF 中
@@ -505,12 +515,15 @@
             let currentY = y;
 
             // 添加標題
-            doc.setFontSize(16);
+            // doc.setFontSize(16);
+            doc.setFontSize(fontSizeInput.value * 1.5);
             doc.text(title, x, currentY);
-            currentY += 10;
+            // 標題後的額外空間
+            currentY += -7 + fontSizeInput.value * 1.5;
 
             // 添加段落
-            doc.setFontSize(12);
+            // doc.setFontSize(12);
+            doc.setFontSize(fontSizeInput.value);
             for (let p of paragraphs) {
                 const textLines = doc.splitTextToSize(p.innerText, width);
                 for (let line of textLines) {
