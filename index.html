@@ -235,7 +235,7 @@
             <label for="font-size">字體大小：</label>
             <input type="number" id="font-size" value="16" min="8" max="72">
             <label for="line-height">行高：</label>
-            <input type="number" id="line-height" value="1.5" min="1" max="3" step="0.1">
+            <input type="number" id="line-height" value="1" min="0.4" max="3" step="0.1">
         </div>
         <h3>圖庫</h3>
         <input type="file" id="image-upload" accept="image/*" multiple>
@@ -514,6 +514,7 @@
                         const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
                         maxYOffset = Math.max(maxYOffset, sectionYOffset);
 
+                        // 如果是奇數個子區塊或最後一個子區塊，則換行
                         if (i % 2 === 1 || i === sections.length - 1) {
                             yOffset = maxYOffset + textLineHeight * 0.5;
                         }
@@ -549,13 +550,17 @@
             doc.setFontSize(titleFontSize);
             const titleLines = doc.splitTextToSize(title, width);
             titleLines.forEach((line, index) => {
+                // 如果超過頁面底部，新增一頁
                 if (currentY > contentHeight - marginBottom) {
                     doc.addPage();
                     currentY = marginTop;
                 }
+                // 添加一行標題
                 doc.text(line, x, currentY + titleLineHeight);
+                // 更新 Y 軸位置
                 currentY += titleLineHeight;
             });
+            // 添加標題與內容間距
             currentY += titleLineHeight * 0.5;
 
             // 添加段落
@@ -569,8 +574,9 @@
                     }
                     doc.text(line, x, currentY);
                     currentY += textLineHeight;
+                    currentY *= 0.88;  // 段落間距
                 }
-                currentY += textLineHeight * 0.5;  // 段落间距
+                currentY += textLineHeight * 0.5;  // 段落間距
             }
 
             // 添加图片
