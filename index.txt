@@ -199,7 +199,7 @@
     <div id="input-section">
         <h2>ESG 報告編輯器</h2>
         <div id="text-indent">
-            <h3>邊界設定（公分）：<input type="number" id="indent-top" value="1.2" min="0" step="0.1"></h3>
+            <h3>邊界設定（公分）：<input type="number" id="indent-top" value="0" min="0" step="0.1"></h3>
             <!-- <label>上：<input type="number" id="indent-top" value="0" min="0" step="0.1"></label> -->
             <!-- 暫時關閉功能只使用上邊距代表全部邊距 隱藏顯示 -->
             <div style="display: none;">
@@ -451,6 +451,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
             // 'l' 代表 landscape（橫向）
             // const doc = new jsPDF('l', 'mm', 'b3');
+            // fontSizeInput.value
 
             doc.setFont('NotoSansTC', 'normal');
 
@@ -459,55 +460,45 @@
             const elements = content.children; // 直接獲取所有頂層元素
 
             // 設置頁面參數
+            let yOffset = 10; // 目前 y 座標的偏移量，用於控制元素在頁面上的位置
             const pageWidth = doc.internal.pageSize.width; // 獲取頁面寬度
             const pageHeight = doc.internal.pageSize.height; // 獲取頁面高度
-
-            // const margin = indentTop.value * 10; // 上下左右各留 ?mm 邊距 左右正常上下不會改變
-            // const contentWidth = pageWidth - 2 * margin; 
-
-            const marginTop = indentTop.value * 10;
-            const marginRight = indentRight.value * 10;
-            const marginBottom = indentBottom.value * 10;
-            const marginLeft = indentLeft.value * 10;
-            // 內容區域的寬度和高度
-            const contentWidth = pageWidth - marginLeft - marginRight;
-            const contentHeight = pageHeight - marginTop - marginBottom;
-
-            const fontSize = parseFloat(fontSizeInput.value);
-            const lineHeight = parseFloat(lineHeightInput.value);
-            const minYOffset = fontSize * lineHeight; // 最小的 y 偏移量
-
-            let yOffset = Math.max(0, marginTop - minYOffset); // 確保 yOffset 不會小於 0
+            const margin = indentTop.value * 10; // 上下左右各留 ?mm 邊距 左右正常上下不會改變
+            const contentWidth = pageWidth - 2 * margin; // 內容區域的寬度
 
             // 遍歷所有元素，根據元素的類型添加到 PDF 中
             for (let element of elements) {
                 if (element.classList.contains('group-preview')) {
-                    const sections = element.querySelectorAll(':scope > .preview-area');
-                    const sectionWidth = contentWidth / 2 - 5;
-                    let maxHeight = 0;
+                    // 處理群組（左右並列的章節）
+                    const sections = element.querySelectorAll(':scope > .preview-area'); // 獲取當前群組中的所有章節
+                    const sectionWidth = contentWidth / 2 - 5; // 5mm 間隔
+                    let maxHeight = 0; // 紀錄當前行中最高的元素高度
 
+                    // 遍歷所有章節
                     for (let i = 0; i < sections.length; i++) {
                         const section = sections[i];
-                        const sectionHeight = await addSectionToPDF(doc, section,
-                            marginLeft + (i % 2) * (sectionWidth + 10),
-                            marginTop + yOffset, sectionWidth);
-                        maxHeight = Math.max(maxHeight, sectionHeight);
+                        // 將章節添加到 PDF 中，並獲取章節的高度
+                        const sectionHeight = await addSectionToPDF(doc, section, margin + (i % 2) * (sectionWidth + 10), yOffset, sectionWidth);
+                        maxHeight = Math.max(maxHeight, sectionHeight); // 更新最高元素高度
 
+                        // 如果是奇數個章節或者是最後一個章節，則換行
                         if (i % 2 === 1 || i === sections.length - 1) {
                             yOffset += maxHeight + 10;
                             maxHeight = 0;
-                            if (yOffset > contentHeight) {
+                            // 如果超過一頁，則新增一頁
+                            if (yOffset > pageHeight - 20) {
                                 doc.addPage();
-                                yOffset = 0;
+                                yOffset = 10;
                             }
                         }
                     }
                 } else if (element.classList.contains('preview-area')) {
-                    const sectionHeight = await addSectionToPDF(doc, element, marginLeft, Math.max(marginTop, minYOffset) + yOffset, contentWidth);
-                    yOffset += sectionHeight;
-                    if (yOffset > contentHeight - minYOffset) {
+                    // 處理單獨的章節
+                    yOffset += await addSectionToPDF(doc, element, margin, yOffset, contentWidth);
+                    // 如果超過一頁，則新增一頁
+                    if (yOffset > pageHeight - 20) {
                         doc.addPage();
-                        yOffset = 0;
+                        yOffset = 10;
                     }
                 }
             }
@@ -523,56 +514,39 @@
             const startY = y;
             let currentY = y;
 
-            // 計算行高
-            const lineHeight = parseFloat(lineHeightInput.value);
-            const fontSize = parseFloat(fontSizeInput.value);
-            const titleFontSize = fontSize * 1.5;
-            const titleLineHeight = titleFontSize * lineHeight;
-            const textLineHeight = fontSize * lineHeight;
-
             // 添加標題
             // doc.setFontSize(16);
             doc.setFontSize(fontSizeInput.value * 1.5);
-            // 確保標題不會被裁切
-            if (currentY < titleLineHeight) {
-                currentY = titleLineHeight;
-                currentY -= 20; // 標題上方的額外空間
-            }
             doc.text(title, x, currentY);
             // 標題後的額外空間
             currentY += -7 + fontSizeInput.value * 1.5;
 
             // 添加段落
             // doc.setFontSize(12);
-            doc.setFontSize(fontSize);
+            doc.setFontSize(fontSizeInput.value);
             for (let p of paragraphs) {
                 const textLines = doc.splitTextToSize(p.innerText, width);
                 for (let line of textLines) {
-                    // 確保文本不會被裁切
-                    if (currentY < textLineHeight) {
-                        doc.addPage();
-                        currentY = textLineHeight;
-                    }
                     doc.text(line, x, currentY);
-                    currentY += textLineHeight;
+                    currentY += 5;
                 }
-                currentY += textLineHeight / 4; // 每個段落後的額外空間
+                currentY += 5; // 每個段落後的額外空間
             }
 
             // 添加圖片
-            const imgWidth = Math.min(width, 50);
+            const imgWidth = Math.min(width, 50); // PDF 中的圖片寬度
             for (let img of images) {
                 const imgData = img.src;
                 const imgHeight = imgWidth * (img.height / img.width);
 
                 // 檢查是否需要新增頁面
-                if (currentY + imgHeight > doc.internal.pageSize.height - (indentBottom.value * 10)) {
+                if (currentY + imgHeight > doc.internal.pageSize.height - 10) {
                     doc.addPage();
-                    currentY = Math.max(indentTop.value * 10, textLineHeight); // 確保新頁面的起始位置不會太靠上
+                    currentY = 10;
                 }
 
                 doc.addImage(imgData, 'PNG', x, currentY, imgWidth, imgHeight);
-                currentY += imgHeight + textLineHeight; // 在圖片後添加一行的間距
+                currentY += imgHeight + 10;
             }
 
             return currentY - startY;
