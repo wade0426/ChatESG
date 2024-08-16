@@ -322,6 +322,7 @@
                     <input type="text" id="${sectionId}-title" placeholder="章節標題" oninput="updatePreview()">
                     <textarea id="${sectionId}-content" placeholder="在此輸入內容..." oninput="updatePreview()"></textarea>
                     <button onclick="openImageGallery('${sectionId}')">添加圖片到章節</button>
+                    <button onclick="openMoveMenu('${sectionId}')">移動章節</button>
                     <button onclick="deleteSection('${sectionId}')">刪除章節</button>
                 </div>
             `;
@@ -332,6 +333,62 @@
             }
             sectionImages[sectionId] = [];
         }
+
+        // 有關移動章節的功能
+        function openMoveMenu(sectionId) {
+            const groups = Array.from(document.querySelectorAll('.group')).map(group => ({
+                id: group.id,
+                name: group.querySelector('.group-name').textContent
+            }));
+
+            const currentGroup = document.getElementById(sectionId).closest('.group');
+            const filteredGroups = groups.filter(group => group.id !== currentGroup.id);
+
+            const menuHtml = `
+                <select id="move-menu-${sectionId}">
+                    ${filteredGroups.map(group => `<option value="${group.id}">${group.name}</option>`).join('')}
+                </select>
+                <button onclick="moveSection('${sectionId}')">確認移動</button>
+                <button onclick="closeMoveMenu('${sectionId}')">取消</button>
+            `;
+
+            const moveMenuContainer = document.createElement('div');
+            moveMenuContainer.id = `move-menu-container-${sectionId}`;
+            moveMenuContainer.innerHTML = menuHtml;
+            document.getElementById(sectionId).appendChild(moveMenuContainer);
+        }
+
+        function closeMoveMenu(sectionId) {
+            const menuContainer = document.getElementById(`move-menu-container-${sectionId}`);
+            if (menuContainer) {
+                menuContainer.remove();
+            }
+        }
+
+        function moveSection(sectionId) {
+            const targetGroupId = document.getElementById(`move-menu-${sectionId}`).value;
+            if (confirm('確定要移動此章節嗎？')) {
+                const section = document.getElementById(sectionId);
+                const title = document.getElementById(`${sectionId}-title`).value;
+                const content = document.getElementById(`${sectionId}-content`).value;
+                const images = sectionImages[sectionId];
+
+                // Remove the old section
+                section.remove();
+
+                // Add a new section to the target group
+                addSection(targetGroupId);
+                const newSectionId = `section-${sectionCounter}`;
+                document.getElementById(`${newSectionId}-title`).value = title;
+                document.getElementById(`${newSectionId}-content`).value = content;
+                sectionImages[newSectionId] = [...images];
+
+                updatePreview();
+                alert('章節已成功移動！');
+            }
+            closeMoveMenu(sectionId);
+        }
+        // 章節移動功能結束
 
         function editName(id, type) {
             const element = document.querySelector(`#${id} .${type}-name`);
