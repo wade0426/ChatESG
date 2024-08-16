@@ -238,7 +238,7 @@
             <label for="color-select">顏色：</label>
             <input type="color" id="color-select" value="#000000">
             <label for="font-size">字體大小：</label>
-            <input type="number" id="font-size" value="16" min="8" max="72">
+            <input type="number" id="font-size" value="12" min="8" max="72">
             <label for="line-height">行高：</label>
             <input type="number" id="line-height" value="1" min="0.4" max="3" step="0.1">
         </div>
@@ -288,13 +288,18 @@
             const groupId = `group-${groupCounter}`;
             const groupHtml = `
                 <div id="${groupId}" class="group">
-                    <h3>群組 ${groupCounter}</h3>
+                    <h3>
+                        <span class="group-name">群組 ${groupCounter}</span>
+                        <button onclick="editName('${groupId}', 'group')">編輯</button>
+                    </h3>
                     <div class="group-content"></div>
                     <button onclick="addSectionToGroup('${groupId}')">新增章節到群組</button>
                     <button onclick="deleteGroup('${groupId}')">刪除群組</button>
                 </div>
             `;
             document.getElementById('sections-container').insertAdjacentHTML('beforeend', groupHtml);
+            // print 提示訊息
+            console.log(groupId);
         }
 
         function deleteGroup(groupId) {
@@ -310,7 +315,10 @@
             const sectionId = `section-${sectionCounter}`;
             const sectionHtml = `
                 <div id="${sectionId}" class="section">
-                    <h3>章節 ${sectionCounter}</h3>
+                    <h3>
+                        <span class="section-name">章節 ${sectionCounter}</span>
+                        <button onclick="editName('${sectionId}', 'section')">編輯</button>
+                    </h3>
                     <input type="text" id="${sectionId}-title" placeholder="章節標題" oninput="updatePreview()">
                     <textarea id="${sectionId}-content" placeholder="在此輸入內容..." oninput="updatePreview()"></textarea>
                     <button onclick="openImageGallery('${sectionId}')">添加圖片到章節</button>
@@ -324,6 +332,43 @@
             }
             sectionImages[sectionId] = [];
         }
+
+        function editName(id, type) {
+            const element = document.querySelector(`#${id} .${type}-name`);
+            if (element.querySelector('.edit-name-input')) {
+                return; // 如果已經在編輯狀態，則不做任何操作
+            }
+            const currentName = element.textContent.trim();
+            const editButton = element.nextElementSibling;
+            editButton.style.display = 'none'; // 隱藏編輯按鈕
+            element.innerHTML = `
+                <input type="text" value="${currentName}" class="edit-name-input">
+                <button onclick="saveName('${id}', '${type}')">確定</button>
+                <button onclick="cancelEdit('${id}', '${type}', '${currentName}')">取消</button>
+            `;
+        }
+
+        function saveName(id, type) {
+            const element = document.querySelector(`#${id} .${type}-name`);
+            const input = element.querySelector('.edit-name-input');
+            const newName = input.value.trim();
+            if (newName) {
+                element.textContent = newName;
+            } else {
+                element.textContent = type === 'group' ? `群組 ${id.split('-')[1]}` : `章節 ${id.split('-')[1]}`;
+            }
+            const editButton = element.nextElementSibling;
+            editButton.style.display = ''; // 顯示編輯按鈕
+            updatePreview();
+        }
+
+        function cancelEdit(id, type, originalName) {
+            const element = document.querySelector(`#${id} .${type}-name`);
+            element.textContent = originalName;
+            const editButton = element.nextElementSibling;
+            editButton.style.display = ''; // 顯示編輯按鈕
+        }
+
 
         function deleteSection(sectionId) {
             if (confirm('確定要刪除這個章節嗎？')) {
@@ -632,8 +677,8 @@
         }
 
         // 初始化：添加一個群組和一個章節
-        addGroup();
-        addSection('group-1');
+        addGroup(); //群組
+        addSection('group-1'); //章節
 
         updatePreview();
     </script>
