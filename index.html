@@ -384,7 +384,7 @@
             // 如果要加入圖片的文字描述，可以在這裡加入
             return `
                 <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}; line-height: ${lineHeight}; padding: ${indentStyle};">
-                    <h2>${title}</h2>
+                    <h2 style="margin-top: 0px;">${title}</h2>
                     ${content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
                     <div class="images-container">
                         ${(sectionImages[sectionId] || []).map((img, index) => `
