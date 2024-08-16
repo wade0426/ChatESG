@@ -23,6 +23,8 @@
         #preview-section {
             flex: 1;
             padding: 20px;
+            /* 是換行的關鍵 */
+            /* box-sizing: border-box;  */
             box-sizing: border-box;
             overflow-y: auto;
         }
@@ -71,6 +73,7 @@
             word-break: break-word;
             hyphens: none;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .preview-area p {
