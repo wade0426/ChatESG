@@ -545,7 +545,8 @@
 
                 yOffset += textLineHeight * 0.5;
 
-                if (yOffset > contentHeight - marginBottom) {
+                // 暴力測出 18 是最佳值 但不知道為什麼 18的話 不會多一個空白頁
+                if (yOffset > contentHeight - marginBottom + 18) {
                     doc.addPage();
                     yOffset = marginTop;
                 }
