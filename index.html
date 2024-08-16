@@ -495,28 +495,24 @@
             const pageWidth = doc.internal.pageSize.width; // 獲取頁面寬度
             const pageHeight = doc.internal.pageSize.height; // 獲取頁面高度
 
-            // const margin = indentTop.value * 10; // 上下左右各留 ?mm 邊距 左右正常上下不會改變
-            // const contentWidth = pageWidth - 2 * margin; 
-
-            // 修改成 * 5 避免 上方邊界過大
-            const marginTop = indentTop.value * 5.1;
-            const marginRight = indentRight.value * 10;
-            const marginBottom = indentBottom.value * 10;
-            const marginLeft = indentLeft.value * 10;
-            // 內容區域的寬度和高度
-            const contentWidth = pageWidth - marginLeft - marginRight;
-            const contentHeight = pageHeight - marginTop - marginBottom;
+            // 將所有邊界設置為相同的值
+            const margin = indentTop.value * 10;
+            const contentWidth = pageWidth - 2 * margin;
+            const contentHeight = pageHeight - 2 * margin;
 
             const fontSize = parseFloat(fontSizeInput.value);
-
             const lineHeight = parseFloat(lineHeightInput.value);
             const textLineHeight = fontSize * lineHeight;
 
-            // 可能棄用
-            // const minYOffset = textLineHeight; // 最小的 y 偏移量
+            // 適當的調整讓第一頁的上邊界一樣 -5
+            let yOffset = margin - 5;
 
-            // let yOffset = Math.max(0, marginTop - minYOffset); // 確保 yOffset 不會小於 0
-            let yOffset = marginTop;
+            function addNewPageIfNeeded() {
+                if (yOffset > pageHeight - margin) {
+                    doc.addPage();
+                    yOffset = margin;
+                }
+            }
 
             // 遍歷所有元素，根據元素的類型添加到 PDF 中
             for (let element of elements) {
@@ -524,14 +520,14 @@
                     const sections = element.querySelectorAll(':scope > .preview-area');
                     if (sections.length === 1) {
                         // 如果群組只有一個章節，以全寬處理
-                        yOffset = await addSectionToPDF(doc, sections[0], marginLeft, yOffset, contentWidth, contentHeight, marginTop, marginBottom);
+                        yOffset = await addSectionToPDF(doc, sections[0], margin, yOffset, contentWidth, contentHeight, margin);
                     } else {
                         const sectionWidth = (contentWidth - 10) / 2;
                         let maxYOffset = yOffset;
                         for (let i = 0; i < sections.length; i++) {
                             const section = sections[i];
-                            const sectionX = marginLeft + (i % 2) * (sectionWidth + 10);
-                            const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
+                            const sectionX = margin + (i % 2) * (sectionWidth + 10);
+                            const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, margin);
                             maxYOffset = Math.max(maxYOffset, sectionYOffset);
 
                             if (i % 2 === 1 || i === sections.length - 1) {
@@ -540,22 +536,17 @@
                         }
                     }
                 } else if (element.classList.contains('preview-area')) {
-                    yOffset = await addSectionToPDF(doc, element, marginLeft, yOffset, contentWidth, contentHeight, marginTop, marginBottom);
+                    yOffset = await addSectionToPDF(doc, element, margin, yOffset, contentWidth, contentHeight, margin);
                 }
 
                 yOffset += textLineHeight * 0.5;
-
-                // 暴力測出 18 是最佳值 但不知道為什麼 18的話 不會多一個空白頁
-                if (yOffset > contentHeight - marginBottom + 18) {
-                    doc.addPage();
-                    yOffset = marginTop;
-                }
+                addNewPageIfNeeded();
             }
 
             doc.save("esg-report.pdf");
         }
 
-        async function addSectionToPDF(doc, section, x, y, width, contentHeight, marginTop, marginBottom) {
+        async function addSectionToPDF(doc, section, x, y, width, contentHeight, margin) {
             const title = section.querySelector(':scope > h2').innerText;
             const paragraphs = section.querySelectorAll(':scope > p');
             const images = section.querySelectorAll(':scope > .images-container > .image-container > img');
@@ -568,18 +559,24 @@
             const titleLineHeight = titleFontSize * lineHeight;
             const textLineHeight = fontSize * lineHeight;
 
+            const pageHeight = doc.internal.pageSize.height;
+
+            function addNewPageIfNeeded() {
+                // 暴力測出 18 是最佳值 但不知道為什麼 18的話 不會多一個空白頁 但是會導致邊界設定失效
+                if (currentY > pageHeight - margin) {
+                    doc.addPage();
+                    currentY = margin;
+                }
+            }
+
             // 添加标题
             doc.setFontSize(titleFontSize);
             const titleLines = doc.splitTextToSize(title, width);
             titleLines.forEach((line, index) => {
-                if (currentY > contentHeight - marginBottom) {
-                    doc.addPage();
-                    currentY = marginTop;
-                }
+                addNewPageIfNeeded();
                 doc.text(line, x, currentY + titleLineHeight);
                 currentY += titleLineHeight;
             });
-            // 暫時把 0.5 移掉 讓段落和標題之間有空隙
             currentY += titleLineHeight;
 
             // 添加段落
@@ -587,10 +584,7 @@
             for (let p of paragraphs) {
                 const lines = doc.splitTextToSize(p.innerText, width);
                 for (let line of lines) {
-                    if (currentY > contentHeight - marginBottom) {
-                        doc.addPage();
-                        currentY = marginTop;
-                    }
+                    addNewPageIfNeeded();
                     doc.text(line, x, currentY);
                     currentY += textLineHeight;
                 }
@@ -603,11 +597,7 @@
                 const imgData = img.src;
                 const imgHeight = imgWidth * (img.height / img.width);
 
-                if (currentY + imgHeight > contentHeight - marginBottom) {
-                    doc.addPage();
-                    currentY = marginTop;
-                }
-
+                addNewPageIfNeeded();
                 doc.addImage(imgData, 'PNG', x, currentY, imgWidth, imgHeight);
                 currentY += imgHeight + textLineHeight * 0.2;
             }
