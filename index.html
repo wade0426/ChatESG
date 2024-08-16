@@ -206,6 +206,25 @@
             min-width: 200px;
             margin: 5px;
         }
+
+        /* 顯示分頁 */
+        .page-break {
+            border-top: 2px dashed #888;
+            margin-top: 10px;
+            padding-top: 10px;
+            position: relative;
+        }
+
+        .page-number {
+            position: absolute;
+            top: -10px;
+            right: 0;
+            background-color: #888;
+            color: white;
+            padding: 2px 5px;
+            font-size: 12px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 
@@ -348,11 +367,15 @@
             const indentStyle = `${indentTop.value}cm ${indentRight.value}cm ${indentBottom.value}cm ${indentLeft.value}cm`;
 
             let previewHtml = '';
+            let currentPageHeight = 0;
+            let pageNumber = 1;
 
             // 設置預覽區域的寬度
             const pdfWidth = 210; // A4 紙張寬度（毫米）
             // const pdfHeight = 297; // A4 紙張高度（毫米）
             const pdfHeight = 218; // A4 紙張高度（毫米）
+            const marginTop = parseFloat(indentTop.value) * 10; // 將 cm 轉換為 mm
+            const contentHeight = pdfHeight - 2 * marginTop; // 考慮上下邊距
 
             // 獲取預覽區域的寬度和高度 像素為單位
             const containerWidth = previewSection.clientWidth;
@@ -364,17 +387,37 @@
 
             // 選取所有具有 id 為 'sections-container' 的元素下的所有 div 元素
             document.querySelectorAll('#sections-container > div').forEach(element => {
-                // 如果元素具有 'group' 類別，表示該元素是一個群組
+                let sectionHtml = '';
                 if (element.classList.contains('group')) {
-                    previewHtml += '<div class="group-preview">';
+                    sectionHtml += '<div class="group-preview">';
                     element.querySelectorAll('.section').forEach(section => {
-                        previewHtml += createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle);
+                        sectionHtml += createSectionPreview(section, font, color, fontSize, lineHeight, indentStyle);
                     });
-                    previewHtml += '</div>';
+                    sectionHtml += '</div>';
                 } else if (element.classList.contains('section')) {
-                    previewHtml += createSectionPreview(element, font, color, fontSize, lineHeight, indentStyle);
+                    sectionHtml += createSectionPreview(element, font, color, fontSize, lineHeight, indentStyle);
                 }
+
+                // 計算當前部分的高度
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = sectionHtml;
+                document.body.appendChild(tempDiv);
+                const sectionHeight = tempDiv.offsetHeight;
+                document.body.removeChild(tempDiv);
+
+                // 檢查是否需要分頁
+                if (currentPageHeight + sectionHeight > contentHeight) {
+                    previewHtml += `<div class="page-break"><span class="page-number">Page ${pageNumber}</span></div>`;
+                    currentPageHeight = 0;
+                    pageNumber++;
+                }
+
+                previewHtml += sectionHtml;
+                currentPageHeight += sectionHeight;
             });
+
+            // 最後一頁的頁碼
+            previewHtml += `<div class="page-break"><span class="page-number">Page ${pageNumber}</span></div>`;
 
             previewContent.innerHTML = previewHtml;
 
