@@ -508,24 +508,28 @@
             for (let element of elements) {
                 if (element.classList.contains('group-preview')) {
                     const sections = element.querySelectorAll(':scope > .preview-area');
-                    const sectionWidth = (contentWidth - 10) / 2;
+                    if (sections.length === 1) {
+                        // 如果群組只有一個章節，以全寬處理
+                        yOffset = await addSectionToPDF(doc, sections[0], marginLeft, yOffset, contentWidth, contentHeight, marginTop, marginBottom);
+                    } else {
+                        const sectionWidth = (contentWidth - 10) / 2;
+                        let maxYOffset = yOffset;
+                        for (let i = 0; i < sections.length; i++) {
+                            const section = sections[i];
+                            const sectionX = marginLeft + (i % 2) * (sectionWidth + 10);
+                            const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
+                            maxYOffset = Math.max(maxYOffset, sectionYOffset);
 
-                    let maxYOffset = yOffset;
-                    for (let i = 0; i < sections.length; i++) {
-                        const section = sections[i];
-                        const sectionX = marginLeft + (i % 2) * (sectionWidth + 10);
-                        const sectionYOffset = await addSectionToPDF(doc, section, sectionX, yOffset, sectionWidth, contentHeight, marginTop, marginBottom);
-                        maxYOffset = Math.max(maxYOffset, sectionYOffset);
-
-                        // 如果是奇數個子區塊或最後一個子區塊，則換行
-                        if (i % 2 === 1 || i === sections.length - 1) {
-                            yOffset = maxYOffset + textLineHeight * 0.5;
+                            if (i % 2 === 1 || i === sections.length - 1) {
+                                yOffset = maxYOffset + textLineHeight * 0.5;
+                            }
                         }
                     }
                 } else if (element.classList.contains('preview-area')) {
                     yOffset = await addSectionToPDF(doc, element, marginLeft, yOffset, contentWidth, contentHeight, marginTop, marginBottom);
-                    yOffset += textLineHeight * 0.5;
                 }
+
+                yOffset += textLineHeight * 0.5;
 
                 if (yOffset > contentHeight - marginBottom) {
                     doc.addPage();
@@ -553,17 +557,13 @@
             doc.setFontSize(titleFontSize);
             const titleLines = doc.splitTextToSize(title, width);
             titleLines.forEach((line, index) => {
-                // 如果超過頁面底部，新增一頁
                 if (currentY > contentHeight - marginBottom) {
                     doc.addPage();
                     currentY = marginTop;
                 }
-                // 添加一行標題
                 doc.text(line, x, currentY + titleLineHeight);
-                // 更新 Y 軸位置
                 currentY += titleLineHeight;
             });
-            // 添加標題與內容間距
             currentY += titleLineHeight * 0.5;
 
             // 添加段落
@@ -577,13 +577,12 @@
                     }
                     doc.text(line, x, currentY);
                     currentY += textLineHeight;
-                    currentY *= 0.88;  // 段落間距
                 }
-                currentY += textLineHeight * 0.5;  // 段落間距
+                currentY += textLineHeight * 0.5;
             }
 
             // 添加图片
-            const imgWidth = Math.min(width, 50);  // 最大寬度為50mm，與預覽一致
+            const imgWidth = Math.min(width, 50);
             for (let img of images) {
                 const imgData = img.src;
                 const imgHeight = imgWidth * (img.height / img.width);
