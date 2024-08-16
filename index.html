@@ -381,6 +381,7 @@
             const title = document.getElementById(`${sectionId}-title`).value;
             const content = document.getElementById(`${sectionId}-content`).value;
             // 原本是 font-size: ${fontSize}px;
+            // 如果要加入圖片的文字描述，可以在這裡加入
             return `
                 <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}; line-height: ${lineHeight}; padding: ${indentStyle};">
                     <h2>${title}</h2>
@@ -390,6 +391,7 @@
                             <div class="image-container">
                                 <img src="${img}" alt="Uploaded image" style="max-width: 50mm; height: auto;">
                                 <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
+                                <br/>
                             </div>
                         `).join('')}
                     </div>
@@ -488,7 +490,8 @@
             // const margin = indentTop.value * 10; // 上下左右各留 ?mm 邊距 左右正常上下不會改變
             // const contentWidth = pageWidth - 2 * margin; 
 
-            const marginTop = indentTop.value * 10;
+            // 修改成 * 5 避免 上方邊界過大
+            const marginTop = indentTop.value * 5.1;
             const marginRight = indentRight.value * 10;
             const marginBottom = indentBottom.value * 10;
             const marginLeft = indentLeft.value * 10;
@@ -497,6 +500,7 @@
             const contentHeight = pageHeight - marginTop - marginBottom;
 
             const fontSize = parseFloat(fontSizeInput.value);
+
             const lineHeight = parseFloat(lineHeightInput.value);
             const textLineHeight = fontSize * lineHeight;
 
@@ -548,8 +552,8 @@
             const images = section.querySelectorAll(':scope > .images-container > .image-container > img');
 
             let currentY = y;
-
-            const lineHeight = parseFloat(lineHeightInput.value);
+            // 讓行高接近預覽的樣式 0.5
+            const lineHeight = parseFloat(lineHeightInput.value * 0.5);
             const fontSize = parseFloat(fontSizeInput.value * 1.3); // 1.3 是為了讓標題比正文大一點
             const titleFontSize = fontSize * 1.5;
             const titleLineHeight = titleFontSize * lineHeight;
@@ -566,7 +570,8 @@
                 doc.text(line, x, currentY + titleLineHeight);
                 currentY += titleLineHeight;
             });
-            currentY += titleLineHeight * 0.5;
+            // 暫時把 0.5 移掉 讓段落和標題之間有空隙
+            currentY += titleLineHeight;
 
             // 添加段落
             doc.setFontSize(fontSize);
