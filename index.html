@@ -354,7 +354,9 @@
             const scaleY = containerHeight / pdfHeight;
             const scale = Math.min(scaleX, scaleY) * 0.95; // 使用 95% 的容器大小來留出一些邊距
 
+            // 選取所有具有 id 為 'sections-container' 的元素下的所有 div 元素
             document.querySelectorAll('#sections-container > div').forEach(element => {
+                // 如果元素具有 'group' 類別，表示該元素是一個群組
                 if (element.classList.contains('group')) {
                     previewHtml += '<div class="group-preview">';
                     element.querySelectorAll('.section').forEach(section => {
@@ -378,9 +380,9 @@
             const sectionId = section.id;
             const title = document.getElementById(`${sectionId}-title`).value;
             const content = document.getElementById(`${sectionId}-content`).value;
-
+            // 原本是 font-size: ${fontSize}px;
             return `
-                <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}px; line-height: ${lineHeight}; padding: ${indentStyle};">
+                <div class="preview-area" style="font-family: ${font}; color: ${color}; font-size: ${fontSize}; line-height: ${lineHeight}; padding: ${indentStyle};">
                     <h2>${title}</h2>
                     ${content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
                     <div class="images-container">
@@ -548,7 +550,7 @@
             let currentY = y;
 
             const lineHeight = parseFloat(lineHeightInput.value);
-            const fontSize = parseFloat(fontSizeInput.value);
+            const fontSize = parseFloat(fontSizeInput.value * 1.3); // 1.3 是為了讓標題比正文大一點
             const titleFontSize = fontSize * 1.5;
             const titleLineHeight = titleFontSize * lineHeight;
             const textLineHeight = fontSize * lineHeight;
