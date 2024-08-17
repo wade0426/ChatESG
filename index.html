@@ -130,6 +130,29 @@
             margin: 5px;
         }
 
+        .image-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px;
+            display: none;
+        }
+
+        .image-container:hover .image-controls {
+            display: block;
+        }
+
+        .image-controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
         .image-container img {
             max-width: 100%;
             height: auto;
@@ -499,8 +522,12 @@
                     ${content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
                     <div class="images-container">
                         ${(sectionImages[sectionId] || []).map((img, index) => `
-                            <div class="image-container">
-                                <img src="${img}" alt="Uploaded image" style="max-width: 50mm; height: auto;">
+                            <div class="image-container" data-section-id="${sectionId}" data-image-index="${index}">
+                                <img src="${img.src}" alt="Uploaded image" style="max-width: ${img.width}mm; height: auto;">
+                                <div class="image-controls">
+                                    <button onclick="resizeImage('${sectionId}', ${index}, 1.1)">+</button>
+                                    <button onclick="resizeImage('${sectionId}', ${index}, 0.9)">-</button>
+                                </div>
                                 <button class="delete-image" onclick="deleteImage('${sectionId}', ${index})">X</button>
                                 <br/>
                             </div>
@@ -508,6 +535,20 @@
                     </div>
                 </div>
             `;
+        }
+
+        // 處理影像大小調整
+        function resizeImage(sectionId, imageIndex, factor) {
+            const image = sectionImages[sectionId][imageIndex];
+            image.width = Math.max(10, Math.min(190, image.width * factor)); // Limit size between 10mm and 190mm
+
+            // Update the actual image element in the preview
+            const imgElement = document.querySelector(`[data-section-id="${sectionId}"] [data-image-index="${imageIndex}"] img`);
+            if (imgElement) {
+                imgElement.style.maxWidth = `${image.width}mm`;
+            }
+
+            updatePreview();
         }
 
         // 監聽事件
@@ -559,7 +600,7 @@
             if (!sectionImages[sectionId]) {
                 sectionImages[sectionId] = [];
             }
-            sectionImages[sectionId].push(src);
+            sectionImages[sectionId].push({ src: src, width: 50 }); // Default width: 50mm
             updatePreview();
             document.getElementById('image-modal').style.display = "none";
         }
@@ -695,10 +736,12 @@
             }
 
             // 添加图片
-            const imgWidth = Math.min(width, 50);
             for (let img of images) {
                 const imgData = img.src;
-                const imgHeight = imgWidth * (img.height / img.width);
+                // Get the resized width from the style attribute
+                const resizedWidth = parseFloat(img.style.maxWidth) || 50; // Default to 50mm if not set
+                const imgWidth = Math.min(width, resizedWidth);
+                const imgHeight = imgWidth * (img.naturalHeight / img.naturalWidth);
 
                 addNewPageIfNeeded();
                 doc.addImage(imgData, 'PNG', x, currentY, imgWidth, imgHeight);
