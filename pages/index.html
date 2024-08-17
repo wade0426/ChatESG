@@ -170,7 +170,7 @@
         </div>
     </div>
     <!-- Call to action-->
-    <section class="page-section bg-dark text-white" style="display: none;">
+    <section class="page-section bg-dark text-white">
         <div class="container px-4 px-lg-5 text-center">
             <h2 class="mb-4">Free Download at Start Bootstrap!</h2>
             <a class="btn btn-light btn-xl" href="https://startbootstrap.com/theme/creative/">Download Now!</a>
@@ -189,68 +189,46 @@
             <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                 <div class="col-lg-6">
                     <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                        <!-- Name input-->
-                        <div class="form-floating mb-3">
+
+                        <!-- <div class="form-floating mb-3">
                             <input value="123" class="form-control" id="name" type="text"
                                 placeholder="Enter your name..." data-sb-validations="required" />
-                            <label for="name">Full name</label>
-                            <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                            <label for="name">標題</label>
+                            <div class="invalid-feedback" data-sb-feedback="name:required">必填</div>
                         </div>
-                        <!-- Email address input-->
-                        <!-- <div class="form-floating mb-3">
-                            <input class="form-control" id="email" type="email" placeholder="name@example.com"
-                                data-sb-validations="required,email" />
-                            <label for="email">Email address</label>
-                            <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                            <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-                        </div> -->
-                        <!-- Phone number input-->
-                        <!-- <div class="form-floating mb-3">
-                            <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890"
-                                data-sb-validations="required" />
-                            <label for="phone">Phone number</label>
-                            <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.
-                            </div>
-                        </div> -->
-                        <!-- Message input-->
                         <div class="form-floating mb-3">
                             <textarea class="form-control" id="message" type="text"
                                 placeholder="Enter your message here..." style="height: 10rem"
                                 data-sb-validations="required"></textarea>
-                            <label for="message">Message</label>
-                            <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.
+                            <label for="message">內容</label>
+                            <div class="invalid-feedback" data-sb-feedback="message:required">必填
                             </div>
+                        </div> -->
+                        <!--  -->
+                        <div id="form-groups">
+                            <!-- 動態產生的表單群組將在這裡 -->
                         </div>
-                        <!-- Submit success message-->
-                        <!---->
-                        <!-- This is what your users will see when the form-->
-                        <!-- has successfully submitted-->
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-xl btn-success --bs-teal" id="addGroup">添加新组</button>
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">提交</button>
+                        </div>
+
                         <div class="d-none" id="submitSuccessMessage">
                             <div class="text-center mb-3">
-                                <div class="fw-bolder">Form submission successful!</div>
-                                To activate this form, sign up at
+                                <div class="fw-bolder">填寫完成！</div>
+                                正字生成內容。
                                 <br />
-                                <a
-                                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                <!-- <a -->
+                                <!-- href="https://">https://</a> -->
                             </div>
                         </div>
-                        <!-- Submit error message-->
-                        <!---->
-                        <!-- This is what your users will see when there is-->
-                        <!-- an error submitting the form-->
                         <div class="d-none" id="submitErrorMessage">
                             <div class="text-center text-danger mb-3">Error sending message!</div>
                         </div>
                         <!-- Submit Button-->
-                        <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton"
-                                type="submit">Submit</button></div>
+                        <!-- <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton"
+                                type="submit">提交</button></div> -->
                     </form>
-                </div>
-            </div>
-            <div class="row gx-4 gx-lg-5 justify-content-center" style="display: none;">
-                <div class="col-lg-4 text-center mb-5 mb-lg-0">
-                    <i class="bi-phone fs-2 mb-3 text-muted"></i>
-                    <div>+1 (555) 123-4567</div>
                 </div>
             </div>
         </div>
@@ -268,6 +246,60 @@
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script>
+
+        // 建立一個變數，統計有多少個群組
+        let groupCount = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const formGroups = document.getElementById('form-groups');
+            const addGroupButton = document.getElementById('addGroup');
+
+            function createGroup(title = '') {
+                groupCount++;
+
+                const group = document.createElement('div');
+                group.className = 'form-group mb-3';
+                group.innerHTML = `
+                
+                    <div class="form-floating mb-3">
+                            <input value="${title}" class="form-control" id="name" type="text"
+                                placeholder="Enter your name..." data-sb-validations="required" />
+                            <label for="name">標題</label>
+                            <div class="invalid-feedback" data-sb-feedback="name:required">必填</div>
+                        </div>
+                        
+                   <div class="form-floating mb-3">
+                            <textarea class="form-control" id="message" type="text"
+                                placeholder="Enter your message here..." style="height: 10rem"
+                                data-sb-validations="required"></textarea>
+                            <label for="message">內容</label>
+                            <div class="invalid-feedback" data-sb-feedback="message:required">必填
+                            </div>
+                        </div>
+                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
+                `;
+                formGroups.appendChild(group);
+
+
+                group.querySelector('.delete-group').addEventListener('click', function () {
+                    formGroups.removeChild(group);
+                });
+            }
+
+            addGroupButton.addEventListener('click', function () {
+                createGroup();
+            });
+
+            // 初始化建立三個群組
+            const initialTitles = ['前言', '關於公司', '公司治理'];
+            for (let title of initialTitles) {
+                createGroup(title);
+            }
+        });
+    </script>
 </body>
 
 </html>
+
+<button></button>
