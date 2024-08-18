@@ -2,36 +2,331 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Transfer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>ChatESG</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
+        rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <!-- <link href="css/styles.css" rel="stylesheet" /> -->
+    <!-- 修改CSS檔案的位置 -->
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 
-<body>
-    <h1>Message Transfer</h1>
-    <input type="text" id="messageInput" placeholder="Enter your message">
-    <button onclick="sendMessage()">Send</button>
-    <p id="response"></p>
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#page-top">ChatESG</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead">
+        <div class="container px-4 px-lg-5 h-100">
+            <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-8 align-self-end">
+                    <h1 class="text-white font-weight-bold">您首選的 ESG 報告生成平台</h1>
+                    <hr class="divider" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                    <p class="text-white-75 mb-5">利用 AI 技術，幫助您輕鬆生成精確的 ESG 報告！只需輸入關鍵數據，
+                        系統便會自動生成報告書，助您輕鬆應對合規要求並提升企業形象！點擊下方按鈕快速獲取量身定制的ESG報告書！
+                    </p>
+                    <a class="btn btn-primary btn-xl" href="#contact">立即開始！</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- About-->
+    <section class="page-section bg-primary" id="about">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="text-white mt-0">We've got what you need!</h2>
+                    <hr class="divider divider-light" />
+                    <p class="text-white-75 mb-4">Start Bootstrap has everything you need to get your new website up and
+                        running in no time! Choose one of our open source, free to download, and easy to use themes! No
+                        strings attached!</p>
+                    <a class="btn btn-light btn-xl" href="#services">Get Started!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Services-->
+    <section class="page-section" id="services" style="background-color: bisque;">
+        <div class="container px-4 px-lg-5">
+            <h2 class="text-center mt-0">技術</h2>
+            <hr class="divider" />
+            <div class="row gx-4 gx-lg-5">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2">Sturdy Themes</h3>
+                        <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2">Up to Date</h3>
+                        <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2">Ready to Publish</h3>
+                        <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2">Made with Love</h3>
+                        <p class="text-muted mb-0">Is it really open source if it's not made with love?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="page-section" id="contact" style="background-color: floralwhite;">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 col-xl-6 text-center">
+                    <h2 class="mt-0">立即開始！</h2>
+                    <hr class="divider" />
+                    <p class="text-muted mb-5">請詳細的輸入以下資訊！</p>
+                </div>
+            </div>
+            <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                <div class="col-lg-6">
+                    <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                        <div id="form-groups">
+                            <!-- 動態產生的表單群組將在這裡 -->
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-xl btn-success --bs-teal" id="addGroup">添加新组</button>
+                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">提交</button>
+                        </div>
 
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">
+                                <div class="fw-bolder">填寫完成！</div>
+                                正字生成內容。
+                                <br />
+                                <!-- <a -->
+                                <!-- href="https://">https://</a> -->
+                            </div>
+                        </div>
+                        <div class="d-none" id="submitErrorMessage">
+                            <div class="text-center text-danger mb-3">Error sending message!</div>
+                        </div>
+                        <!-- Submit Button-->
+                        <!-- <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton"
+                                type="submit">提交</button></div> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer-->
+    <footer class="bg-light py-5">
+        <div class="container px-4 px-lg-5">
+            <div class="small text-center text-muted">Copyright &copy; 2024 - NTCUST NLP Lab</div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SimpleLightbox plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="../static/scripts.js"></script>
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script>
+
+        // 建立一個變數，統計有多少個群組
+        let groupCount = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const formGroups = document.getElementById('form-groups');
+            const addGroupButton = document.getElementById('addGroup');
+            const submitButton = document.getElementById('submitButton');
+
+            function createGroup(title = '', className_title = 'is-invalid', className_content = 'is-invalid') {
+                groupCount++;
+
+                const group = document.createElement('div');
+                group.className = 'form-group mb-3';
+                group.innerHTML = `
+                    <div class="form-floating mb-3">
+                        <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
+                            placeholder="Enter your name..." data-sb-validations="required" />
+                        <label for="name${groupCount}">標題</label>
+                        <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control ${className_content}" id="message${groupCount}" type="text"
+                            placeholder="Enter your message here..." style="height: 10rem"
+                            data-sb-validations="required"></textarea>
+                        <label for="message${groupCount}">內容</label>
+                        <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
+                `;
+                formGroups.appendChild(group);
+
+                const input = group.querySelector('input');
+                const textarea = group.querySelector('textarea');
+
+                input.addEventListener('input', validateField);
+                textarea.addEventListener('input', validateField);
+
+                group.querySelector('.delete-group').addEventListener('click', function () {
+                    formGroups.removeChild(group);
+                    groupCount--;
+                    validateForm();
+                });
+
+                validateForm();
+            }
+
+            function validateField() {
+                if (this.value.trim() === '') {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+                validateForm();
+            }
+
+            function validateForm() {
+                const groups = formGroups.querySelectorAll('.form-group');
+                let isValid = true;
+
+                groups.forEach((group) => {
+                    const input = group.querySelector('input');
+                    const textarea = group.querySelector('textarea');
+
+                    if (input.value.trim() === '' || textarea.value.trim() === '') {
+                        isValid = false;
+                    }
+                });
+
+                submitButton.disabled = !isValid;
+            }
+
+            addGroupButton.addEventListener('click', function () {
+                createGroup();
+            });
+
+            // 初始化建立三個群組
+            const initialTitles = ['前言', '關於公司', '公司治理'];
+            for (let title of initialTitles) {
+                createGroup(title, '');
+            }
+
+            // 初始驗證表單
+            validateForm();
+        });
+
+        // 用於傳送訊息到py
+        // 傳送的訊息要包含 groupCount 這個變數，以及每個群組的標題和內容
+        // 請注意處理動態個groupCount因為使用者可能會新增或刪除
+        // 需要修改這段函數，使其能夠傳送所有群組的標題和內容
+        // 給py的資料 JSON 格式應該是這樣：{'groupCount': 'X', 'group1': {'title': '前言', 'content': '內容'}, 'group2': {'title': '關於公司', 'content': '內容'}, 'group3': {'title': '公司治理', 'content': '內容'}}
         function sendMessage() {
-            const message = document.getElementById('messageInput').value;
+            const formGroups = document.getElementById('form-groups');
+            const groups = formGroups.querySelectorAll('.form-group');
+
+            let data = {
+                groupCount: groups.length
+            };
+
+            groups.forEach((group, index) => {
+                const title = group.querySelector('input[type="text"]').value;
+                const content = group.querySelector('textarea').value;
+                data[`group${index + 1}`] = {
+                    title: title,
+                    content: content
+                };
+            });
+            console.log(data);
             fetch('/send_message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: message }),
+                body: JSON.stringify(data),
             })
                 .then(response => response.json())
                 .then(data => {
+                    // 顯示回應訊息
                     document.getElementById('response').textContent = data.response;
+                    // console.log(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            event.preventDefault();  // 防止表單默認提交
+            // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
+            const formGroups = document.getElementById('form-groups');
+            const groups = formGroups.querySelectorAll('.form-group');
+            let valid = true;
+            groups.forEach((group) => {
+                const title = group.querySelector('input[type="text"]').value;
+                const content = group.querySelector('textarea').value;
+                if (title === '' || content === '') {
+                    valid = false;
+                }
+            });
+            if (!valid) {
+                alert('請填寫所有群組的標題和內容！');
+                return;
+            }
+            else {
+                alert('提交成功！');
+                // 將所有input標籤 和 text 加入disabled屬性，避免重複提交
+                const inputs = document.querySelectorAll('input');
+                const textareas = document.querySelectorAll('textarea');
+                inputs.forEach((input) => {
+                    input.disabled = true;
+                });
+                textareas.forEach((textarea) => {
+                    textarea.disabled = true;
+                });
+
+                // console.log(valid);
+                sendMessage();
+            }
+        });
+
     </script>
 </body>
 
 </html>
+
+<button></button>

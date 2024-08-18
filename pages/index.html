@@ -282,6 +282,52 @@
                 createGroup(title);
             }
         });
+
+        // 用於傳送訊息到py
+        // 傳送的訊息要包含 groupCount 這個變數，以及每個群組的標題和內容
+        // 請注意處理動態個groupCount因為使用者可能會新增或刪除
+        // 需要修改這段函數，使其能夠傳送所有群組的標題和內容
+        // 給py的資料 JSON 格式應該是這樣：{'groupCount': 'X', 'group1': {'title': '前言', 'content': '內容'}, 'group2': {'title': '關於公司', 'content': '內容'}, 'group3': {'title': '公司治理', 'content': '內容'}}
+        function sendMessage() {
+            const formGroups = document.getElementById('form-groups');
+            const groups = formGroups.querySelectorAll('.form-group');
+
+            let data = {
+                groupCount: groups.length
+            };
+
+            groups.forEach((group, index) => {
+                const title = group.querySelector('input[type="text"]').value;
+                const content = group.querySelector('textarea').value;
+                data[`group${index + 1}`] = {
+                    title: title,
+                    content: content
+                };
+            });
+            console.log(data);
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // 顯示回應訊息
+                    document.getElementById('response').textContent = data.response;
+                    // console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            event.preventDefault();  // 防止表單默認提交
+            sendMessage();
+        });
+
     </script>
 </body>
 
