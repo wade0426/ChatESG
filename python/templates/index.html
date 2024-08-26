@@ -127,7 +127,7 @@
                         </div>
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-xl btn-success --bs-teal" id="addGroup">添加新组</button>
-                            <button class="btn btn-primary btn-xl" id="submitButton" type="submit">提交</button>
+                            <button class="btn btn-primary btn-xl" id="my_submitButton" type="submit">提交</button>
                         </div>
 
                         <div class="d-none" id="submitSuccessMessage">
@@ -143,7 +143,7 @@
                             <div class="text-center text-danger mb-3">Error sending message!</div>
                         </div>
                         <!-- Submit Button-->
-                        <!-- <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="submitButton"
+                        <!-- <div class="d-grid"><button class="btn btn-primary btn-xl disabled" id="my_submitButton"
                                 type="submit">提交</button></div> -->
                     </form>
                 </div>
@@ -172,7 +172,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const formGroups = document.getElementById('form-groups');
             const addGroupButton = document.getElementById('addGroup');
-            const submitButton = document.getElementById('submitButton');
+            const my_submitButton = document.getElementById('my_submitButton');
 
             function createGroup(title = '', className_title = 'is-invalid', className_content = 'is-invalid') {
                 groupCount++;
@@ -234,7 +234,7 @@
                     }
                 });
 
-                submitButton.disabled = !isValid;
+                my_submitButton.disabled = !isValid;
             }
 
             addGroupButton.addEventListener('click', function () {
@@ -248,7 +248,7 @@
             }
 
             // 初始驗證表單
-            validateForm();
+            // validateForm();
         });
 
         // 用於傳送訊息到py
@@ -283,7 +283,10 @@
                 .then(response => response.json())
                 .then(data => {
                     // 顯示回應訊息
+                    alert("取得回應！");
                     document.getElementById('response').textContent = data.response;
+                    // 使用 LocalStorage
+                    localStorage.setItem('response', data.response);
                     // console.log(data);
                 })
                 .catch(error => {
@@ -291,7 +294,7 @@
                 });
         }
 
-        document.getElementById('submitButton').addEventListener('click', function (event) {
+        document.getElementById('my_submitButton').addEventListener('click', function (event) {
             event.preventDefault();  // 防止表單默認提交
             // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
             const formGroups = document.getElementById('form-groups');

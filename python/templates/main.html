@@ -7,9 +7,9 @@
     <title>ESG 報告生成器</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="NotoSansTC-normal.js"></script>
+    <script src="../static/NotoSansTC-normal.js"></script>
     <!-- 引入字體 -->
-    <link rel="stylesheet" href="Noto_Sans_TC.css">
+    <link rel="stylesheet" href="../static/Noto_Sans_TC.css">
     <style>
         body {
             font-family: 'Noto Sans TC', Arial, sans-serif;
@@ -776,9 +776,69 @@
             document.removeEventListener('mouseup', stopResize);
         }
 
-        // 初始化：添加一個群組和一個章節
-        addGroup(); //群組
-        addSection('group-1'); //章節
+        function parseJsonToVariable(input) {
+            let a = JSON.parse(input);
+            return a;
+        }
+
+        // 當程式載入時，取得const value = localStorage.getItem('response');
+        // response 的格式類似 [{'title': '前言', 'content': 'hello b'}, {'title': '關於公司', 'content': 'hello b'}, {'title': '公司治理', 'content': 'hello bbb'}] (可能更多動態調整)
+        // 自動建立群組 addGroup(); 然後建立章節 addSection('group-1'); 並且將 title 和 content 填入 response[0]
+        // 自動建立群組 addGroup(); 然後建立章節 addSection('group-2'); 並且將 title 和 content 填入 response[1]
+
+        // 當程式載入時，初始化頁面內容
+        window.addEventListener('load', function () {
+            let response = [];
+            let storedResponse = "";
+            try {
+                storedResponse = localStorage.getItem('response');
+
+                if (storedResponse) {
+                    storedResponse = storedResponse.replace(/'/g, '"');
+                    // storedResponse = `${storedResponse}`;
+                    // 將所有'變成"
+                    console.log(storedResponse);
+                    console.log(typeof storedResponse);
+
+                    response = JSON.parse(storedResponse);
+                    console.log(response);
+                }
+            } catch (error) {
+                console.error('Error parsing stored response:', error);
+                // 如果解析失敗，使用空數組
+            }
+
+            if (Array.isArray(response) || response.length > 0) {
+                console.log("is array");
+                console.log(response);
+                response.forEach((item, index) => {
+                    // 每個項目創建一個新的群組
+                    addGroup();
+                    const groupId = `group-${groupCounter}`;
+
+                    // 在新群組中添加一個章節
+                    addSection(groupId);
+                    const sectionId = `section-${sectionCounter}`;
+
+                    // 填充章節的標題和內容
+                    if (item && typeof item === 'object') {
+                        document.getElementById(`${sectionId}-title`).value = item.title || '';
+                        document.getElementById(`${sectionId}-content`).value = item.content || '';
+                    }
+                });
+            } else {
+                // 如果沒有有效的儲存資料，創建一個默認的群組和章節
+                addGroup();
+                addSection('group-1');
+            }
+
+            // 更新預覽
+            updatePreview();
+        });
+
+        // 刪除原有的初始化代碼
+        // addGroup();
+        // addSection('group-1');
 
         updatePreview();
     </script>

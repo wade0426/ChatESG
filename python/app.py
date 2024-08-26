@@ -40,6 +40,11 @@ def send_message():
     # 
     return jsonify({"response": response})
 
+# 用於切換瀏覽器
+@app.route('/main')
+def main():
+    return render_template('main.html')
+
 # 生成 ESG 報告的函數
 def generate_esg_report(groups_data):
     print("處理中...")
