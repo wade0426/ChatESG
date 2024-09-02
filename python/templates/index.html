@@ -156,7 +156,10 @@
             <div class="small text-center text-muted">Copyright &copy; 2024 - NTCUST NLP Lab</div>
         </div>
     </footer>
-    <p id="response"></p>
+
+    <!-- 測試p標籤 -->
+    <!-- <p id="response"></p> -->
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SimpleLightbox plugin JS-->
@@ -284,9 +287,14 @@
                 .then(data => {
                     // 顯示回應訊息
                     alert("取得回應！");
-                    document.getElementById('response').textContent = data.response;
+
+                    // 測試p標籤
+                    // document.getElementById('response').textContent = data.response;
+
                     // 使用 LocalStorage
                     localStorage.setItem('response', data.response);
+                    // 改變網頁位置
+                    window.location.href = "/main";
                     // console.log(data);
                 })
                 .catch(error => {

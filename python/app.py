@@ -48,6 +48,12 @@ def main():
 # 生成 ESG 報告的函數
 def generate_esg_report(groups_data):
     print("處理中...")
+
+    # 先將標題分類
+    import title_classification
+    obj = title_classification
+    print(obj.title_classification("前言"))
+    
     # groups_data = [{'title': '前言a', 'content': 'a'}, {'title': '關於公司', 'content': 'a'}, {'title': '公司治理', 'content': 'a'}]
     # 將 每一個 content 加入 "hello" 字串
     for group in groups_data:
