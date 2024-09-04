@@ -109,11 +109,9 @@ model = genai.GenerativeModel(
 #   "output: ",
 # ])
 
-# print(response.text)
-
 def title_classification(title):
   response = model.generate_content([
-    "你是一個標題分類器 你只會輸出標題 \"長官的話\", \"公司簡介\", \"營運績效\"",
+    "你是一個標題分類器 你只會輸出標題 \"長官的話\", \"公司簡介\", \"營運績效\", \"無法分類\"",
     "input: 總經理的話",
     "output: 長官的話",
     "input: CEO的話",
@@ -188,3 +186,5 @@ def title_classification(title):
     "output: ",
   ])
   return response.text
+
+print(title_classification(""))
