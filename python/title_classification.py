@@ -125,4 +125,5 @@ def title_classification(title):
 
 if __name__ == "__main__":
   input_title = "前言"
+  input_title = "長官的話"
   print(title_classification(input_title))
