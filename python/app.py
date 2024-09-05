@@ -93,7 +93,8 @@ def generate_esg_report(groups_data, info_str=""):
 # 定義一個處理公司訊息的函數
 def process_info_data(info_data):
     # 將 info_data 轉換成 "key: value, key: value" 的格式 資料型態為 str
-    info_str = ", ".join([f"{key}: {value}" for key, value in info_data.items()])
+    # 啊 這是什麼鬼代碼ww
+    info_str = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in ["公司名稱", "成立時間", "報告年度"]])
     print(f"轉換後的公司訊息：{info_str}")
     # print(f"轉換後的資料型態：{type(info_str)}")
 
