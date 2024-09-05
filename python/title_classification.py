@@ -19,10 +19,10 @@ genai.configure(api_key=api_key)
 
 # Create the model
 generation_config = {
-  "temperature": 1,
+  "temperature": 1.6,
   "top_p": 0.95,
   "top_k": 64,
-  "max_output_tokens": 20,
+  "max_output_tokens": 4,
   "response_mime_type": "text/plain",
 }
 
@@ -66,6 +66,8 @@ def title_classification(title):
     "output: 公司簡介",
     "input: 本公司概況",
     "output: 公司簡介",
+    "input: 永續發展策略",
+    "output: 永續治理",
     "input: 關於我們",
     "output: 公司簡介",
     "input: 我們的公司",
@@ -108,6 +110,8 @@ def title_classification(title):
     "output: 營運績效",
     "input: 公司治理",
     "output: 公司治理",
+    "input: 永續發展策略",
+    "output: 永續治理",
     "input: 公司治理架構",
     "output: 公司治理",
     "input: 關於公司",
@@ -118,6 +122,12 @@ def title_classification(title):
     "output: 長官的話",
     "input: 關於公司",
     "output: 公司簡介",
+    "input: 永續發展策略",
+    "output: 永續治理",
+    "input: 永續治理公司",
+    "output: 永續治理",
+    "input: 永續治理企業",
+    "output: 永續治理",
     f"input: {title}",
     "output: ",
   ])
@@ -125,5 +135,5 @@ def title_classification(title):
 
 if __name__ == "__main__":
   input_title = "前言"
-  input_title = "長官的話"
+  input_title = "永續發展策略"
   print(title_classification(input_title))
