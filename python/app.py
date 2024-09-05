@@ -1,4 +1,8 @@
+# pip install flask
 from flask import Flask, request, jsonify, render_template
+from title_classification import title_classification
+from preamble import preamble
+import re
 
 app = Flask(__name__)
 
@@ -7,58 +11,95 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+# 用於切換瀏覽器
+@app.route('/main')
+def main():
+    return render_template('main.html')
+
+
 # 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
 @app.route('/send_message', methods=['POST'])
 # 用於處理發送訊息的請求，接收 JSON 格式的訊息，並返回處理後的結果。
 def send_message():
     data = request.json
     print("Received data:", data)  # 打印接收到的所有數據，用於調試
-    # 輸出 Received data: {'groupCount': 3, 'group1': {'title': '前言a', 'content': 'a'}, 'group2': {'title': '關於公司', 'content': 'a'}, 'group3': {'title': '公司治理', 'content': 'a'}}
 
-    # 如果 groupCount 不存在，則預設為 0
-    group_count = data.get('groupCount', 0)
+    info_count = int(data.get('infoCount', 0))
+    group_count = int(data.get('groupCount', 0))
+    info_data = data.get('資訊', {})
     groups_data = []
 
     for i in range(1, group_count + 1):
         group_key = f'group{i}'
-        if group_key in data:
-            groups_data.append(data[group_key])
+        if group_key in data.get('章節', {}):
+            groups_data.append(data['章節'][group_key])
 
-    # 輸出 處理數據：[{'title': '前言a', 'content': 'a'}, {'title': '關於公司', 'content': 'a'}, {'title': '公司治理', 'content': 'a'}]
-    print(f"處理數據：{groups_data}")
+    print(f"接收資訊：{info_data}")
+    print(f"接收章節：{groups_data}")
 
-    # 這裡你可以處理接收到的數據
-    # 例如，你可以將數據傳遞給一個函數來生成 ESG 報告
-    generate_esg_report(groups_data)
+    # 這裡可以調用函數處理數據
+    info_str = process_info_data(info_data)
+    generate_esg_report(groups_data, info_str)
 
-    # 暫時的示例響應
-    response = f"Received {group_count} groups of data. Processing..."
-    response = f"{groups_data}"
+    response = {
+        # 暫時不回傳 info_str
+        # "info": info_str,
+        "groups": groups_data
+    }
 
     print(f"Output: {response}")
-    
-    # 
-    return jsonify({"response": response})
+    return jsonify(response)  # 直接返回 response 字典，jsonify 会自动使用双引号
 
-# 用於切換瀏覽器
-@app.route('/main')
-def main():
-    return render_template('main.html')
-
-# 生成 ESG 報告的函數
-def generate_esg_report(groups_data):
+# 修改生成 ESG 报告的函数
+def generate_esg_report(groups_data, info_str=""):
     print("處理中...")
 
-    # 先將標題分類
-    import title_classification
-    obj = title_classification
-    print(obj.title_classification("前言"))
-    
-    # groups_data = [{'title': '前言a', 'content': 'a'}, {'title': '關於公司', 'content': 'a'}, {'title': '公司治理', 'content': 'a'}]
-    # 將 每一個 content 加入 "hello" 字串
+    print(f"有{len(groups_data)}個章節")
+    # print(groups_data)
+
+    # 處理章節內容
     for group in groups_data:
-        group['content'] = f"hello {group['content']}"
-    # print(f"ESG 報告生成成功！")
+        # 取得章節名稱
+        title_name = group['title']
+        # 將章節名稱分類
+        print(f"暫時將AI功能關閉")
+        # title_agent = title_classification(title_name)
+        title_agent = "長官的話"
+        # print(type(title_agent))
+        
+        # 取代 title_agent 所有不是中文字的內容
+        title_agent = re.sub(r'[^\u4e00-\u9fff]', '', title_agent)
+        
+        # 提示
+        print(f"章節名稱：{title_name} 分類：{title_agent}")
+
+        if (title_agent == "長官的話"):
+            tmp = preamble(group['content'], info_str)
+            tmp = tmp.replace('\n', '<br> ')
+            group['content'] = f"{tmp}" # type: ignore
+            # group['content'] = f"AI生成"
+
+        elif title_agent == "公司簡介":
+            group['content'] = f"處理後的內容：{group['content']}"
+
+        else:
+            group['content'] = f"無法分類：{group['content']}"
+
+    print(groups_data)
+    print(f"ESG 報告生成成功！")
+
+
+
+# 定義一個處理公司訊息的函數
+def process_info_data(info_data):
+    # 將 info_data 轉換成 "key: value, key: value" 的格式 資料型態為 str
+    info_str = ", ".join([f"{key}: {value}" for key, value in info_data.items()])
+    print(f"轉換後的公司訊息：{info_str}")
+    # print(f"轉換後的資料型態：{type(info_str)}")
+
+    return info_str
+
+
 
 
 if __name__ == '__main__':

@@ -781,22 +781,15 @@
             return a;
         }
 
-        // 當程式載入時，取得const value = localStorage.getItem('response');
-        // response 的格式類似 [{'title': '前言', 'content': 'hello b'}, {'title': '關於公司', 'content': 'hello b'}, {'title': '公司治理', 'content': 'hello bbb'}] (可能更多動態調整)
-        // 自動建立群組 addGroup(); 然後建立章節 addSection('group-1'); 並且將 title 和 content 填入 response[0]
-        // 自動建立群組 addGroup(); 然後建立章節 addSection('group-2'); 並且將 title 和 content 填入 response[1]
-
         // 當程式載入時，初始化頁面內容
         window.addEventListener('load', function () {
-            let response = [];
+            let response = {};
             let storedResponse = "";
             try {
                 storedResponse = localStorage.getItem('response');
 
                 if (storedResponse) {
                     storedResponse = storedResponse.replace(/'/g, '"');
-                    // storedResponse = `${storedResponse}`;
-                    // 將所有'變成"
                     console.log(storedResponse);
                     console.log(typeof storedResponse);
 
@@ -805,13 +798,13 @@
                 }
             } catch (error) {
                 console.error('Error parsing stored response:', error);
-                // 如果解析失敗，使用空數組
+                // 如果解析失敗，使用空對象
             }
 
-            if (Array.isArray(response) || response.length > 0) {
-                console.log("is array");
-                console.log(response);
-                response.forEach((item, index) => {
+            if (response && response.groups && Array.isArray(response.groups) && response.groups.length > 0) {
+                console.log("Valid groups found");
+                console.log(response.groups);
+                response.groups.forEach((item, index) => {
                     // 每個項目創建一個新的群組
                     addGroup();
                     const groupId = `group-${groupCounter}`;
@@ -835,10 +828,6 @@
             // 更新預覽
             updatePreview();
         });
-
-        // 刪除原有的初始化代碼
-        // addGroup();
-        // addSection('group-1');
 
         updatePreview();
     </script>

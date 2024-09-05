@@ -21,6 +21,8 @@
     <!-- <link href="css/styles.css" rel="stylesheet" /> -->
     <!-- 修改CSS檔案的位置 -->
     <link rel="stylesheet" href="../static/styles.css">
+    <!-- bulma -->
+    <link rel="stylesheet" href="../static/my_bulma.css">
 </head>
 
 <body id="page-top">
@@ -33,7 +35,7 @@
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">關於</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -53,28 +55,78 @@
                     <p class="text-white-75 mb-5">利用 AI 技術，幫助您輕鬆生成精確的 ESG 報告！只需輸入關鍵數據，
                         系統便會自動生成報告書，助您輕鬆應對合規要求並提升企業形象！點擊下方按鈕快速獲取量身定制的ESG報告書！
                     </p>
-                    <a class="btn btn-primary btn-xl" href="#contact">立即開始！</a>
+                    <a class="btn btn-primary btn-xl" href="#question">立即開始！</a>
                 </div>
             </div>
         </div>
     </header>
-    <!-- About-->
-    <section class="page-section bg-primary" id="about">
+
+
+
+    <!-- 問題-->
+    <section class="page-section" id="question" style="background-color: lightslategray; padding-bottom: 5%;">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2 class="text-white mt-0">We've got what you need!</h2>
+                    <h2 class="text-white mt-0">讓我們先了解你！</h2>
                     <hr class="divider divider-light" />
-                    <p class="text-white-75 mb-4">Start Bootstrap has everything you need to get your new website up and
-                        running in no time! Choose one of our open source, free to download, and easy to use themes! No
-                        strings attached!</p>
-                    <a class="btn btn-light btn-xl" href="#services">Get Started!</a>
+                    <p class="text-white-75" style="font-size: 150%; margin-bottom: 0%;">你想要製作哪一個產業類別的ESG報告書?</p>
+
+                    <!-- button -->
+                    <div class="btn-group" style="margin: 3%;">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            選擇你的產業類別
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#about" id="industry-finance">金融業</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-education">教育</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-food">食品工業</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-electric">電器電纜</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-machinery">電器機械</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-biotech">生技醫療</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-textile">紡織纖維</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-chemical">化學工業</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-plastic">塑膠工業</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-cement">水泥工業</a></li>
+                            <li><a class="dropdown-item" href="#about" id="industry-glass">玻璃陶瓷</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="industry-general">通用</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About-->
+    <section class="page-section" id="about" style="background-color: lightslategray; display: none; padding-top: 5%;">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="text-white mt-0">讓我們生成更符合您所需要的報告！</h2>
+                    <hr class="divider divider-light" />
+
+                    <!-- 輸入表單 -->
+                    <div id="industry-form" style="display: none;">
+                        <div id="form-fields">
+                            <!-- 動態生成的表單字段將在這裡 -->
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm mb-3 add-group btn-xl"
+                            style="padding: 1% 5% 1% 5%;">添加新資料</button>
+                    </div>
+                    <br>
+                    <a style="display: none; border-radius: 10rem; padding: 2.5% 6% 2.5% 6%; "
+                        class="btn btn-primary btn-light" href="#contact" id="about_next">下一步！</a>
                 </div>
             </div>
         </div>
     </section>
     <!-- Services-->
-    <section class="page-section" id="services" style="background-color: bisque;">
+    <section class="page-section" id="services" style="background-color: bisque; display: none;">
         <div class="container px-4 px-lg-5">
             <h2 class="text-center mt-0">技術</h2>
             <hr class="divider" />
@@ -110,11 +162,11 @@
             </div>
         </div>
     </section>
-    <section class="page-section" id="contact" style="background-color: floralwhite;">
+    <section class="page-section" id="contact" style="background-color: floralwhite; display: none;">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6 text-center">
-                    <h2 class="mt-0">立即開始！</h2>
+                    <h2 class="mt-0">輸入你想要製作的章節！</h2>
                     <hr class="divider" />
                     <p class="text-muted mb-5">請詳細的輸入以下資訊！</p>
                 </div>
@@ -158,7 +210,7 @@
     </footer>
 
     <!-- 測試p標籤 -->
-    <!-- <p id="response"></p> -->
+    <p id="response"></p>
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -167,8 +219,8 @@
     <!-- Core theme JS-->
     <script src="../static/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    <script>
 
+    <script>
         // 建立一個變數，統計有多少個群組
         let groupCount = 0;
 
@@ -190,8 +242,7 @@
                         <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea class="form-control ${className_content}" id="message${groupCount}" type="text"
-                            placeholder="Enter your message here..." style="height: 10rem"
+                        <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
                             data-sb-validations="required"></textarea>
                         <label for="message${groupCount}">內容</label>
                         <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
@@ -255,27 +306,42 @@
         });
 
         // 用於傳送訊息到py
-        // 傳送的訊息要包含 groupCount 這個變數，以及每個群組的標題和內容
-        // 請注意處理動態個groupCount因為使用者可能會新增或刪除
+        // 傳送的訊息要包含 infoCount 和 groupCount 這個變數，以及每個群組的標題和內容
+        // 請注意處理動態個 infoCount 和 groupCount因為使用者可能會新增或刪除
         // 需要修改這段函數，使其能夠傳送所有群組的標題和內容
-        // 給py的資料 JSON 格式應該是這樣：{'groupCount': 'X', 'group1': {'title': '前言', 'content': '內容'}, 'group2': {'title': '關於公司', 'content': '內容'}, 'group3': {'title': '公司治理', 'content': '內容'}}
+        // 給py的資料 JSON 格式應該是這樣：{"infoCount":"X","groupCount":"X","資訊":{"公司名稱":"臺灣產物保險股份有限公司","成立時間":"1990年","報告年度":"2024年"},"章節":{"group1":{"title":"前言","content":"內容"},"group2":{"title":"關於公司","content":"內容"},"group3":{"title":"公司治理","content":"內容"}}}
         function sendMessage() {
             const formGroups = document.getElementById('form-groups');
             const groups = formGroups.querySelectorAll('.form-group');
+            const formFields = document.getElementById('form-fields');
+            const infoGroups = formFields.querySelectorAll('.form-group');
 
             let data = {
-                groupCount: groups.length
+                infoCount: infoGroups.length,
+                groupCount: groups.length,
+                資訊: {},
+                章節: {}
             };
 
+            // 處理"資訊"部分
+            infoGroups.forEach((group) => {
+                const title = group.querySelector('input[type="text"]').value;
+                const content = group.querySelector('textarea').value;
+                data.資訊[title] = content;
+            });
+
+            // 處理"章節"部分
             groups.forEach((group, index) => {
                 const title = group.querySelector('input[type="text"]').value;
                 const content = group.querySelector('textarea').value;
-                data[`group${index + 1}`] = {
+                data.章節[`group${index + 1}`] = {
                     title: title,
                     content: content
                 };
             });
-            console.log(data);
+
+            // console.log(data);
+
             fetch('/send_message', {
                 method: 'POST',
                 headers: {
@@ -289,12 +355,15 @@
                     alert("取得回應！");
 
                     // 測試p標籤
-                    // document.getElementById('response').textContent = data.response;
+                    console.log(data);
+                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
 
                     // 使用 LocalStorage
-                    localStorage.setItem('response', data.response);
+                    localStorage.setItem('response', JSON.stringify(data));
                     // 改變網頁位置
-                    window.location.href = "/main";
+                    // window.location.href = "/main";
+
+                    // 測試
                     // console.log(data);
                 })
                 .catch(error => {
@@ -302,6 +371,7 @@
                 });
         }
 
+        // 監聽提交按鈕
         document.getElementById('my_submitButton').addEventListener('click', function (event) {
             event.preventDefault();  // 防止表單默認提交
             // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
@@ -334,6 +404,102 @@
                 // console.log(valid);
                 sendMessage();
             }
+        });
+
+        // about的產業類別選單
+        document.addEventListener('DOMContentLoaded', function () {
+            // 統計infoCount
+            let infoCount = 0;
+            const question_area = document.getElementById('question');
+            const about_area = document.getElementById('about');
+            const about_next = document.getElementById('about_next');
+            const contact = document.getElementById('contact');
+
+            const formFields = document.getElementById('form-fields');
+            const addGroupButton = document.querySelector('.add-group');
+            const industryForm = document.getElementById('industry-form');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+            function createFormGroup(title = '', placeholder = '') {
+                infoCount++;
+                const group = document.createElement('div');
+                group.className = 'form-group mb-3';
+                group.innerHTML = `
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="title${Date.now()}" type="text" placeholder="Enter title..." value="${title}" required />
+                        <label for="title${Date.now()}">標題</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="content${Date.now()}" placeholder="Enter content..." style="height: 10rem" required>${placeholder}</textarea>
+                        <label for="content${Date.now()}">內容</label>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group">刪除</button>
+                `;
+                formFields.appendChild(group);
+
+                group.querySelector('.delete-group').addEventListener('click', function () {
+                    formFields.removeChild(group);
+                });
+            }
+
+            function clearFormFields() {
+                formFields.innerHTML = '';
+            }
+
+            function showIndustryForm() {
+                industryForm.style.display = 'block';
+            }
+
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    clearFormFields();
+                    showIndustryForm();
+
+                    // 移除 display: none 的屬性
+                    question_area.style.paddingBottom = '0%';
+                    about_next.style.display = 'math';
+                    about_area.style.display = 'block';
+                    contact.style.display = 'block';
+
+
+                    // 去 #contact
+                    window.location.href = "#about";
+
+                    const industry = this.id.split('-')[1];
+                    if (industry === 'finance') {
+                        createFormGroup('公司名稱', "填寫您的公司名稱，例如：「臺灣產物保險股份有限公司」或「國泰金控」。");
+                        createFormGroup('成立時間', "填寫您的公司成立時間，例如：「1990年」。");
+                        createFormGroup('報告年度', "填寫您的公司報告年度，例如：「2024年」。");
+                        createFormGroup('公司簡介', "提供公司的簡要介紹，包括核心業務領域。例如：「臺灣產物保險股份有限公司是全台歷史最悠久的產物保險公司，致力於提供客戶多元且創新的保險產品及服務。」");
+                        createFormGroup('公司願景與使命', "描述公司長遠的發展願景以及現階段的使命。例如：以『穩健經營、客戶導向』為核心策略，致力於成為亞太地區最具影響力的金融機構。");
+                        createFormGroup('核心價值觀', "列出公司堅持的核心價值觀，這些價值觀如何指導公司的決策和行為。例如：「誠信、創新、客戶至上、永續發展。」");
+                        createFormGroup('產品與服務', "描述公司提供的主要產品和服務，包括市場定位和特色。例如：「臺灣產物保險提供車險、住宅保險、企業財產保險等多元產品，並致力於創新發展綠能保險。」");
+                        createFormGroup('市場地位', "提供公司在市場中的地位和競爭優勢，如市場份額或領先優勢。例如：「本公司在台灣產險市場的市占率達到20%，位居市場前列。」");
+                        createFormGroup('董事會與管理層', "提供董事會成員和管理層的簡介，包括他們的背景和在公司的角色。例如：「本公司董事會由七名資深董事組成，皆具有豐富的金融業經驗，並由總經理領導管理團隊。」");
+                        createFormGroup('關鍵成就與獎項', "列出公司在報告年度內的關鍵成就和獲得的獎項，例如：「榮獲金管會2022年度公平待客評核結果為產險業排名前25%之績優金融機構」。");
+                        createFormGroup('財務數據', "填寫公司在報告年度內的重要財務數據，例如：「2022年資本額為36.22億元，風險資本適足率達1081.89%」。");
+                        createFormGroup('永續發展措施', "填寫公司在環境保護、社會參與及公司治理等方面的具體措施，例如：「推動數位E化作業及車險保單無紙化」。例如：「公司制定綠色低碳運營模式，推動能資源耗損的減少及高耗能設備的汰換。」");
+                        createFormGroup('社會責任行動', "填寫公司在社會責任方面的具體行動如慈善活動、社區關懷或其他公益舉措，例如：「成立臺灣產物保險文教基金會，支持青少年校園反毒宣導」。例如：「臺灣產物保險文教基金會多年來積極關懷弱勢群體，推動婦女與獨居老人的照顧計畫。」");
+                        createFormGroup('未來承諾', "填寫公司未來的計劃和面臨的挑戰，例如：「面對氣候變遷及資安威脅，將加速跨界交流與加深協作能力」。");
+                        createFormGroup('永續經營理念', "本司致力於推動永續經營理念，致力於實踐企業社會責任，秉持著環保、社會責任與公司治理三大核心價值，將其融入到日常經營活動中，確保企業長期穩健發展，為環境保護和社會進步貢獻力量。");
+                        createFormGroup('減碳成效', "本司積極響應國際減碳趨勢，於 2022 年取得 ISO14064-1 溫室氣體排放量盤查證書，並完成所有國內、海外據點及子公司的盤查，展現我們邁向淨零排放的決心。同時，我們���極推動綠色金融，將 ESG 因素納入授信評估，引導資金投入永續發展領域，積極推動低碳轉型。");
+                        createFormGroup('社會參與', "持續關注社會需求，積極參與公益活動，並推動員工志工服務，以實際行動回饋社會，促進地方發展與提升社會福祉。");
+                        createFormGroup('展望未來', "本司將持續加深永續發展理念，以科學減碳、責任投資、盡職授信及普惠金融為四大主軸，整合永續發展目標 (SDGs) 精神，從環境、社會和治理面向，積極推動各項永續發展措施，並與客戶、員工、股東和社會大眾攜手合作，共同創造更美好的未來。");
+                        createFormGroup('', "");
+
+                    }
+                    else if (industry === 'education') {
+                        createFormGroup('學校名稱', "填寫您的學校名稱，例如：「」或「」。");
+                        createFormGroup('課程', "");
+                    }
+                    else {
+                        createFormGroup();
+                    }
+                });
+            });
+
+            addGroupButton.addEventListener('click', () => createFormGroup());
         });
 
     </script>
