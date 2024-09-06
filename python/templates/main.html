@@ -261,7 +261,7 @@
             <label for="color-select">顏色：</label>
             <input type="color" id="color-select" value="#000000">
             <label for="font-size">字體大小：</label>
-            <input type="number" id="font-size" value="12" min="8" max="72">
+            <input type="number" id="font-size" value="16" min="8" max="72">
             <label for="line-height">行高：</label>
             <input type="number" id="line-height" value="1" min="0.4" max="3" step="0.1">
         </div>
@@ -464,7 +464,7 @@
         function updatePreview() {
             const font = fontSelect.value;
             const color = colorSelect.value;
-            const fontSize = fontSizeInput.value + 'px';
+            const fontSize = (fontSizeInput.value) + 'px';
             const lineHeight = lineHeightInput.value;
             // 暫時關右下左功能，統一用上方邊距。
             indentRight.value = indentBottom.value = indentLeft.value = indentTop.value;
@@ -644,6 +644,7 @@
             const contentWidth = pageWidth - 2 * margin;
             const contentHeight = pageHeight - 2 * margin;
 
+            // 將字體大小輸入框的值轉換為浮點數
             const fontSize = parseFloat(fontSizeInput.value);
             const lineHeight = parseFloat(lineHeightInput.value);
             const textLineHeight = fontSize * lineHeight;
@@ -721,10 +722,12 @@
                 doc.text(line, x, currentY + titleLineHeight);
                 currentY += titleLineHeight;
             });
-            currentY += titleLineHeight;
+            // 讓標題與正文間距變小一點
+            currentY += titleLineHeight - 2;
 
             // 添加段落
-            doc.setFontSize(fontSize);
+            // 讓字體變小一點
+            doc.setFontSize(fontSize - 4);
             for (let p of paragraphs) {
                 const lines = doc.splitTextToSize(p.innerText, width);
                 for (let line of lines) {

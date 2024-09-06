@@ -17,6 +17,12 @@ def index():
 def main():
     return render_template('main.html')
 
+# 用於切換瀏覽器
+@app.route('/edit')
+def edit():
+    return render_template('edit.html')
+
+
 
 # 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
 @app.route('/send_message', methods=['POST'])
@@ -64,7 +70,8 @@ def generate_esg_report(groups_data, info_str="", preamble_str="", Sustainable_G
         title_name = group['title']
         # 將章節名稱分類
         title_agent = title_classification(title_name)
-        # title_agent = "長官的話"
+        title_agent = "長官的話"
+        # title_agent = "無法分類"
         # print(f"暫時將AI功能關閉")
         # print(type(title_agent))
         

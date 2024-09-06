@@ -128,6 +128,8 @@ def title_classification(title):
     "output: 永續治理",
     "input: 永續治理企業",
     "output: 永續治理",
+    "input: 永續治理input",
+    "output: 永續治理",
     f"input: {title}",
     "output: ",
   ])
