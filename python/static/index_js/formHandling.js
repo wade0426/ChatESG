@@ -100,5 +100,5 @@ function updatePrompt(input, textarea) {
 }
 
 // 導出需要在其他地方使用的函数
-// updatePrompt
-export { initializeFormHandling, createGroup, validateField, validateForm, updatePrompt };
+// initializeFormHandling
+// export { createGroup, validateField, validateForm, updatePrompt };

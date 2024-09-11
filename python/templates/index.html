@@ -254,14 +254,13 @@
     <!-- Core theme JS -->
     <script src="../static/scripts.js"></script>
     <!-- (優先)引入formHandling.js -->
-    <script type="module" src="/static/index_js/formHandling.js"></script>
+    <script src="/static/index_js/formHandling.js"></script>
     <!-- Custom prompt JS -->
     <script src="../static/index_js/prompt.js"></script>
 
     <!-- index.html 的 JS -->
-    <script type="module">
+    <script>
 
-        import { initializeFormHandling, createGroup, validateField, validateForm, updatePrompt } from '../static/index_js/formHandling.js';
 
         // 當 DOM 加載完成後執行初始化
         document.addEventListener('DOMContentLoaded', () => {
