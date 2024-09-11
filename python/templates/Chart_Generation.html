@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖表生成</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .input-section,
+        .chart-section {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #chartContainer {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>圖表生成應用</h1>
+
+        <div class="input-section">
+            <h2>數據輸入</h2>
+            <table id="dataTable">
+                <tr>
+                    <th>類別</th>
+                    <th>數值</th>
+                    <th>操作</th>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="輸入類別"></td>
+                    <td><input type="number" placeholder="輸入數值"></td>
+                    <td><button onclick="addRow()">添加行</button></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="chart-section">
+            <h2>圖表生成</h2>
+            <button onclick="generateChart('bar')">生成柱狀圖</button>
+            <button onclick="generateChart('line')">生成折線圖</button>
+            <button onclick="generateChart('pie')">生成餅圖</button>
+            <button onclick="downloadChart()">下載圖表</button>
+            <div id="chartContainer">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+
+        function addRow() {
+            const table = document.getElementById('dataTable');
+            const newRow = table.insertRow(-1);
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="輸入類別"></td>
+                <td><input type="number" placeholder="輸入數值"></td>
+                <td><button onclick="this.parentNode.parentNode.remove()">刪除</button></td>
+            `;
+        }
+
+        function generateChart(type) {
+            const table = document.getElementById('dataTable');
+            const data = [];
+            const labels = [];
+
+            for (let i = 1; i < table.rows.length; i++) {
+                const category = table.rows[i].cells[0].getElementsByTagName('input')[0].value;
+                const value = parseFloat(table.rows[i].cells[1].getElementsByTagName('input')[0].value);
+                if (category && !isNaN(value)) {
+                    labels.push(category);
+                    data.push(value);
+                }
+            }
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: type,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '數值',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadChart() {
+            if (chart) {
+                const canvas = document.getElementById('myChart');
+                canvas.toBlob(function (blob) {
+                    saveAs(blob, "chart.png");
+                });
+            } else {
+                alert("請先生成圖表");
+            }
+        }
+    </script>
+</body>
+
+</html>

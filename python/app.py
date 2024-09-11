@@ -115,7 +115,7 @@ def process_info_data(info_data):
     # 將 info_data 轉換成 "key: value, key: value" 的格式 資料型態為 str
     info_str = ", ".join([f"{key}: {value}" for key, value in info_data.items()])
     preamble_str = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in ["公司名稱", "成立時間", "報告年度", "公司簡介", "公司願景與使命", "核心價值觀"]])
-    Sustainable_Governance_str = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in ["公司名稱", "成立時間", "報告年度", "公司簡介", "永續發展委員會設立", "永續發展委員會成員", "永續發展委員會職責", "永續發展政策和守則", "核心價值觀"]])
+    Sustainable_Governance_str = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in ["公司名稱", "報告年度", "公司簡介", "永續發展委員會設立", "永續發展委員會成員", "永續發展委員會職責", "永續發展政策和守則", "核心價值觀"]])
     
     print(f"轉換後的公司訊息：{info_str}")
     # print(f"轉換後的資料型態：{type(info_str)}")
