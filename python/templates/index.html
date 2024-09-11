@@ -244,6 +244,7 @@
     <!-- Core theme JS-->
     <script src="../static/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <script src="../static/index_js/prompt.js"></script>
 
     <script>
         // 建立一個變數，統計有多少個群組
@@ -269,7 +270,7 @@
                     <div class="form-floating mb-3">
                         <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
                             data-sb-validations="required">${demo_text}</textarea>
-                        <label for="message${groupCount}">內容</label>
+                        <label for="message${groupCount}">Prompt</label>
                         <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
                     </div>
                     <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
@@ -322,7 +323,7 @@
 
             // 初始化建立群組
             createGroup('關於本報告書', '', 'is-invalid', "");
-            createGroup('長官的話', '', 'is-invalid', '');
+            createGroup('長官的話', '', '', getPrompt('長官的話'));
             createGroup('關於公司', '', 'is-invalid', "");
             createGroup('永續發展策略', '', 'is-invalid', "");
             createGroup('公司治理', '', 'is-invalid', "");
@@ -385,8 +386,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    // 顯示回應訊息
-                    // alert("取得回應！");
+                    // 關閉等待提示
                     document.getElementById('wating_cancel-btn').click();
 
                     // 測試p標籤
@@ -396,15 +396,25 @@
                     // 使用 LocalStorage
                     localStorage.setItem('response', JSON.stringify(data));
 
-                    // 開啟一個新的視窗
-                    window.open("/main", "_blank");
+                    // 打開main頁面
+                    // 打開main頁面
+                    // 嘗試打開新頁面，如果被封鎖則在當前頁面導航
+                    function openOrNavigate(url) {
+                        const newWindow = window.open(url, '_blank');
+                        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                            // 彈出窗口被阻擋，在當前頁面導航
+                            window.location.href = url;
+                        }
+                    }
 
-                    // 改變網頁位置
-                    window.location.href = "/edit";
+                    // 打開main頁面
+                    openOrNavigate('/main');
 
+                    // 打開edit頁面
+                    openOrNavigate('/edit');
 
-                    // 測試
-                    // console.log(data);
+                    // 關閉當前index頁面
+                    // window.close();
                 })
                 .catch(error => {
                     console.error('Error:', error);
