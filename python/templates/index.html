@@ -2,26 +2,31 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>ChatESG</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
-    <!-- Bootstrap Icons-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico">
+
+    <!-- External CSS -->
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
-        rel="stylesheet" type="text/css" />
-    <!-- SimpleLightbox plugin CSS-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <!-- <link href="css/styles.css" rel="stylesheet" /> -->
-    <!-- 修改CSS檔案的位置 -->
+        rel="stylesheet" type="text/css">
+
+    <!-- SimpleLightbox plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../static/styles.css">
-    <!-- bulma -->
     <link rel="stylesheet" href="../static/my_bulma.css">
 </head>
 
@@ -237,91 +242,33 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JS-->
+    <!-- 外部庫 -->
+    <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SimpleLightbox plugin JS-->
+    <!-- SimpleLightbox plugin JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="../static/scripts.js"></script>
+    <!-- Bootstrap Forms JS -->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+    <!-- 本地腳本 -->
+    <!-- Core theme JS -->
+    <script src="../static/scripts.js"></script>
+    <!-- (優先)引入formHandling.js -->
+    <script type="module" src="/static/index_js/formHandling.js"></script>
+    <!-- Custom prompt JS -->
     <script src="../static/index_js/prompt.js"></script>
 
-    <script>
-        // 建立一個變數，統計有多少個群組
-        let groupCount = 0;
+    <!-- index.html 的 JS -->
+    <script type="module">
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const formGroups = document.getElementById('form-groups');
-            const addGroupButton = document.getElementById('addGroup');
-            const my_submitButton = document.getElementById('my_submitButton');
+        import { initializeFormHandling, createGroup, validateField, validateForm, updatePrompt } from '../static/index_js/formHandling.js';
 
-            function createGroup(title = '', className_title = 'is-invalid', className_content = 'is-invalid', demo_text = '') {
-                groupCount++;
+        // 當 DOM 加載完成後執行初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化表單處理
+            initializeFormHandling();
 
-                const group = document.createElement('div');
-                group.className = 'form-group mb-3';
-                group.innerHTML = `
-                    <div class="form-floating mb-3">
-                        <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
-                            placeholder="Enter your name..." data-sb-validations="required" />
-                        <label for="name${groupCount}">章節</label>
-                        <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
-                            data-sb-validations="required">${demo_text}</textarea>
-                        <label for="message${groupCount}">Prompt</label>
-                        <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
-                `;
-                formGroups.appendChild(group);
-
-                const input = group.querySelector('input');
-                const textarea = group.querySelector('textarea');
-
-                input.addEventListener('input', validateField);
-                textarea.addEventListener('input', validateField);
-
-                group.querySelector('.delete-group').addEventListener('click', function () {
-                    formGroups.removeChild(group);
-                    groupCount--;
-                    validateForm();
-                });
-
-                validateForm();
-            }
-
-            function validateField() {
-                if (this.value.trim() === '') {
-                    this.classList.add('is-invalid');
-                } else {
-                    this.classList.remove('is-invalid');
-                }
-                validateForm();
-            }
-
-            function validateForm() {
-                const groups = formGroups.querySelectorAll('.form-group');
-                let isValid = true;
-
-                groups.forEach((group) => {
-                    const input = group.querySelector('input');
-                    const textarea = group.querySelector('textarea');
-
-                    if (input.value.trim() === '' || textarea.value.trim() === '') {
-                        isValid = false;
-                    }
-                });
-
-                my_submitButton.disabled = !isValid;
-            }
-
-            addGroupButton.addEventListener('click', function () {
-                createGroup();
-            });
-
-            // 初始化建立群組
+            // 在這裡添加其他的事件監聽器或函數調用
             createGroup('關於本報告書', '', 'is-invalid', "");
             createGroup('長官的話', '', '', getPrompt('長官的話'));
             createGroup('關於公司', '', 'is-invalid', "");
@@ -331,9 +278,11 @@
             createGroup('永續環境', '', 'is-invalid', "");
             createGroup('員工關懷', '', 'is-invalid', "");
 
-            // 初始驗證表單
-            // validateForm();
+            // 驗證表單 是否為空
+            validateForm();
         });
+
+
 
         // 用於傳送訊息到py
         // 傳送的訊息要包含 infoCount 和 groupCount 這個變數，以及每個群組的標題和內容

@@ -9,9 +9,13 @@ const prompts = {
 語氣要求：
 自信且誠懇，傳達出公司高層對未來的承諾與展望。
 正式且具有領導者的口吻，強調公司在ESG方面的核心價值。`,
+
+    '你好': `你好`,
     // 在這裡新增 prompts
 };
 
 function getPrompt(key) {
     return prompts[key] || '';
 }
+
+// export { getPrompt };
