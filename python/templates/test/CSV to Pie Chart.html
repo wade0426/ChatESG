@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Pie Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <input type="file" id="csvFile" accept=".csv">
+    <canvas id="pieChart"></canvas>
+
+    <script>
+        document.getElementById('csvFile').addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const csvData = e.target.result;
+                const data = parseCSV(csvData);
+                createPieChart(data);
+            };
+
+            reader.readAsText(file);
+        }
+
+        function parseCSV(csvData) {
+            const rows = csvData.split('\n');
+            const labels = [];
+            const values = [];
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i].split(',');
+                if (row.length === 2) {
+                    labels.push(row[0]);
+                    values.push(parseFloat(row[1]));
+                }
+            }
+
+            return { labels, values };
+        }
+
+        function createPieChart(data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Pie Chart from CSV Data'
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

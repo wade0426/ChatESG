@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV 文件讀取器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CSV 文件讀取器</h1>
+    <input type="file" id="csvFile" accept=".csv">
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('csvFile').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            Papa.parse(file, {
+                complete: function (results) {
+                    displayData(results.data);
+                }
+            });
+        });
+
+        function displayData(data) {
+            const output = document.getElementById('output');
+            let table = '<table>';
+
+            // 添加表头
+            table += '<tr>';
+            for (let cell of data[0]) {
+                table += `<th>${cell}</th>`;
+            }
+            table += '</tr>';
+
+            // 添加数据行
+            for (let i = 1; i < data.length; i++) {
+                table += '<tr>';
+                for (let cell of data[i]) {
+                    table += `<td>${cell}</td>`;
+                }
+                table += '</tr>';
+            }
+
+            table += '</table>';
+            output.innerHTML = table;
+        }
+    </script>
+
+    <!-- 以下是另一種讀取方式 -->
+    <div id="csvString"></div>
+    <script>
+        document.getElementById('csvFile').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const csvString = event.target.result.replace(/\r\n|\n|\r/g, ' '); // 替換所有換行符為空格
+                const rows = csvString.split(' ').filter(Boolean); // 使用空格分割並過濾空字符串
+                let formattedOutput = file.name + '。' + rows.join(' ');
+
+                document.getElementById('csvString').innerText = formattedOutput;
+            };
+            reader.readAsText(file);
+        });
+    </script>
+    <script>
+        document.getElementById('csvFile').addEventListener('change', function (e) {
+            const fileName = e.target.files[0].name;
+            document.getElementById('file-name').textContent = '已上傳文件: ' + fileName;
+        });
+    </script>
+
+    <div id="file-name"></div>
+</body>
+
+</html>

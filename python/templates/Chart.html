@@ -1,4 +1,3 @@
-<!-- 當沒有開啟對比模式時，只會有一份圖表和資料，當開啟對比模式時，會根據使用者已經填入的資料格數，自動生成一樣的格數，還要有新增對比資料的按鈕，因為使用者可能會需要對比多份資料。 -->
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -31,6 +30,14 @@
 <body>
     <div class="container">
         <h1 class="text-center mb-4">圖表生成器</h1>
+
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04"
+                aria-label="Upload">
+            <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04">上傳CSV</button>
+        </div>
+        <div id="csvString"></div>
+
 
         <div id="chart-controls" class="mb-4">
             <div class="row g-3">
@@ -116,6 +123,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/Chart_js/csv.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // 常量定义
@@ -166,7 +175,7 @@
             }
 
             // 添加数据行
-            function addDataRow() {
+            const addDataRow = function addDataRow() {
                 const newRow = elements.dataTable.insertRow();
                 newRow.innerHTML = `
                     <td><input type="text" class="form-control x-value"></td>
@@ -402,7 +411,29 @@
             }
 
             init();
+
+            // 上傳CSV文件 自動填入資料
+            document.getElementById('inputGroupFileAddon04').addEventListener('click', function () {
+                const fileInput = document.getElementById('inputGroupFile04');
+                if (fileInput && fileInput.files.length > 0) {
+                    Processing_file(fileInput)
+                        .then(func_jsonData => {
+                            const jsonData = func_jsonData;
+                            const elements_tr = elements.dataTable.getElementsByTagName('tr');
+                            createChart(jsonData, addDataRow, elements_tr);
+                            // 自動生成圖表
+                            generateChartHandler();
+                        })
+                        .catch(error => {
+                            console.error('Error processing file:', error);
+                        });
+                } else {
+                    console.error('No file selected');
+                }
+            });
+
         });
+
     </script>
 </body>
 
