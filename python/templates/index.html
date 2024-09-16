@@ -173,7 +173,7 @@
                 <div class="col-lg-8 col-xl-6 text-center">
                     <h2 class="mt-0">輸入你想要製作的章節！</h2>
                     <hr class="divider" />
-                    <p class="text-muted mb-5">請詳細的輸入以下資訊！</p>
+                    <p class="text-muted mb-5">請詳細的輸入以下資訊</p>
                 </div>
             </div>
             <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -264,6 +264,22 @@
     <!-- Custom eventListeners JS -->
     <!-- 包含所有事件監聽器的設置 -->
     <script src="../static/index_js/eventListeners.js"></script>
+
+    <script>
+        // 這段程式用於初始化Bootstrap的Popover功能
+        document.addEventListener('DOMContentLoaded', function () {
+            // 當DOM內容加載完成後執行以下程式
+
+            // 獲取所有帶有'data-bs-toggle="popover"'屬性的元素
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+
+            // 對每個找到的元素初始化Popover
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                // 為每個元素創建一個新的Bootstrap Popover實例
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
+        });
+    </script>
 
 </body>
 

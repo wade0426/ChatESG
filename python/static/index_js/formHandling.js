@@ -1,3 +1,4 @@
+// 全域變數
 let groupCount = 0;
 let formGroups;
 let addGroupButton;

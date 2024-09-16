@@ -77,16 +77,39 @@ document.addEventListener('DOMContentLoaded', function () {
         group.className = 'form-group mb-3';
         group.innerHTML = `
             <div class="form-floating mb-3">
-                <input class="form-control" id="title${Date.now()}" type="text" placeholder="Enter title..." value="${title}" required />
+                <input class="form-control" id="title${Date.now()}" type="text" placeholder="Enter title..." value="${title}" required data-bs-toggle="popover" data-bs-trigger="manual" data-bs-placement="left" data-bs-content="${placeholder}" />
                 <label for="title${Date.now()}">標題</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control" id="content${Date.now()}" placeholder="Enter content..." style="height: 10rem" required>${placeholder}</textarea>
+                <textarea class="form-control" id="content${Date.now()}" placeholder="Enter content..." style="height: 10rem" required data-bs-toggle="popover" data-bs-trigger="manual" data-bs-placement="left" data-bs-content="${placeholder}"></textarea>
                 <label for="content${Date.now()}">內容</label>
             </div>
             <button type="button" class="btn btn-danger btn-sm mb-3 delete-group">刪除</button>
         `;
         formFields.appendChild(group);
+
+        // 初始化 Popover 並添加自定義行為
+        const popoverTriggerList = [].slice.call(group.querySelectorAll('textarea[data-bs-toggle="popover"]'));
+        popoverTriggerList.forEach(function (popoverTriggerEl) {
+            const popover = new bootstrap.Popover(popoverTriggerEl);
+            let hideTimeout;
+
+            popoverTriggerEl.addEventListener('focus', function () {
+                clearTimeout(hideTimeout);
+                popover.show();
+            });
+
+            popoverTriggerEl.addEventListener('blur', function () {
+                hideTimeout = setTimeout(() => {
+                    popover.hide();
+                }, 1000);
+            });
+
+            popoverTriggerEl.addEventListener('input', function () {
+                clearTimeout(hideTimeout);
+                popover.show();
+            });
+        });
 
         group.querySelector('.delete-group').addEventListener('click', function () {
             formFields.removeChild(group);
@@ -148,6 +171,12 @@ document.addEventListener('DOMContentLoaded', function () {
             else {
                 createFormGroup();
             }
+
+            // 初始化所有 Popover
+            const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl);
+            });
         });
     });
 
