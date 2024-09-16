@@ -471,7 +471,10 @@
                 formFields.innerHTML = '';
             }
 
-            function showIndustryForm() {
+            const showIndustryForm = function showIndustryForm() {
+                // 這段程式碼將 industryForm 元素的 display 樣式設置為 'block'
+                // 這意味著將使 industryForm 元素變為可見
+                // 通常用於在特定條件下顯示一個之前被隱藏的表單或區域
                 industryForm.style.display = 'block';
             }
 
@@ -510,7 +513,7 @@
                 const parsedData = JSON.parse(edit_json);
                 console.log(parsedData);
 
-                // 清空现有表单
+                // 清空現有表單
                 // clearFormFields();
 
                 // 添加资讯字段
@@ -527,18 +530,16 @@
                     });
                 }
 
-                // 更新表单显示
+                // 更新表單顯示
                 showIndustryForm();
                 about_next.style.display = 'inline-block';
                 about_area.style.display = 'block';
                 contact.style.display = 'block';
 
-                // 滚动到表单位置
+                // 滾動到表單位置
                 window.location.href = "#about";
             }
         });
-
-
 
     </script>
 </body>
