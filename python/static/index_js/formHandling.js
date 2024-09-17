@@ -1,12 +1,8 @@
-// 全域變數
-let groupCount = 0;
-let formGroups;
-let addGroupButton;
-let my_submitButton;
+// 全域變數 定義在 eventListeners.js
 
 function initializeFormHandling() {
     formGroups = document.getElementById('form-groups');
-    addGroupButton = document.getElementById('addGroup');
+    // addGroupButton = document.getElementById('addGroup');
     my_submitButton = document.getElementById('my_submitButton');
 
     addGroupButton.addEventListener('click', () => {
