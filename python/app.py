@@ -4,7 +4,11 @@ from title_classification import title_classification
 from preamble import preamble
 from SustainableGovernance import SustainableGovernance
 from generate_esg_report import generate_esg_report
+from ftp import upload_file
+import base64
+import io
 import re
+from ftplib import FTP
 
 app = Flask(__name__)
 
@@ -23,14 +27,17 @@ def main():
 def edit():
     return render_template('edit.html')
 
-
+# 用於切換瀏覽器
+@app.route('/chart')
+def chart():
+    return render_template('Chart.html')
 
 # 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
 @app.route('/send_message', methods=['POST'])
 # 用於處理發送訊息的請求，接收 JSON 格式的訊息，並返回處理後的結果。
 def send_message():
     data = request.json
-    print("Received data:", data, "type:", type(data))  # 打印接收到的所有數據，用於調試
+    print("Received data:", data, "type:", type(data))  # 打印接收到的所有數據，於調試
 
     info_count = int(data.get('infoCount', 0)) # type: ignore
     group_count = int(data.get('groupCount', 0)) # type: ignore
@@ -42,7 +49,7 @@ def send_message():
         if group_key in data.get('章節', {}): # type: ignore
             groups_data.append(data['章節'][group_key]) ## type: ignore
 
-    print(f"接收資訊：{info_data}")
+    print(f"接收章節資訊：{info_data}")
     print(f"接收章節：{groups_data}")
 
     # 這裡可以調用函數處理數據
@@ -59,6 +66,23 @@ def send_message():
     return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
+@app.route('/use-chart', methods=['POST'])
+def use_chart():
+    data = request.json
+    image_data = data['imageData']
+    
+    # 移除 base64 編碼的前缀
+    image_data = image_data.split(',')[1]
+    
+    # 解碼 base64 數據
+    image_binary = base64.b64decode(image_data)
+
+    res = upload_file(image_binary)
+    if res:
+        return jsonify({"message": "Chart saved successfully"}), 200
+    else:
+        return jsonify({"message": "Chart saved failed"}), 500
+    
 
 # 定義一個處理公司訊息的函數
 def process_info_data(info_data):

@@ -108,11 +108,14 @@
             </div>
 
             <div class="row mt-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <button id="generate-chart" class="btn btn-success w-100">生成圖表</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <button id="download-chart" class="btn btn-info w-100">下載圖表</button>
+                </div>
+                <div class="col-md-4">
+                    <button id="use-chart" class="btn btn-warning w-100">使用圖表</button>
                 </div>
             </div>
         </div>
@@ -430,6 +433,42 @@
                 } else {
                     console.error('No file selected');
                 }
+            });
+
+            // 使用圖表
+            document.getElementById('use-chart').addEventListener('click', function () {
+                if (!chart) {
+                    alert('請先生成圖表');
+                    return;
+                }
+
+                const tempCanvas = createTempCanvas();
+                const backgroundColor = elements.chartColor.value;
+                drawChartOnTempCanvas(tempCanvas, backgroundColor);
+
+                const imageData = tempCanvas.toDataURL('image/png');
+
+                fetch('/use-chart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ imageData: imageData }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log('Server response:', data);
+                        alert('圖表已成功使用');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('使用圖表時發生錯誤: ' + error.message);
+                    });
             });
 
         });
