@@ -17,11 +17,11 @@ const addGroupButton = document.getElementById('addGroup');
 const industryForm = document.getElementById('industry-form');
 const dropdownItems = document.querySelectorAll('.dropdown-item');
 
-// 在文件顶部添加一个新的全局变量
+// 用於判斷是否在載入資料
 let isInitialLoad = true;
 
 
-// 确保在 DOM 加载完成后初始化所有事件监听器
+// 確保在 DOM 加載完成後初始化所有事件監聽器
 document.addEventListener('DOMContentLoaded', () => {
     // 初始化表單處理 有關formHandling.js
     initializeFormHandling();
@@ -79,9 +79,19 @@ function restoreFormData(title) {
     }
 
     // 恢復資訊數據
-    // 對 groupsData 迭代
     groupsData.forEach((groupData) => {
-        createFormGroup(groupData.title, groupData.content);
+        const group = createFormGroup(groupData.title, groupData.content);
+
+        // 恢復圖表數據
+        if (groupData.charts && groupData.charts.length > 0) {
+            const chartsContainer = group.querySelector('.charts-container');
+            groupData.charts.forEach(chartData => {
+                const chartContainer = createChartContainer();
+                chartContainer.querySelector('.chart-preview').src = chartData.base64;
+                chartContainer.querySelector('.chart-description').value = chartData.imageDescription;
+                chartsContainer.appendChild(chartContainer);
+            });
+        }
     });
 
     // 恢復章節數據
@@ -104,7 +114,7 @@ function autoSave() {
     const groupsData = [];
     const chaptersData = [];
 
-    // 保存 groups 数据（標題和內容）
+    // 保存 groups 数据（標題、內容和圖表）
     document.getElementById('form-fields').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
@@ -112,15 +122,12 @@ function autoSave() {
 
         group.querySelectorAll('.chart-container').forEach(chartContainer => {
             charts.push({
-                description: chartContainer.querySelector('.chart-description').value,
-                imageSrc: chartContainer.querySelector('.chart-preview').src
+                base64: chartContainer.querySelector('.chart-preview').src,
+                imageDescription: chartContainer.querySelector('.chart-description').value,
+                url: "" // 暫時為空
             });
         });
 
-        // 這行程式碼將每個表單組的資料（標題、內容和圖表）添加到 groupsData 陣列中
-        // title: 表單組的標題
-        // content: 表單組的內容
-        // charts: 包含該表單組中所有圖表資訊的陣列
         groupsData.push({ title, content, charts });
     });
 
@@ -199,14 +206,14 @@ function createFormGroup(title = '', textarea_value = '') {
         });
     });
 
-    // 确保新添加的图表按钮正常工作
+    // 確保新添加的圖表按鈕正常工作
     const addChartButton = group.querySelector('.add-chart');
     addChartButton.addEventListener('click', function () {
-        console.log('新增圖表按钮被点击');  // 添加日志
+        console.log('新增圖表按鈕被點擊');  // 添加日誌
         const chartsContainer = group.querySelector('.charts-container');
         const newChartContainer = createChartContainer();
         chartsContainer.appendChild(newChartContainer);
-        autoSave(); // 添加自动保存
+        autoSave(); // 添加自動保存
         console.log("新增圖表呼叫自動保存", isInitialLoad);
     });
 
@@ -223,15 +230,15 @@ function createFormGroup(title = '', textarea_value = '') {
     console.log("新增內容呼叫自動保存", isInitialLoad);
 
     if (!isInitialLoad) {
-        autoSave(); // 只在非初始加载时自动保存
+        autoSave(); // 只在非初始加載時自動保存
         console.log("新增組呼叫自動保存", isInitialLoad);
     }
-    // return group; // 返回创建的组元素
+    return group; // 返回創建的組元素
 }
 
 // 创建图表容器
 function createChartContainer() {
-    console.log('创建新的图表容器');  // 添加日志
+    console.log('創建新的圖表容器');  // 添加日誌
     const chartContainer = document.createElement('div');
     chartContainer.className = 'chart-container mb-3';
     chartContainer.innerHTML = `
@@ -259,25 +266,29 @@ function createChartContainer() {
         </div>
     `;
 
-    // 添加图表描述输入事件
+    // 添加圖表描述輸入事件
     const chartDescription = chartContainer.querySelector('.chart-description');
     const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
 
+    // 為圖表描述文本框添加輸入事件監聽器
     chartDescription.addEventListener('input', function () {
+        // 當輸入發生時，將描述文本同步到預覽區域
         chartPreviewText.textContent = this.value;
-        autoSave(); // 添加自动保存
+        // 調用自動保存函數，以保存當前的更改
+        autoSave();
+        // 輸出日誌，顯示新增圖表描述觸發了自動保存，並顯示當前的初始加載狀態
         console.log("新增圖表描述呼叫自動保存", isInitialLoad);
     });
 
     // 添加移除圖表按鈕的事件監聽器
     chartContainer.querySelector('.remove-chart').addEventListener('click', function () {
-        console.log('移除图表按钮被点击');  // 添加日志
+        console.log('移除圖表按鈕被點擊');  // 添加日誌
         chartContainer.remove();
-        autoSave(); // 在移除图表后自动保存
+        autoSave(); // 在移除圖表后自動保存
         console.log("移除圖表呼叫自動保存", isInitialLoad);
     });
 
-    // 添加图片点击和文件上传事件
+    // 添加圖片點擊和文件上傳事件
     const chartPreview = chartContainer.querySelector('.chart-preview');
     const chartUpload = chartContainer.querySelector('.chart-upload');
 
@@ -320,8 +331,6 @@ function clearChapterFields() {
 function showIndustryForm() {
     industryForm.style.display = 'block';
 }
-
-
 
 
 
@@ -395,7 +404,7 @@ addDataButton.addEventListener('click', () => {
 
 
 
-// 监听提交按钮
+// 監聽提交按鈕
 document.getElementById('my_submitButton').addEventListener('click', function (event) {
     event.preventDefault();  // 防止表單默認提交
     // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
@@ -432,9 +441,9 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
     }
 });
 
-// 清除本地存储的按钮
+// 清除本地存儲的按鈕
 const clearStorageButton = document.createElement('button');
-clearStorageButton.textContent = '清除保存的数据';
+clearStorageButton.textContent = '清除保存的數據';
 clearStorageButton.addEventListener('click', () => {
     localStorage.removeItem('groupsData');
     localStorage.removeItem('chaptersData');
