@@ -20,6 +20,83 @@ const dropdownItems = document.querySelectorAll('.dropdown-item');
 // 在文件顶部添加一个新的全局变量
 let isInitialLoad = true;
 
+
+// 确保在 DOM 加载完成后初始化所有事件监听器
+document.addEventListener('DOMContentLoaded', () => {
+    // 初始化表單處理 有關formHandling.js
+    initializeFormHandling();
+
+    // 驗證表單 是否為空
+    validateForm();
+
+    // 初始化表单
+    initializeForm();
+});
+
+
+// 修改 initializeForm 函数
+function initializeForm() {
+    isInitialLoad = true; // 開始初始化時設置標誌
+
+    const savedGroupsData = localStorage.getItem('groupsData');
+    const savedChaptersData = localStorage.getItem('chaptersData');
+    const savedIndustry = localStorage.getItem('selectedIndustry');
+
+    if (savedGroupsData || savedChaptersData || savedIndustry) {
+        restoreFormData();
+    } else {
+        // 如果沒有保存的數據，則創建默認的 form group 和 chapter groups
+        createFormGroup();
+
+    }
+
+    // 如果有保存的行業，顯示行業表單
+    if (savedIndustry) {
+        showIndustryForm();
+    }
+
+    isInitialLoad = false; // 初始化完成後重置標誌
+}
+
+
+// 修改 restoreFormData 函数
+function restoreFormData(title) {
+    isInitialLoad = true; // 開始恢復數據時設置標誌
+
+    // 恢復數據
+    const savedGroupsData = localStorage.getItem('groupsData');
+    const savedChaptersData = localStorage.getItem('chaptersData');
+    const savedIndustry = localStorage.getItem('selectedIndustry');
+
+    const groupsData = JSON.parse(savedGroupsData);
+
+    // 恢復選擇的行業
+    if (savedIndustry) {
+        const industryElement = document.getElementById(savedIndustry);
+        if (industryElement) {
+            industryElement.click(); // 觸發點擊事件以恢復行業選擇
+        }
+    }
+
+    // 恢復資訊數據
+    // 對 groupsData 迭代
+    groupsData.forEach((groupData) => {
+        createFormGroup(groupData.title, groupData.content);
+    });
+
+    // 恢復章節數據
+    if (savedChaptersData) {
+        const chaptersData = JSON.parse(savedChaptersData);
+
+        chaptersData.forEach((chapterData) => {
+            createGroup(chapterData.title, chapterData.content);
+        });
+    }
+
+    isInitialLoad = false; // 恢復數據完成後重置標誌
+}
+
+
 // 修改 autoSave 函数
 function autoSave() {
     if (isInitialLoad) return; // 如果是初始加载，不执行自动保存
@@ -40,6 +117,10 @@ function autoSave() {
             });
         });
 
+        // 這行程式碼將每個表單組的資料（標題、內容和圖表）添加到 groupsData 陣列中
+        // title: 表單組的標題
+        // content: 表單組的內容
+        // charts: 包含該表單組中所有圖表資訊的陣列
         groupsData.push({ title, content, charts });
     });
 
@@ -60,6 +141,8 @@ function autoSave() {
         localStorage.setItem('selectedIndustry', activeIndustry.id);
     }
 }
+
+
 
 // 創建表單組
 function createFormGroup(title = '', textarea_value = '') {
@@ -223,9 +306,14 @@ function createChartContainer() {
     return chartContainer;
 }
 
-// 清除表單字段
+// 清除表單字段 選擇不同的行業會清除表單字段
 function clearFormFields() {
     formFields.innerHTML = '';
+}
+
+// 清除章節字段 選擇不同的行業會清除章節字段
+function clearChapterFields() {
+    document.getElementById('form-groups').innerHTML = '';
 }
 
 // 顯示行業表單
@@ -233,72 +321,17 @@ function showIndustryForm() {
     industryForm.style.display = 'block';
 }
 
-// 修改 restoreFormData 函数
-function restoreFormData(title) {
-    isInitialLoad = true; // 開始恢復數據時設置標誌
 
-    // 恢復數據
-    const savedGroupsData = localStorage.getItem('groupsData');
-    const savedChaptersData = localStorage.getItem('chaptersData');
-    const savedIndustry = localStorage.getItem('selectedIndustry');
 
-    const groupsData = JSON.parse(savedGroupsData);
 
-    // 恢復選擇的行業
-    if (savedIndustry) {
-        const industryElement = document.getElementById(savedIndustry);
-        if (industryElement) {
-            industryElement.click(); // 觸發點擊事件以恢復行業選擇
-        }
-    }
-
-    // 恢復資訊數據
-    // 對 groupsData 迭代
-    groupsData.forEach((groupData) => {
-        createFormGroup(groupData.title, groupData.content);
-    });
-
-    // 恢復章節數據
-    if (savedChaptersData) {
-        const chaptersData = JSON.parse(savedChaptersData);
-
-        chaptersData.forEach((chapterData) => {
-            createGroup(chapterData.title, '', '', chapterData.content);
-        });
-    }
-
-    isInitialLoad = false; // 恢復數據完成後重置標誌
-}
-
-// 修改 initializeForm 函数
-function initializeForm() {
-    isInitialLoad = true; // 開始初始化時設置標誌
-
-    const savedGroupsData = localStorage.getItem('groupsData');
-    const savedChaptersData = localStorage.getItem('chaptersData');
-    const savedIndustry = localStorage.getItem('selectedIndustry');
-
-    if (savedGroupsData || savedChaptersData || savedIndustry) {
-        restoreFormData();
-    } else {
-        // 如果沒有保存的數據，則創建默認的 form group 和 chapter groups
-        createFormGroup();
-
-    }
-
-    // 如果有保存的行業，顯示行業表單
-    if (savedIndustry) {
-        showIndustryForm();
-    }
-
-    isInitialLoad = false; // 初始化完成後重置標誌
-}
 
 // 設置行業類別的點擊事件
 dropdownItems.forEach(item => {
     item.addEventListener('click', function (event) {
         event.preventDefault();
+        // 清除表單字段和章節字段
         clearFormFields();
+        clearChapterFields();
         showIndustryForm();
 
         // 移除 display: none 的屬性
@@ -317,20 +350,20 @@ dropdownItems.forEach(item => {
                 createFormGroup('公司名稱');
                 createFormGroup('成立時間');
                 // 建立章節
-                createGroup('關於本報告書', '', 'is-invalid', "");
-                createGroup('長官的話', '', '', getPrompt('長官的話'));
-                createGroup('關於公司', '', 'is-invalid', "");
-                createGroup('永續發展策略', '', 'is-invalid', "");
-                createGroup('公司治理', '', 'is-invalid', "");
-                createGroup('永續金融', '', 'is-invalid', "");
-                createGroup('永續環境', '', 'is-invalid', "");
-                createGroup('員工關懷', '', 'is-invalid', "");
+                createGroup('關於本報告書', "");
+                createGroup('長官的話', getPrompt('長官的話'));
+                createGroup('關於公司', "");
+                createGroup('永續發展策略', "");
+                createGroup('公司治理', "");
+                createGroup('永續金融', "");
+                createGroup('永續環境', "");
+                createGroup('員工關懷', "");
             }
             else if (industry === 'education') {
                 createFormGroup('學校名稱');
                 createFormGroup('課程');
                 // 建立章節
-                createGroup('關於本報告書', '', 'is-invalid', "");
+                createGroup('關於本報告書', "");
 
             }
             else {
@@ -360,17 +393,7 @@ addDataButton.addEventListener('click', () => {
     autoSave(); // 添加自動保存
 });
 
-// 确保在 DOM 加载完成后初始化所有事件监听器
-document.addEventListener('DOMContentLoaded', () => {
-    // 初始化表單處理 有關formHandling.js
-    initializeFormHandling();
 
-    // 驗證表單 是否為空
-    validateForm();
-
-    // 初始化表单
-    initializeForm();
-});
 
 // 监听提交按钮
 document.getElementById('my_submitButton').addEventListener('click', function (event) {

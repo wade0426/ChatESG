@@ -11,7 +11,12 @@ function initializeFormHandling() {
 }
 
 
-function createGroup(title = '', className_title = 'is-invalid', className_content = 'is-invalid', demo_text = '') {
+function createGroup(title = '', demo_text = '') {
+    let className_title = '';
+    let className_content = '';
+    if (title === '') className_title = 'is-invalid';
+    if (demo_text === '') className_content = 'is-invalid';
+
     groupCount++;
     const group = document.createElement('div');
     group.className = 'form-group mb-3';
