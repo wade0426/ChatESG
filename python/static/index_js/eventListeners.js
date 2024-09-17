@@ -87,8 +87,16 @@ function restoreFormData(title) {
             const chartsContainer = group.querySelector('.charts-container');
             groupData.charts.forEach(chartData => {
                 const chartContainer = createChartContainer();
-                chartContainer.querySelector('.chart-preview').src = chartData.base64;
-                chartContainer.querySelector('.chart-description').value = chartData.imageDescription;
+                const chartPreview = chartContainer.querySelector('.chart-preview');
+                const chartDescription = chartContainer.querySelector('.chart-description');
+                const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
+
+                chartPreview.src = chartData.base64;
+                chartDescription.value = chartData.imageDescription;
+
+                // 更新預覽文本
+                updateChartPreviewText(chartDescription, chartPreviewText);
+
                 chartsContainer.appendChild(chartContainer);
             });
         }
@@ -236,7 +244,9 @@ function createFormGroup(title = '', textarea_value = '') {
     return group; // 返回創建的組元素
 }
 
-// 创建图表容器
+
+
+// 創建圖表容器
 function createChartContainer() {
     console.log('創建新的圖表容器');  // 添加日誌
     const chartContainer = document.createElement('div');
@@ -272,13 +282,11 @@ function createChartContainer() {
 
     // 為圖表描述文本框添加輸入事件監聽器
     chartDescription.addEventListener('input', function () {
-        // 當輸入發生時，將描述文本同步到預覽區域
-        chartPreviewText.textContent = this.value;
-        // 調用自動保存函數，以保存當前的更改
-        autoSave();
-        // 輸出日誌，顯示新增圖表描述觸發了自動保存，並顯示當前的初始加載狀態
-        console.log("新增圖表描述呼叫自動保存", isInitialLoad);
+        updateChartPreviewText(this, chartPreviewText);
     });
+
+    // 初始化時也更新預覽文本
+    updateChartPreviewText(chartDescription, chartPreviewText);
 
     // 添加移除圖表按鈕的事件監聽器
     chartContainer.querySelector('.remove-chart').addEventListener('click', function () {
@@ -315,6 +323,13 @@ function createChartContainer() {
     chartDescription.addEventListener('blur', autoSave);
 
     return chartContainer;
+}
+
+// 新增一個輔助函數來更新預覽文本
+function updateChartPreviewText(descriptionElement, previewElement) {
+    previewElement.textContent = descriptionElement.value;
+    autoSave();
+    console.log("更新圖表描述呼叫自動保存", isInitialLoad);
 }
 
 // 清除表單字段 選擇不同的行業會清除表單字段
