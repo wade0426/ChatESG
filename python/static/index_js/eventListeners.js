@@ -122,7 +122,7 @@ function autoSave() {
     const groupsData = [];
     const chaptersData = [];
 
-    // 保存 groups 数据（標題、內容和圖表）
+    // 保存 groups 數據（標題、內容和圖表）
     document.getElementById('form-fields').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
@@ -139,7 +139,7 @@ function autoSave() {
         groupsData.push({ title, content, charts });
     });
 
-    // 保存 chapters 数据（章節和prompt）
+    // 保存 chapters 數據（章節和prompt）
     document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;

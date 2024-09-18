@@ -44,10 +44,17 @@ function createGroup(title = '', demo_text = '') {
     input.addEventListener('input', () => updatePrompt(input, textarea));
     textarea.addEventListener('input', validateField);
 
+    // 添加 input 事件監聽器來觸發自動保存
+    input.addEventListener('input', autoSave);
+    textarea.addEventListener('input', autoSave);
+
+    // 刪除按鈕
     group.querySelector('.delete-group').addEventListener('click', function () {
         formGroups.removeChild(group);
         groupCount--;
         validateForm();
+        console.log('刪除後自動保存');
+        autoSave(); // 刪除後自動保存
     });
 
     validateForm();
