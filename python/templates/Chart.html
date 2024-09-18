@@ -458,6 +458,7 @@
                     alert('請先生成圖表');
                     return;
                 }
+                localStorage.removeItem('chart-image');
 
                 const tempCanvas = createTempCanvas();
                 const backgroundColor = elements.chartColor.value;
@@ -467,7 +468,7 @@
                 // 將這個imageData 用 localStorage 存起來
                 localStorage.setItem('chart-image', imageData);
                 // 按下 "使用圖表" 時關閉 Modal
-                window.parent.postMessage('closeModal', '*');
+                window.parent.postMessage('closeModal，' + imageData, '*');
 
 
                 // 暫時關閉後端傳輸

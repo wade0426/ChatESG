@@ -303,14 +303,16 @@
     <!-- 用來關閉Modal -->
     <script>
         window.addEventListener('message', function (event) {
-            if (event.data === 'closeModal') {
+            if (event.data.startsWith('closeModal')) {
                 var modal = bootstrap.Modal.getInstance(document.getElementById('csvPieChartModal'));
                 if (modal) {
                     modal.hide();
                     console.log("關閉");
-                    console.log(return_chartButtons);
-                    // return_chartButtons 塞 base64
-                    return_chartButtons.src = localStorage.getItem('chart-image')
+                    // console.log(return_chartButtons);
+                    // localStorage可能會有問題 時間差?
+                    return_chartButtons.src = 'data:image/png;base64,' + event.data.split(',')[1];
+                    autoSave();
+                    // console.log(return_chartButtons.src);
                 }
             }
         });

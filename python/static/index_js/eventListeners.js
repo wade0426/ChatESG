@@ -469,6 +469,7 @@ clearStorageButton.addEventListener('click', () => {
     localStorage.removeItem('groupsData');
     localStorage.removeItem('chaptersData');
     localStorage.removeItem('selectedIndustry');
+    localStorage.removeItem('chart-image');
     location.reload();
 });
 document.body.appendChild(clearStorageButton);
