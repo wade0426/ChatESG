@@ -232,9 +232,9 @@ function createFormGroup(title = '', textarea_value = '') {
     const titleInput = group.querySelector('input[type="text"]');
     const contentTextarea = group.querySelector('textarea');
 
-    titleInput.addEventListener('blur', autoSave);
+    titleInput.addEventListener('input', autoSave);
     console.log("新增標題呼叫自動保存", isInitialLoad);
-    contentTextarea.addEventListener('blur', autoSave);
+    contentTextarea.addEventListener('input', autoSave);
     console.log("新增內容呼叫自動保存", isInitialLoad);
 
     if (!isInitialLoad) {
