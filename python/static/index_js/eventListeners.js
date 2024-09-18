@@ -17,6 +17,9 @@ const addGroupButton = document.getElementById('addGroup');
 const industryForm = document.getElementById('industry-form');
 const dropdownItems = document.querySelectorAll('.dropdown-item');
 
+// 按下圖表生成器的區域
+let return_chartButtons = null;
+
 // 用於判斷是否在載入資料
 let isInitialLoad = true;
 
@@ -260,7 +263,7 @@ function createChartContainer() {
                     <label>圖表描述</label>
                 </div>
                 <div class="mb-3">
-                    <button type="button" class="btn btn-secondary btn-sm test-chart me-1">測試</button>
+                    <button type="button" class="btn btn-secondary btn-sm test-chart me-1" data-bs-toggle="modal" data-bs-target="#csvPieChartModal">使用圖表生成器</button>
                     <button type="button" class="btn btn-danger btn-sm remove-chart">移除圖表</button>
                 </div>
             </div>
@@ -299,6 +302,9 @@ function createChartContainer() {
     // 添加圖片點擊和文件上傳事件
     const chartPreview = chartContainer.querySelector('.chart-preview');
     const chartUpload = chartContainer.querySelector('.chart-upload');
+
+    // 如果需要在其他地方使用這個按鈕，可以考慮將它添加到某個對象或數組中
+    return_chartButtons = chartPreview;
 
     chartPreview.addEventListener('click', function () {
         chartUpload.click();
