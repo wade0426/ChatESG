@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 驗證表單 是否為空
     validateForm();
 
-    // 初始化表单
+    // 初始化表單
     initializeForm();
 });
 
@@ -164,6 +164,9 @@ function autoSave() {
 
 // 創建表單組
 function createFormGroup(title = '', textarea_value = '') {
+    let btnTip = '除了文字敘述也可以加入圖表';
+    if (get_btnTip(title)) { btnTip = '建議加入圖表讓整份ESG報告書更加豐富'; }
+
     console.log("createFormGroup", title, textarea_value);
     infoCount++;
     const group = document.createElement('div');
@@ -181,7 +184,7 @@ function createFormGroup(title = '', textarea_value = '') {
                 <label for="content${Date.now()}">內容</label>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <button type="button" class="btn btn-primary btn-sm add-chart">新增圖表</button>
+                <button type="button" class="btn btn-primary btn-sm add-chart" data-bs-content="${btnTip}">新增圖表</button>
                 <button type="button" class="btn btn-danger btn-sm delete-group">刪除</button>
             </div>
             <div class="charts-container mb-5">
@@ -217,8 +220,35 @@ function createFormGroup(title = '', textarea_value = '') {
         });
     });
 
+
     // 確保新添加的圖表按鈕正常工作
     const addChartButton = group.querySelector('.add-chart');
+
+    // 新增監聽器 add-chart 當使用者把滑鼠放在上面時，會顯示提示訊息 "除了文字，還可以加入圖表"
+    // addChartButton.addEventListener('mouseover', function () {
+    const popoverTriggerList_addChart = [].slice.call(group.querySelectorAll('.add-chart'));
+    popoverTriggerList_addChart.forEach(function (popoverTriggerEl) {
+        const popover = new bootstrap.Popover(popoverTriggerEl);
+        let hideTimeout;
+
+        popoverTriggerEl.addEventListener('mouseover', function () {
+            clearTimeout(hideTimeout);
+            popover.show();
+        });
+
+        popoverTriggerEl.addEventListener('mouseout', function () {
+            hideTimeout = setTimeout(() => {
+                popover.hide();
+            }, 100);
+        });
+
+        // popoverTriggerEl.addEventListener('input', function () {
+        //     clearTimeout(hideTimeout);
+        //     popover.show();
+        // });
+    });
+
+
     addChartButton.addEventListener('click', function () {
         console.log('新增圖表按鈕被點擊');  // 添加日誌
         const chartsContainer = group.querySelector('.charts-container');

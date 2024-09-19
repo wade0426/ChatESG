@@ -18,4 +18,13 @@ function getPrompt(key) {
     return prompts[key] || '';
 }
 
+const btnTips = {
+    '公司名稱': true,
+}
+
+
+function get_btnTip(key) {
+    return btnTips[key] || false;
+}
+
 // export { getPrompt };

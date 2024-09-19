@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <script>
+        const regions = 3;
+        const container = document.getElementById('container');
+
+        for (let i = 1; i <= regions; i++) {
+            const regionDiv = document.createElement('div');
+
+            const label = document.createElement('label');
+            label.setAttribute('for', `region${i}`);
+            label.textContent = `Region ${i}:`;
+            regionDiv.appendChild(label);
+
+            const innerDiv = document.createElement('div');
+
+            const select = document.createElement('select');
+            select.setAttribute('id', `region${i}`);
+            for (let j = 1; j <= 3; j++) {
+                const option = document.createElement('option');
+                option.setAttribute('value', `option${j}`);
+                option.textContent = `Option ${j}`;
+                select.appendChild(option);
+            }
+            const otherOption = document.createElement('option');
+            otherOption.setAttribute('value', 'other');
+            otherOption.textContent = '其他';
+            select.appendChild(otherOption);
+            innerDiv.appendChild(select);
+
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('id', `input${i}`);
+            input.setAttribute('placeholder', 'Enter text here');
+            input.style.display = 'none';
+            innerDiv.appendChild(input);
+
+            select.addEventListener('change', function () {
+                if (select.value === 'other') {
+                    select.style.display = 'none';
+                    input.style.display = 'block';
+                } else {
+                    select.style.display = 'block';
+                    input.style.display = 'none';
+                }
+            });
+
+            regionDiv.appendChild(innerDiv);
+            container.appendChild(regionDiv);
+        }
+    </script>
+</body>
+
+</html>
