@@ -273,6 +273,10 @@
     <!-- (優先)引入formHandling.js -->
     <!-- 包含所有表單處理的設置 -->
     <script src="../static/index_js/formHandling.js"></script>
+    <!-- Custom autoSave JS -->
+    <script src="../static/index_js/autoSave.js"></script>
+    <!-- Custom info_data_Handling JS -->
+    <script src="../static/index_js/info_data_Handling.js"></script>
     <!-- Custom prompt JS -->
     <script src="../static/index_js/prompt.js"></script>
     <!-- Custom communication JS -->
@@ -308,16 +312,12 @@
                 if (modal) {
                     modal.hide();
                     console.log("關閉");
-                    // console.log(return_chartButtons);
-                    // localStorage可能會有問題 時間差?
-                    return_chartButtons.src = 'data:image/png;base64,' + event.data.split(',')[1];
+                    const imageData = event.data.split(',')[2];
+                    return_chartButtons.src = 'data:image/png;base64,' + imageData;
                     autoSave();
-                    // console.log(return_chartButtons.src);
                 }
             }
         });
-        // console.log(localStorage.getItem('chart-image'));
-
     </script>
 
 </body>

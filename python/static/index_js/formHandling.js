@@ -21,19 +21,18 @@ function createGroup(title = '', demo_text = '') {
     const group = document.createElement('div');
     group.className = 'form-group mb-3';
     group.innerHTML = `
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3" style="width: 100%;">
             <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
                 placeholder="Enter your name..." data-sb-validations="required" />
             <label for="name${groupCount}">章節</label>
             <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
         </div>
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3" style="width: 100%;">
             <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
                 data-sb-validations="required">${demo_text}</textarea>
             <label for="message${groupCount}">Prompt</label>
             <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
         </div>
-        <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
     `;
     formGroups.appendChild(group);
 
@@ -48,8 +47,45 @@ function createGroup(title = '', demo_text = '') {
     input.addEventListener('input', autoSave);
     textarea.addEventListener('input', autoSave);
 
+    // 新增圖表按鈕
+    const addChartButton = document.createElement('button');
+    addChartButton.type = 'button';
+    addChartButton.className = 'btn btn-success btn-sm mb-3 add-chart btn-xl';
+    addChartButton.textContent = '新增圖表';
+    addChartButton.style.padding = '1% 5% 1% 5%';
+
     // 刪除按鈕
-    group.querySelector('.delete-group').addEventListener('click', function () {
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-danger btn-sm mb-3 delete-group btn-xl';
+    deleteButton.textContent = '删除';
+    deleteButton.style.padding = '1% 5% 1% 5%';
+
+    // 按鈕容器
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'd-flex justify-content-between mb-3';
+
+    // 將按鈕添加到按鈕容器
+    buttonContainer.appendChild(addChartButton);
+    buttonContainer.appendChild(deleteButton);
+
+    // 添加圖表容器
+    const chartsContainer = document.createElement('div');
+    chartsContainer.className = 'charts-container mb-3';
+
+    // 將按鈕容器和圖表容器添加到組中
+    group.appendChild(buttonContainer);
+    group.appendChild(chartsContainer);
+
+    // 新增圖表按鈕事件
+    addChartButton.addEventListener('click', function () {
+        const newChartContainer = createChartContainer();
+        chartsContainer.appendChild(newChartContainer);
+        autoSave(); // 添加自動保存
+    });
+
+    // 刪除按鈕事件
+    deleteButton.addEventListener('click', function () {
         formGroups.removeChild(group);
         groupCount--;
         validateForm();
@@ -107,7 +143,3 @@ function updatePrompt(input, textarea) {
     // 驗證表單 是否為空
     validateForm();
 }
-
-// 導出需要在其他地方使用的函数
-// initializeFormHandling
-// export { createGroup, validateField, validateForm, updatePrompt };

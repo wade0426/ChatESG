@@ -467,32 +467,8 @@
                 const imageData = tempCanvas.toDataURL('image/png');
                 // 將這個imageData 用 localStorage 存起來
                 localStorage.setItem('chart-image', imageData);
-                // 按下 "使用圖表" 時關閉 Modal
-                window.parent.postMessage('closeModal，' + imageData, '*');
-
-
-                // 暫時關閉後端傳輸
-                // fetch('/use-chart', {
-                // method: 'POST',
-                // headers: {
-                // 'Content-Type': 'application/json',
-                // },
-                // body: JSON.stringify({ imageData: imageData }),
-                // })
-                // .then(response => {
-                // if (!response.ok) {
-                // throw new Error('Network response was not ok');
-                // }
-                // return response.text();
-                // })
-                // .then(data => {
-                // console.log('Server response:', data);
-                // alert('圖表已成功使用');
-                // })
-                // .catch(error => {
-                // console.error('Error:', error);
-                // alert('使用圖表時發生錯誤: ' + error.message);
-                // });
+                // 按下 "使用圖表" 時關閉 Modal 並發送消息
+                window.parent.postMessage('closeModal,' + localStorage.getItem('chart-image'), '*');
             });
 
         });

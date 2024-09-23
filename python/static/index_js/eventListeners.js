@@ -118,165 +118,6 @@ function restoreFormData(title) {
 }
 
 
-// 修改 autoSave 函数
-function autoSave() {
-    if (isInitialLoad) return; // 如果是初始加载，不执行自动保存
-
-    const groupsData = [];
-    const chaptersData = [];
-
-    // 保存 groups 數據（標題、內容和圖表）
-    document.getElementById('form-fields').querySelectorAll('.form-group').forEach((group) => {
-        const title = group.querySelector('input[type="text"]').value;
-        const content = group.querySelector('textarea').value;
-        const charts = [];
-
-        group.querySelectorAll('.chart-container').forEach(chartContainer => {
-            charts.push({
-                base64: chartContainer.querySelector('.chart-preview').src,
-                imageDescription: chartContainer.querySelector('.chart-description').value,
-                url: "" // 暫時為空
-            });
-        });
-
-        groupsData.push({ title, content, charts });
-    });
-
-    // 保存 chapters 數據（章節和prompt）
-    document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
-        const title = group.querySelector('input[type="text"]').value;
-        const content = group.querySelector('textarea').value;
-        chaptersData.push({ title, content });
-    });
-
-    localStorage.setItem('groupsData', JSON.stringify(groupsData));
-    console.log("groupsData", groupsData);
-    localStorage.setItem('chaptersData', JSON.stringify(chaptersData));
-
-    // 保存選擇的行業類別
-    const activeIndustry = document.querySelector('.dropdown-item.active');
-    if (activeIndustry) {
-        localStorage.setItem('selectedIndustry', activeIndustry.id);
-    }
-}
-
-
-
-// 創建表單組
-function createFormGroup(title = '', textarea_value = '') {
-    let btnTip = '除了文字敘述也可以加入圖表';
-    if (get_btnTip(title)) { btnTip = '建議加入圖表讓整份ESG報告書更加豐富'; }
-
-    console.log("createFormGroup", title, textarea_value);
-    infoCount++;
-    const group = document.createElement('div');
-    group.className = 'form-group mb-5';
-    // 添加條件類名來設置背景顏色
-    group.style.backgroundColor = infoCount % 2 === 0 ? '#d7d7d8' : '#f0f0f0';
-    group.innerHTML = `
-        <div class="p-3"> <!-- 添加內邊距 -->
-            <div class="form-floating mb-4">
-                <input class="form-control" id="title${Date.now()}" type="text" placeholder="Enter title..." value="${title}" required data-bs-toggle="popover" data-bs-trigger="manual" data-bs-placement="left" data-bs-content="${getTips(title)}" />
-                <label for="title${Date.now()}">標題</label>
-            </div>
-            <div class="form-floating mb-4">
-                <textarea class="form-control" id="content${Date.now()}" placeholder="Enter content..." style="height: 10rem" required data-bs-toggle="popover" data-bs-trigger="manual" data-bs-placement="left" data-bs-content="${getTips(title)}">${textarea_value}</textarea>
-                <label for="content${Date.now()}">內容</label>
-            </div>
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <button type="button" class="btn btn-primary btn-sm add-chart" data-bs-content="${btnTip}">新增圖表</button>
-                <button type="button" class="btn btn-danger btn-sm delete-group">刪除</button>
-            </div>
-            <div class="charts-container mb-5">
-            <!-- 圖表將在這裡動態添加 -->
-            </div>
-            <hr class="my-4" style="border-top: 4px solid #dc3545;"> <!-- 添加粗一點的黃色水平線 -->
-        </div>
-    `;
-    // style="display:none"
-    formFields.appendChild(group);
-
-
-    // 初始化 Popover 並添加自定義行為
-    const popoverTriggerList = [].slice.call(group.querySelectorAll('textarea[data-bs-toggle="popover"]'));
-    popoverTriggerList.forEach(function (popoverTriggerEl) {
-        const popover = new bootstrap.Popover(popoverTriggerEl);
-        let hideTimeout;
-
-        popoverTriggerEl.addEventListener('focus', function () {
-            clearTimeout(hideTimeout);
-            popover.show();
-        });
-
-
-        popoverTriggerEl.addEventListener('blur', function () {
-            hideTimeout = setTimeout(() => {
-                popover.hide();
-            }, 1000);
-        });
-
-        popoverTriggerEl.addEventListener('input', function () {
-            clearTimeout(hideTimeout);
-            popover.show();
-        });
-    });
-
-
-    // 確保新添加的圖表按鈕正常工作
-    const addChartButton = group.querySelector('.add-chart');
-
-    // 新增監聽器 add-chart 當使用者把滑鼠放在上面時，會顯示提示訊息 "除了文字，還可以加入圖表"
-    // addChartButton.addEventListener('mouseover', function () {
-    const popoverTriggerList_addChart = [].slice.call(group.querySelectorAll('.add-chart'));
-    popoverTriggerList_addChart.forEach(function (popoverTriggerEl) {
-        const popover = new bootstrap.Popover(popoverTriggerEl);
-        let hideTimeout;
-
-        popoverTriggerEl.addEventListener('mouseover', function () {
-            clearTimeout(hideTimeout);
-            popover.show();
-        });
-
-        popoverTriggerEl.addEventListener('mouseout', function () {
-            hideTimeout = setTimeout(() => {
-                popover.hide();
-            }, 100);
-        });
-
-        // popoverTriggerEl.addEventListener('input', function () {
-        //     clearTimeout(hideTimeout);
-        //     popover.show();
-        // });
-    });
-
-
-    addChartButton.addEventListener('click', function () {
-        console.log('新增圖表按鈕被點擊');  // 添加日誌
-        const chartsContainer = group.querySelector('.charts-container');
-        const newChartContainer = createChartContainer();
-        chartsContainer.appendChild(newChartContainer);
-        autoSave(); // 添加自動保存
-        console.log("新增圖表呼叫自動保存", isInitialLoad);
-    });
-
-    group.querySelector('.delete-group').addEventListener('click', function () {
-        formFields.removeChild(group);
-    });
-
-    const titleInput = group.querySelector('input[type="text"]');
-    const contentTextarea = group.querySelector('textarea');
-
-    titleInput.addEventListener('input', autoSave);
-    console.log("新增標題呼叫自動保存", isInitialLoad);
-    contentTextarea.addEventListener('input', autoSave);
-    console.log("新增內容呼叫自動保存", isInitialLoad);
-
-    if (!isInitialLoad) {
-        autoSave(); // 只在非初始加載時自動保存
-        console.log("新增組呼叫自動保存", isInitialLoad);
-    }
-    return group; // 返回創建的組元素
-}
 
 
 
@@ -294,15 +135,15 @@ function createChartContainer() {
                     <label>圖表描述</label>
                 </div>
                 <div class="mb-3">
-                    <button type="button" class="btn btn-secondary btn-sm test-chart me-1" data-bs-toggle="modal" data-bs-target="#csvPieChartModal">使用圖表生成器</button>
+                    <button type="button" id='' class="btn btn-secondary btn-sm test-chart me-1" data-bs-toggle="modal" data-bs-target="#csvPieChartModal">使用圖表生成器</button>
                     <button type="button" class="btn btn-danger btn-sm remove-chart">移除圖表</button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card h-100">
                     <img src="../static/index_js/image/picture_file.png" class="card-img-top chart-preview" alt="圖表預覽" style="cursor: pointer; width: 100%; height: 300px; object-fit: contain;">
-                    <div class="card-body p-3">
-                        <p class="card-text chart-preview-text mb-0"></p>
+                    <div class="card-body" style="padding-top: 5px;">
+                        <p class="card-text chart-preview-text mb-0" style="text-align: center;"></p> <!-- 添加 text-align: center; -->
                     </div>
                 </div>
                 <input class="form-control chart-upload mt-2" type="file" accept="image/*" style="display: none;">
@@ -336,6 +177,12 @@ function createChartContainer() {
 
     // 如果需要在其他地方使用這個按鈕，可以考慮將它添加到某個對象或數組中
     return_chartButtons = chartPreview;
+
+    // 當按下圖表生成器按鈕時，將<input class="form-control chart-upload mt-2" type="file" accept="image/*" style="display: none;">紀錄在localStorage
+    const testChartButton = chartContainer.querySelector('.test-chart');
+    testChartButton.addEventListener('click', function () {
+        return_chartButtons = chartPreview;
+    });
 
     chartPreview.addEventListener('click', function () {
         chartUpload.click();
