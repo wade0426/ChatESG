@@ -22,16 +22,27 @@ function autoSave() {
         groupsData.push({ title, content, charts });
     });
 
-    // 保存 chapters 數據（章節和prompt）
+    // 保存 chapters 數據（章節、prompt 和圖表）
     document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
-        chaptersData.push({ title, content });
+        const charts = [];
+
+        group.querySelectorAll('.chart-container').forEach(chartContainer => {
+            charts.push({
+                base64: chartContainer.querySelector('.chart-preview').src,
+                imageDescription: chartContainer.querySelector('.chart-description').value,
+                url: "" // 暫時為空
+            });
+        });
+
+        chaptersData.push({ title, content, charts });
     });
 
     localStorage.setItem('groupsData', JSON.stringify(groupsData));
     console.log("groupsData", groupsData);
     localStorage.setItem('chaptersData', JSON.stringify(chaptersData));
+    console.log("chaptersData", chaptersData);
 
     // 保存選擇的行業類別
     const activeIndustry = document.querySelector('.dropdown-item.active');

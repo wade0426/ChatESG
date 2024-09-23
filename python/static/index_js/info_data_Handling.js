@@ -86,14 +86,14 @@ function createFormGroup(title = '', textarea_value = '') {
     });
 
     // info 關閉 新增圖表功能
-    // addChartButton.addEventListener('click', function () {
-    //     console.log('新增圖表按鈕被點擊');  // 添加日誌
-    //     const chartsContainer = group.querySelector('.charts-container');
-    //     const newChartContainer = createChartContainer();
-    //     chartsContainer.appendChild(newChartContainer);
-    //     autoSave(); // 添加自動保存
-    //     console.log("新增圖表呼叫自動保存", isInitialLoad);
-    // });
+    addChartButton.addEventListener('click', function () {
+        console.log('新增圖表按鈕被點擊');  // 添加日誌
+        const chartsContainer = group.querySelector('.charts-container');
+        const newChartContainer = createChartContainer();
+        chartsContainer.appendChild(newChartContainer);
+        autoSave(); // 添加自動保存
+        console.log("新增圖表呼叫自動保存", isInitialLoad);
+    });
 
     group.querySelector('.delete-group').addEventListener('click', function () {
         formFields.removeChild(group);
