@@ -5,7 +5,8 @@
 // 給py的資料 JSON 格式應該是這樣：{"infoCount":"X","groupCount":"X","資訊":{"公司名稱":"臺灣產物保險股份有限公司","成立時間":"1990年","報告年度":"2024年"},"章節":{"group1":{"title":"前言","content":"內容"},"group2":{"title":"關於公司","content":"內容"},"group3":{"title":"公司治理","content":"內容"}}}
 function sendMessage() {
     const formGroups = document.getElementById('form-groups');
-    const groups = formGroups.querySelectorAll('.form-group');
+    // const groups = formGroups.querySelectorAll('.form-group');
+    const groups = JSON.parse(localStorage.getItem('chaptersData'));
     const formFields = document.getElementById('form-fields');
     const infoGroups = formFields.querySelectorAll('.form-group');
 
@@ -27,11 +28,10 @@ function sendMessage() {
 
     // 處理"章節"部分
     groups.forEach((group, index) => {
-        const title = group.querySelector('input[type="text"]').value;
-        const content = group.querySelector('textarea').value;
         data.章節[`group${index + 1}`] = {
-            title: title,
-            content: content
+            title: group.title,
+            content: group.content,
+            charts: group.charts
         };
         // console.log(data);
         localStorage.setItem('edit', JSON.stringify(data));

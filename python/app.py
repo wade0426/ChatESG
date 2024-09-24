@@ -6,9 +6,9 @@ from SustainableGovernance import SustainableGovernance
 from generate_esg_report import generate_esg_report
 from ftp import upload_file
 import base64
-import io
-import re
-from ftplib import FTP
+# import io
+# import re
+# from ftplib import FTP
 
 app = Flask(__name__)
 

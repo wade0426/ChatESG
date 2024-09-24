@@ -79,10 +79,10 @@ function createFormGroup(title = '', textarea_value = '') {
             }, 100);
         });
 
-        // popoverTriggerEl.addEventListener('input', function () {
-        //     clearTimeout(hideTimeout);
-        //     popover.show();
-        // });
+        popoverTriggerEl.addEventListener('input', function () {
+            // clearTimeout(hideTimeout);
+            // popover.show();
+        });
     });
 
     // info 關閉 新增圖表功能

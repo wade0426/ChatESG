@@ -53,7 +53,13 @@ function createGroup(title = '', demo_text = '') {
 
     input.addEventListener('input', validateField);
     input.addEventListener('input', () => updatePrompt(input, textarea));
+    input.setAttribute('data-bs-toggle', 'popover');
+    input.setAttribute('data-bs-content', '設定產生的章節');
+    input.setAttribute('data-bs-placement', 'left');
     textarea.addEventListener('input', validateField);
+    textarea.setAttribute('data-bs-toggle', 'popover');
+    textarea.setAttribute('data-bs-content', '撰寫與LLM的生成prompt');
+    textarea.setAttribute('data-bs-placement', 'left');
 
     // 添加 input 事件監聽器來觸發自動保存
     input.addEventListener('input', autoSave);
@@ -63,6 +69,8 @@ function createGroup(title = '', demo_text = '') {
     const addChartButton = document.createElement('button');
     addChartButton.type = 'button';
     addChartButton.className = 'btn btn-success btn-sm mb-3 add-chart btn-xl';
+    addChartButton.setAttribute('data-bs-toggle', 'popover');
+    addChartButton.setAttribute('data-bs-content', '除了文字敘述也可以加入圖表');
     addChartButton.textContent = '新增圖表';
     addChartButton.style.padding = '1% 5% 1% 5%';
 
@@ -88,6 +96,31 @@ function createGroup(title = '', demo_text = '') {
     // 將按鈕容器和圖表容器添加到組中
     group.appendChild(buttonContainer);
     group.appendChild(chartsContainer);
+
+    // 初始化 Popover 並添加自定義行為
+    const popoverTriggerList = [].slice.call(group.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.forEach(function (popoverTriggerEl) {
+        const popover = new bootstrap.Popover(popoverTriggerEl, {
+            trigger: 'hover' // 明確指定只在懸停時觸發
+        });
+        let hideTimeout;
+
+        popoverTriggerEl.addEventListener('mouseenter', function () {
+            clearTimeout(hideTimeout);
+            popover.show();
+        });
+
+        popoverTriggerEl.addEventListener('mouseleave', function () {
+            hideTimeout = setTimeout(() => {
+                popover.hide();
+            }, 100);
+        });
+
+        // click事件
+        popoverTriggerEl.addEventListener('click', function () {
+            popover.hide();
+        });
+    });
 
     // 新增圖表按鈕事件
     addChartButton.addEventListener('click', function () {

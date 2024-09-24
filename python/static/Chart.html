@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖表生成器</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        #chart-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 30px;
+            padding: 0;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">圖表生成器</h1>
+
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04"
+                aria-label="Upload">
+            <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04">上傳CSV</button>
+        </div>
+        <div id="csvString"></div>
+
+
+        <div id="chart-controls" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <select id="chart-type" class="form-select">
+                        <option value="bar">長條圖</option>
+                        <option value="line">折線圖</option>
+                        <option value="pie">圓餅圖</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="chart-title" class="form-control" placeholder="圖表標題">
+                </div>
+            </div>
+            <div class="row g-3 mt-2">
+                <div class="col-md-6 text-center">
+                    <input type="text" id="x-axis-title" class="form-control" placeholder="X軸標題">
+                </div>
+                <div class="col-md-6 text-center">
+                    <input type="text" id="y-axis-title" class="form-control" placeholder="Y軸標題">
+                </div>
+            </div>
+
+            <div class="row mt-3 align-items-center">
+                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                    <label for="chart-color" class="me-2 mb-0">背景顏色：</label>
+                    <input type="color" id="chart-color" class="form-control form-control-color" value="#fffcf0">
+                </div>
+                <div class="col-md-2 d-flex justify-content-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show-background" checked>
+                        <label class="form-check-label" for="show-background">
+                            顯示背景顏色
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex justify-content-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="download-with-background" checked>
+                        <label class="form-check-label" for="download-with-background">
+                            下載圖片時顯示背景顏色
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex justify-content-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show-detailed-labels" checked>
+                        <label class="form-check-label" for="show-detailed-labels">
+                            顯示詳細標題
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex justify-content-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show-detailed-values" checked>
+                        <label class="form-check-label" for="show-detailed-values">
+                            顯示詳細數值
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="data-input" class="mt-3">
+                <table class="table" id="data-table">
+                    <thead>
+                        <tr>
+                            <th class="x-label">X軸數值</th>
+                            <th class="y-label">Y軸數值</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button id="add-data" class="btn btn-primary">添加資料</button>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <button id="generate-chart" class="btn btn-success w-100">生成圖表</button>
+                </div>
+                <div class="col-md-4">
+                    <button id="download-chart" class="btn btn-info w-100">下載圖表</button>
+                </div>
+                <div class="col-md-4">
+                    <button id="use-chart" class="btn btn-warning w-100">使用圖表</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/Chart_js/csv.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 常量定义
+            const CHART_TYPES = {
+                BAR: 'bar',
+                LINE: 'line',
+                PIE: 'pie'
+            };
+
+            // DOM 元素
+            const elements = {
+                chartType: document.getElementById('chart-type'),
+                chartTitle: document.getElementById('chart-title'),
+                xAxisTitle: document.getElementById('x-axis-title'),
+                yAxisTitle: document.getElementById('y-axis-title'),
+                chartColor: document.getElementById('chart-color'),
+                showBackground: document.getElementById('show-background'),
+                downloadWithBackground: document.getElementById('download-with-background'),
+                addDataBtn: document.getElementById('add-data'),
+                dataTable: document.getElementById('data-table').getElementsByTagName('tbody')[0],
+                generateChart: document.getElementById('generate-chart'),
+                downloadChart: document.getElementById('download-chart'),
+                chartContainer: document.getElementById('chart-container'),
+                ctx: document.getElementById('myChart').getContext('2d'),
+                showDetailedLabels: document.getElementById('show-detailed-labels'),
+                showDetailedValues: document.getElementById('show-detailed-values')
+            };
+
+            let chart;
+
+            // 事件监听器设置
+            function setupEventListeners() {
+                elements.chartType.addEventListener('change', updateChartTypeUI);
+                elements.addDataBtn.addEventListener('click', addDataRow);
+                elements.chartColor.addEventListener('input', updateChartBackground);
+                elements.showBackground.addEventListener('change', updateChartBackground);
+                elements.generateChart.addEventListener('click', generateChartHandler);
+                elements.downloadChart.addEventListener('click', downloadChartHandler);
+            }
+
+            // 更新图表类型UI
+            function updateChartTypeUI() {
+                const isPieChart = this.value === CHART_TYPES.PIE;
+                document.querySelector('.x-label').textContent = isPieChart ? '類別' : 'X軸數值';
+                document.querySelector('.y-label').textContent = isPieChart ? '數值' : 'Y軸數值';
+                elements.xAxisTitle.style.display = isPieChart ? 'none' : 'block';
+                elements.yAxisTitle.style.display = isPieChart ? 'none' : 'block';
+            }
+
+            // 添加数据行
+            const addDataRow = function addDataRow() {
+                const newRow = elements.dataTable.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="text" class="form-control x-value"></td>
+                    <td><input type="number" class="form-control y-value"></td>
+                    <td>
+                        <input id="color-picker" type="color" class="form-control-color color-picker" value="#${getRandomColor()}" style="vertical-align: bottom;" title="選擇數據顏色">
+                        <input id="text-color-picker" type="color" class="form-control-color color-picker" value="#${getRandomColor()}" style="vertical-align: bottom;" title="選擇詳細文字顏色">
+                        <button class="btn btn-sm btn-secondary move-up">上移</button>
+                        <button class="btn btn-sm btn-secondary move-down">下移</button>
+                        <button class="btn btn-sm btn-danger delete">刪除</button>
+                    </td>
+                `;
+
+                newRow.querySelector('.move-up').addEventListener('click', moveRowUp);
+                newRow.querySelector('.move-down').addEventListener('click', moveRowDown);
+                newRow.querySelector('.delete').addEventListener('click', deleteRow);
+            }
+
+            // 生成随机颜色
+            function getRandomColor() {
+                return Math.floor(Math.random() * 16777215).toString(16);
+            }
+
+            // 上移行
+            function moveRowUp() {
+                const row = this.closest('tr');
+                const prevRow = row.previousElementSibling;
+                if (prevRow) {
+                    elements.dataTable.insertBefore(row, prevRow);
+                }
+            }
+
+            // 下移行
+            function moveRowDown() {
+                const row = this.closest('tr');
+                const nextRow = row.nextElementSibling;
+                if (nextRow) {
+                    elements.dataTable.insertBefore(nextRow, row);
+                }
+            }
+
+            // 删除行
+            function deleteRow() {
+                const row = this.closest('tr');
+                elements.dataTable.removeChild(row);
+            }
+
+            // 更新图表背景
+            function updateChartBackground() {
+                if (chart && elements.showBackground.checked) {
+                    elements.chartContainer.style.backgroundColor = elements.chartColor.value;
+                } else {
+                    elements.chartContainer.style.backgroundColor = 'transparent';
+                }
+            }
+
+            // 生成图表处理函数
+            function generateChartHandler() {
+                const chartData = collectChartData();
+                const config = createChartConfig(chartData);
+                createOrUpdateChart(config);
+            }
+
+            // 收集图表数据
+            function collectChartData() {
+                const data = {
+                    labels: [],
+                    datasets: [{
+                        label: elements.yAxisTitle.value,
+                        data: [],
+                        backgroundColor: [],
+                        borderColor: [],
+                        borderWidth: 1,
+                        textColor: []
+                    }]
+                };
+
+                const rows = elements.dataTable.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const xValue = row.querySelector('.x-value').value;
+                    const yValue = parseFloat(row.querySelector('.y-value').value);
+                    const rowColor = row.querySelector('#color-picker').value;
+                    const textColor = row.querySelector('#text-color-picker').value;
+                    data.labels.push(xValue);
+                    data.datasets[0].data.push(yValue);
+                    data.datasets[0].backgroundColor.push(rowColor);
+                    data.datasets[0].borderColor.push(rowColor);
+                    data.datasets[0].textColor.push(textColor);
+                });
+
+                return data;
+            }
+
+            // 创建图表配置
+            function createChartConfig(data) {
+                const type = elements.chartType.value;
+                const title = elements.chartTitle.value;
+                const xTitle = elements.xAxisTitle.value;
+                const yTitle = elements.yAxisTitle.value;
+
+                return {
+                    type: type,
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                // 圖表標題
+                                display: true,
+                                text: title,
+                                font: {
+                                    size: 18,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                // 圖例
+                                position: 'right',
+                                display: true,
+                                labels: {
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    // 工具提示
+                                    label: function (context) {
+                                        const value = context.parsed.y || context.parsed;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return `${context.label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                // 詳細數值
+                                display: function (context) {
+                                    return elements.showDetailedLabels.checked || elements.showDetailedValues.checked;
+                                },
+                                color: function (context) {
+                                    return context.dataset.textColor[context.dataIndex];
+                                },
+                                font: {
+                                    weight: 'bold',
+                                    size: 14
+                                },
+                                formatter: function (value, context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    const label = context.chart.data.labels[context.dataIndex];
+                                    let displayText = '';
+                                    if (elements.showDetailedLabels.checked) {
+                                        displayText += label + '\n';
+                                    }
+                                    if (elements.showDetailedValues.checked) {
+                                        displayText += `${value} (${percentage}%)`;
+                                    }
+                                    return displayText.trim();
+                                },
+                                align: 'center',
+                                anchor: 'center'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: type !== CHART_TYPES.PIE,
+                                title: {
+                                    display: type !== CHART_TYPES.PIE,
+                                    text: xTitle
+                                }
+                            },
+                            y: {
+                                display: type !== CHART_TYPES.PIE,
+                                title: {
+                                    display: type !== CHART_TYPES.PIE,
+                                    text: yTitle,
+                                },
+                            }
+                        }
+                    }
+                };
+            }
+
+            // 创建或更新图表
+            function createOrUpdateChart(config) {
+                if (chart) {
+                    chart.destroy();
+                }
+                chart = new Chart(elements.ctx, config);
+                updateChartBackground();
+            }
+
+            // 下载图表处理函数
+            function downloadChartHandler() {
+                if (chart) {
+                    const originalBackgroundColor = elements.chartContainer.style.backgroundColor;
+                    const backgroundColor = elements.downloadWithBackground.checked ? elements.chartColor.value : 'transparent';
+
+                    elements.chartContainer.style.backgroundColor = backgroundColor;
+
+                    const tempCanvas = createTempCanvas();
+                    drawChartOnTempCanvas(tempCanvas, backgroundColor);
+                    downloadChartAsImage(tempCanvas);
+
+                    elements.chartContainer.style.backgroundColor = originalBackgroundColor;
+                }
+            }
+
+            // 创建临时画布
+            function createTempCanvas() {
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = chart.canvas.width;
+                tempCanvas.height = chart.canvas.height;
+                return tempCanvas;
+            }
+
+            // 在临时画布上绘制图表
+            function drawChartOnTempCanvas(tempCanvas, backgroundColor) {
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.fillStyle = backgroundColor;
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                tempCtx.drawImage(chart.canvas, 0, 0);
+            }
+
+            // 下载图表为图片
+            function downloadChartAsImage(tempCanvas) {
+                const link = document.createElement('a');
+                link.download = 'chart.png';
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
+            }
+
+            // 初始化
+            function init() {
+                setupEventListeners();
+                elements.chartContainer.style.backgroundColor = 'transparent';
+                Chart.register(ChartDataLabels);
+            }
+
+            init();
+
+            // 上傳CSV文件 自動填入資料
+            document.getElementById('inputGroupFileAddon04').addEventListener('click', function () {
+                // 先清空所有資料
+                elements.dataTable.innerHTML = '';
+                const fileInput = document.getElementById('inputGroupFile04');
+                if (fileInput && fileInput.files.length > 0) {
+                    Processing_file(fileInput)
+                        .then(func_jsonData => {
+                            const jsonData = func_jsonData;
+                            const elements_tr = elements.dataTable.getElementsByTagName('tr');
+                            createChart(jsonData, addDataRow, elements_tr);
+                            // 自動生成圖表
+                            generateChartHandler();
+                        })
+                        .catch(error => {
+                            console.error('Error processing file:', error);
+                        });
+                } else {
+                    console.error('No file selected');
+                }
+            });
+
+            // 使用圖表
+            document.getElementById('use-chart').addEventListener('click', function () {
+                if (!chart) {
+                    alert('請先生成圖表');
+                    return;
+                }
+                localStorage.removeItem('chart-image');
+
+                const tempCanvas = createTempCanvas();
+                const backgroundColor = elements.chartColor.value;
+                drawChartOnTempCanvas(tempCanvas, backgroundColor);
+
+                const imageData = tempCanvas.toDataURL('image/png');
+                // 將這個imageData 用 localStorage 存起來
+                localStorage.setItem('chart-image', imageData);
+                // 按下 "使用圖表" 時關閉 Modal 並發送消息
+                window.parent.postMessage('closeModal,' + localStorage.getItem('chart-image'), '*');
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>
