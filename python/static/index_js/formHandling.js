@@ -93,6 +93,8 @@ function createGroup(title = '', demo_text = '') {
         autoSave(); // 刪除後自動保存
     });
 
+    return group;
+
     validateForm();
 }
 

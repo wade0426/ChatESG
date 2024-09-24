@@ -100,6 +100,9 @@ function restoreFormData(title) {
                 // 更新預覽文本
                 updateChartPreviewText(chartDescription, chartPreviewText);
 
+                // 將新創建的圖表容器添加到圖表容器區域
+                // 這行代碼將新建的圖表容器（chartContainer）添加為chartsContainer的子元素
+                // 這樣做可以在用戶界面上顯示新的圖表
                 chartsContainer.appendChild(chartContainer);
             });
         }
@@ -108,9 +111,36 @@ function restoreFormData(title) {
     // 恢復章節數據
     if (savedChaptersData) {
         const chaptersData = JSON.parse(savedChaptersData);
+        console.log("恢復章節數據", chaptersData);
 
         chaptersData.forEach((chapterData) => {
-            createGroup(chapterData.title, chapterData.content);
+            // 這樣可以正常獲取到base64
+            // console.log("base64", chapterData.charts[0].base64);
+            const group = createGroup(chapterData.title, chapterData.content);
+
+            // 恢復圖表數據
+            if (chapterData.charts.length > 0) {
+                const chartsContainer = group.querySelector('.charts-container');
+                chapterData.charts.forEach(chartData => {
+                    const chartContainer = createChartContainer();
+                    const chartPreview = chartContainer.querySelector('.chart-preview');
+                    const chartDescription = chartContainer.querySelector('.chart-description');
+                    const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
+
+                    chartPreview.src = chartData.base64;
+                    chartDescription.value = chartData.imageDescription;
+
+                    // 更新預覽文本
+                    updateChartPreviewText(chartDescription, chartPreviewText);
+
+                    // 將新創建的圖表容器添加到圖表容器區域 一定要加
+                    chartsContainer.appendChild(chartContainer);
+                });
+
+            }
+            else {
+                console.log("沒有圖表數據");
+            }
         });
     }
 
