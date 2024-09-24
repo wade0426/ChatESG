@@ -18,8 +18,9 @@ function createGroup(title = '', demo_text = '') {
     if (demo_text === '') className_content = 'is-invalid';
 
     groupCount++;
+
     const group = document.createElement('div');
-    group.className = 'form-group mb-3';
+    group.className = 'form-group';
     group.innerHTML = `
         <div class="form-floating mb-3" style="width: 100%;">
             <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
@@ -34,6 +35,17 @@ function createGroup(title = '', demo_text = '') {
             <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
         </div>
     `;
+
+    // if groupCount aliceblue or fff
+    if (groupCount % 2 === 0) {
+        group.style.backgroundColor = '#f0f0f0';
+    }
+    else {
+        group.style.backgroundColor = 'antiquewhite';
+    }
+    group.style.padding = '2% 2% 2% 2%';
+    group.style.marginBottom = '10%';
+
     formGroups.appendChild(group);
 
     const input = group.querySelector('input');
@@ -93,9 +105,17 @@ function createGroup(title = '', demo_text = '') {
         autoSave(); // 刪除後自動保存
     });
 
-    return group;
+    // 加入一個水平線
+    const horizontalLine = document.createElement('hr');
+    // border-top: 4px solid #dc3545;
+    // margin-top: 10px;
+    horizontalLine.style.borderTop = '4px solid #000';
+    horizontalLine.style.marginBottom = '20px';
+    group.appendChild(horizontalLine);
 
     validateForm();
+
+    return group;
 }
 
 // 檢查當前輸入框是否為空

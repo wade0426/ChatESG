@@ -5,7 +5,7 @@ let groupCount = 0;
 let formGroups;
 let my_submitButton;
 
-// 全域變數
+// 全域變數 用來判斷info組數 有關顏色
 let infoCount = 0;
 const question_area = document.getElementById('question');
 const about_area = document.getElementById('about');
