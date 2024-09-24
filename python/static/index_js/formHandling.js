@@ -37,12 +37,7 @@ function createGroup(title = '', demo_text = '') {
     `;
 
     // if groupCount aliceblue or fff
-    if (groupCount % 2 === 0) {
-        group.style.backgroundColor = '#f0f0f0';
-    }
-    else {
-        group.style.backgroundColor = 'antiquewhite';
-    }
+    group.style.backgroundColor = groupCount % 2 === 0 ? '#f0f0f0' : 'antiquewhite';
     group.style.padding = '2% 2% 2% 2%';
     group.style.marginBottom = '10%';
 
@@ -97,31 +92,6 @@ function createGroup(title = '', demo_text = '') {
     group.appendChild(buttonContainer);
     group.appendChild(chartsContainer);
 
-    // 初始化 Popover 並添加自定義行為
-    const popoverTriggerList = [].slice.call(group.querySelectorAll('[data-bs-toggle="popover"]'));
-    popoverTriggerList.forEach(function (popoverTriggerEl) {
-        const popover = new bootstrap.Popover(popoverTriggerEl, {
-            trigger: 'hover' // 明確指定只在懸停時觸發
-        });
-        let hideTimeout;
-
-        popoverTriggerEl.addEventListener('mouseenter', function () {
-            clearTimeout(hideTimeout);
-            popover.show();
-        });
-
-        popoverTriggerEl.addEventListener('mouseleave', function () {
-            hideTimeout = setTimeout(() => {
-                popover.hide();
-            }, 100);
-        });
-
-        // click事件
-        popoverTriggerEl.addEventListener('click', function () {
-            popover.hide();
-        });
-    });
-
     // 新增圖表按鈕事件
     addChartButton.addEventListener('click', function () {
         const newChartContainer = createChartContainer();
@@ -147,6 +117,37 @@ function createGroup(title = '', demo_text = '') {
     group.appendChild(horizontalLine);
 
     validateForm();
+
+    // 初始化 Popover 並添加自定義行為
+    const popoverTriggerList_addChart = group.querySelectorAll('[data-bs-toggle="popover"]');
+    popoverTriggerList_addChart.forEach(function (popoverTriggerEl) {
+        const popover = new bootstrap.Popover(popoverTriggerEl, {
+            trigger: 'manual' // 设置为手动触发
+        });
+        let hideTimeout;
+
+        popoverTriggerEl.addEventListener('mouseover', function () {
+            clearTimeout(hideTimeout);
+            popover.show();
+        });
+
+        popoverTriggerEl.addEventListener('mouseout', function () {
+            hideTimeout = setTimeout(() => {
+                popover.hide();
+            }, 100);
+        });
+
+        popoverTriggerEl.addEventListener('focus', function () {
+            clearTimeout(hideTimeout);
+            popover.show();
+        });
+
+        popoverTriggerEl.addEventListener('blur', function () {
+            hideTimeout = setTimeout(() => {
+                popover.hide();
+            }, 100);
+        });
+    });
 
     return group;
 }

@@ -44,7 +44,7 @@ function createFormGroup(title = '', textarea_value = '') {
             popover.show();
         });
 
-
+        // 失去焦點
         popoverTriggerEl.addEventListener('blur', function () {
             hideTimeout = setTimeout(() => {
                 popover.hide();
@@ -68,18 +68,21 @@ function createFormGroup(title = '', textarea_value = '') {
         const popover = new bootstrap.Popover(popoverTriggerEl);
         let hideTimeout;
 
-        popoverTriggerEl.addEventListener('mouseover', function () {
+        popoverTriggerEl.addEventListener('mouseover', function (event) {
+            event.stopPropagation(); // 阻止事件冒泡
             clearTimeout(hideTimeout);
             popover.show();
         });
 
-        popoverTriggerEl.addEventListener('mouseout', function () {
+        popoverTriggerEl.addEventListener('mouseout', function (event) {
+            event.stopPropagation(); // 阻止事件冒泡
             hideTimeout = setTimeout(() => {
                 popover.hide();
             }, 100);
         });
 
-        popoverTriggerEl.addEventListener('input', function () {
+        popoverTriggerEl.addEventListener('input', function (event) {
+            event.stopPropagation(); // 阻止事件冒泡
             // clearTimeout(hideTimeout);
             // popover.show();
         });

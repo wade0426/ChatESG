@@ -309,11 +309,11 @@ dropdownItems.forEach(item => {
             }
         }
 
-        // 初始化所有 Popover
-        const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-        popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl);
-        });
+        // 初始化所有 Popover XXXX啊啊啊 找到問題了...
+        // const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        // popoverTriggerList.map(function (popoverTriggerEl) {
+        //     return new bootstrap.Popover(popoverTriggerEl);
+        // });
 
         // 設置當前選中的行業
         dropdownItems.forEach(i => i.classList.remove('active'));
