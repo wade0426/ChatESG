@@ -285,8 +285,16 @@ dropdownItems.forEach(item => {
         if (!isInitialLoad) {
             const industry = this.id.split('-')[1];
             if (industry === 'finance') {
+                createFormGroup('報告年度');
                 createFormGroup('公司名稱');
-                createFormGroup('成立時間');
+                createFormGroup('公司歷史與成就');
+                createFormGroup('經營成果與財務績效');
+                createFormGroup('永續發展策略與目標');
+                createFormGroup('氣候變遷與環境承諾');
+                createFormGroup('數位轉型與創新');
+                createFormGroup('社會責任與公益');
+                createFormGroup('未來展望');
+
                 // 建立章節
                 createGroup('關於本報告書', "");
                 createGroup('長官的話', getPrompt('長官的話'));
