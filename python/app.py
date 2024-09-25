@@ -9,6 +9,18 @@ import base64
 # import io
 # import re
 # from ftplib import FTP
+from process_chapter_data import process_chapter_data
+
+class ImageCount:
+    image_count = 0
+    
+    @classmethod
+    def get_image_count(cls):
+        return cls.image_count
+    
+    @classmethod
+    def add_image_count(cls):
+        cls.image_count += 1
 
 app = Flask(__name__)
 
@@ -32,40 +44,6 @@ def edit():
 def chart():
     return render_template('Chart.html')
 
-# 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
-@app.route('/send_message', methods=['POST'])
-# 用於處理發送訊息的請求，接收 JSON 格式的訊息，並返回處理後的結果。
-def send_message():
-    data = request.json
-    print("Received data:", data, "type:", type(data))  # 打印接收到的所有數據，於調試
-
-    info_count = int(data.get('infoCount', 0)) # type: ignore
-    group_count = int(data.get('groupCount', 0)) # type: ignore
-    info_data = data.get('資訊', {}) # type: ignore
-    groups_data = []
-
-    for i in range(1, group_count + 1):
-        group_key = f'group{i}'
-        if group_key in data.get('章節', {}): # type: ignore
-            groups_data.append(data['章節'][group_key]) ## type: ignore
-
-    print(f"接收章節資訊：{info_data}")
-    print(f"接收章節：{groups_data}")
-
-    # 這裡可以調用函數處理數據
-    info_str, preamble_str, Sustainable_Governance_str = process_info_data(info_data)
-    generate_esg_report(groups_data, info_str, preamble_str, Sustainable_Governance_str)
-
-    response = {
-        # 暫時不回傳 info_str
-        # "info": info_str,
-        "groups": groups_data
-    }
-
-    print(f"Output: {response}")
-    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
-
-
 @app.route('/use-chart', methods=['POST'])
 def use_chart():
     data = request.json
@@ -82,6 +60,47 @@ def use_chart():
         return jsonify({"message": "Chart saved successfully"}), 200
     else:
         return jsonify({"message": "Chart saved failed"}), 500
+
+
+
+# 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
+@app.route('/send_message', methods=['POST'])
+# 用於處理發送訊息的請求，接收 JSON 格式的訊息，並返回處理後的結果。
+def send_message():
+    data = request.json
+    print("Received data:", data, "type:", type(data))  # 打印接收到的所有數據，於調試
+    # Received data: {'infoCount': 2, 'groupCount': 1, '資訊': {'公司名稱': '中科金控', '成立時間': '2024年'}, '章節': {'group1': {'title': '關於本報告書', 'content': '測試', 'charts' : [{'base64': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABScAAAKTCAYAAADrML09AAAAAXNSR0IArs4c6QAAIABJREFUeF7s3WmUVeW56PunpKAakGhUQKMEbEFBRLAlBkyCJEZDdhqO2wTsEWKfY84ddAgQIECBAgACBUgTEyVLYXZQAAQIECBAgQIAAAQIECBAgQIAAAXHSPUCAAAECBAgQIECAAAE CBAgQIECAQCkC4mQp7C5KgAABAgQIECBAgAABAgQIECBAgIA46R4gQIAAAQIECBAgQIAAAQIECBAgQKAUAXGyFHYXJUCAAAECBAgQIECAAAECBAgQIEBAnHQPECBAgAABAgQIECBAgAABAgQIECBQisD/Aqia59KJ/y7VAAAAAElFTkSu QmCC', 'imageDescription': '圖', 'url': ''}]}}}
+
+    info_count = int(data.get('infoCount', 0)) # type: ignore
+    group_count = int(data.get('groupCount', 0)) # type: ignore
+    info_data = data.get('資訊', {}) # type: ignore
+    groups_data = []
+
+    
+    # 處理章節數據
+    for i in range(1, group_count + 1):
+        group_key = f'group{i}'
+        if group_key in data.get('章節', {}): # type: ignore
+            group_data = data['章節'][group_key]
+            processed_group = process_chapter_data(group_data, ImageCount)
+            groups_data.append(processed_group)
+
+    print(f"接收章節資訊：{info_data}")
+    print(f"處理後的章節：{groups_data}")
+
+    # 這裡可以調用函數處理數據
+    info_str, preamble_str, Sustainable_Governance_str = process_info_data(info_data)
+    generate_esg_report(groups_data, info_str, preamble_str, Sustainable_Governance_str)
+
+    response = {
+        # 暫時不回傳 info_str
+        # "info": info_str,
+        "groups": groups_data
+    }
+
+    print(f"Output: {response}")
+    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
+
     
 
 # 定義一個處理公司訊息的函數
