@@ -1,11 +1,11 @@
 # pip install flask 
 from title_classification import title_classification
-from preamble import preamble
+from leader_agent import generate_leader
 from SustainableGovernance import SustainableGovernance
 import re
 
 # 修改生成 ESG 报告的函数
-def generate_esg_report(groups_data, info_str="", preamble_str="", Sustainable_Governance_str=""):
+def generate_esg_report(groups_data, leader_message=""):
     print("處理中...")
 
     print(f"有{len(groups_data)}個章節")
@@ -29,22 +29,11 @@ def generate_esg_report(groups_data, info_str="", preamble_str="", Sustainable_G
         print(f"章節名稱：{title_name} 分類：{title_agent}")
 
         if (title_agent == "長官的話"):
-            tmp = preamble(group['content'], preamble_str=preamble_str)
+            tmp = generate_leader(group['content'], leader_message)
             tmp = tmp.replace('\n', '<br> ')
             tmp = tmp.replace(' ', '')
             group['content'] = f"{tmp}"
             print("長官的話生成成功")
-            # group['content'] = f"AI生成"
-
-        elif title_agent == "公司簡介":
-            group['content'] = f"處理後的內容：{group['content']}"
-
-        elif (title_agent == "永續治理") or (title_agent == "永續治理公司"):
-            tmp = SustainableGovernance(group['content'], Sustainable_Governance_str)
-            tmp = tmp.replace('\n', '<br> ')
-            tmp = tmp.replace(' ', '')
-            group['content'] = f"{tmp}"
-            print("永續治理生成成功")
 
         else:
             # group['content'] = f"無法分類：{group['content']}"

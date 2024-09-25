@@ -27,7 +27,8 @@ def generate_word_document(data):
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         
         # 添加內文
-        content = document.add_paragraph(group['content'])
+        # 將 <br> 轉換成換行符
+        content = document.add_paragraph(group['content'].replace('<br>', '\n'))
         content.style = 'Heading 2'
         
         # 添加圖片
@@ -51,7 +52,7 @@ def generate_word_document(data):
         document.add_page_break()
     
     # 指定一個新的目錄來保存文件
-    save_dir = os.path.join(f"{os.getcwd()}\python", 'generated_reports')
+    save_dir = os.path.join(f"{os.getcwd()}", 'generated_reports')
     os.makedirs(save_dir, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -65,26 +66,30 @@ def generate_word_document(data):
     except Exception as e:
         print(f"保存文件時發生錯誤: {str(e)}")
 
-# 示例數據
-sample_data = {
-    'groups': [
-        {
-            'title': '關於本報告書',
-            'content': '無法分類：關於本報告書',
-            'charts': [
-                {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\0.png', 'imageDescription': '圖1', 'url': ''},
-                {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\2.png', 'imageDescription': '圖2', 'url': ''}
-            ]
-        },
-        {
-            'title': '測試',
-            'content': '內文',
-            'charts': []
-        }
-    ]
-}
 
-# 調用函數生成Word文件
-generate_word_document(sample_data)
+
+
+if __name__ == "__main__":
+    # 示例數據
+    sample_data = {
+        'groups': [
+            {
+                'title': '關於本報告書',
+                'content': '無法分類：關於本報告書',
+                'charts': [
+                    {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\0.png', 'imageDescription': '圖1', 'url': ''},
+                    {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\2.png', 'imageDescription': '圖2', 'url': ''}
+                ]
+            },
+            {
+                'title': '測試',
+                'content': '內文',
+                'charts': []
+            }
+        ]
+    }
+
+    # 調用函數生成Word文件
+    generate_word_document(sample_data)
 
 
