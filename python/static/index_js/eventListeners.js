@@ -381,3 +381,55 @@ clearStorageButton.addEventListener('click', () => {
     location.reload();
 });
 document.body.appendChild(clearStorageButton);
+
+
+// 僅用於測試
+// 加入"載入預設資料"的按鈕
+const loadDefaultDataButton = document.createElement('button');
+loadDefaultDataButton.textContent = '載入預設資料';
+document.body.appendChild(loadDefaultDataButton);
+
+loadDefaultDataButton.addEventListener('click', () => {
+    // 預設資料
+    const defaultData = {
+        // 資訊
+        '公司名稱': '中科金控',
+        '成立時間': '2024年',
+        // 章節
+        '關於本報告書': '本報告書涵蓋中科金控2024年度的永續發展成果。',
+        '長官的話': '我們致力於為客戶、股東和社會創造長期價值。',
+        '關於公司': '中科金控是一家領先的金融服務提供商，專注於創新和可持續發展。',
+        '永續發展策略': '我們的策略基於三大支柱：金融創新、環境責任和社會影響。',
+        '公司治理': '我們堅持最高標準的公司治理，確保透明度和問責制。',
+        '永續金融': '我們開發和提供多種永續金融產品，支持綠色經濟轉型。',
+        '永續環境': '我們致力於減少自身營運的環境足跡，並支持客戶的環保計劃。',
+        '員工關懷': '我們為員工提供全面的培訓、福利和職業發展機會。'
+    };
+
+    // 填充表單字段
+    const formGroups = document.querySelectorAll('#form-fields .form-group');
+    formGroups.forEach((group, index) => {
+        const input = group.querySelector('input[type="text"]');
+        const textarea = group.querySelector('textarea');
+        if (input && textarea) {
+            // 根據索引從defaultData對象中獲取對應的鍵名
+            const key = Object.keys(defaultData)[index];
+            input.value = key;
+            textarea.value = defaultData[key];
+        }
+    });
+
+    // 填充章節內容
+    const chapterGroups = document.querySelectorAll('#form-groups .form-group');
+    chapterGroups.forEach((group) => {
+        const input = group.querySelector('input[type="text"]');
+        const textarea = group.querySelector('textarea');
+        if (input && textarea && defaultData[input.value]) {
+            textarea.value = defaultData[input.value];
+        }
+    });
+
+    // 自動保存
+    autoSave();
+});
+
