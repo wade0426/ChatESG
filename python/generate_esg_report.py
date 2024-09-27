@@ -1,7 +1,7 @@
 # pip install flask 
 from title_classification import title_classification
-from leader_agent import generate_leader
-from SustainableGovernance import SustainableGovernance
+# 從 Gemini 資料夾 引入 generate_leader
+from Gemini.leader_agent import generate_leader
 import re
 
 # 修改生成 ESG 报告的函数

@@ -1,0 +1,64 @@
+<!-- 時間/輸入token/輸出token/總token/模型/輸入價格/輸出價格/API金鑰/運算時間 -->
+<!-- 2024/09/28-06:19:45, 0.000027, 0.000012, 0.000039, gpt-4o-mini-2024-07-18, 9, 1, sk-***4sA, 1.15 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI API 使用情況</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>OpenAI API 使用情況</h1>
+    <div>
+        <label><input type="checkbox" class="column-toggle" data-column="0" checked> 時間</label>
+        <label><input type="checkbox" class="column-toggle" data-column="1" checked> 輸入價格</label>
+        <label><input type="checkbox" class="column-toggle" data-column="2" checked> 輸出價格</label>
+        <label><input type="checkbox" class="column-toggle" data-column="3" checked> 總價格</label>
+        <label><input type="checkbox" class="column-toggle" data-column="4" checked> 模型</label>
+        <label><input type="checkbox" class="column-toggle" data-column="5" checked> 輸入token</label>
+        <label><input type="checkbox" class="column-toggle" data-column="6" checked> 輸出token</label>
+        <label><input type="checkbox" class="column-toggle" data-column="7" checked> API金鑰</label>
+        <label><input type="checkbox" class="column-toggle" data-column="8" checked> 運算時間</label>
+    </div>
+    <table id="usageTable">
+        <thead>
+            <tr>
+                <th data-column="0">日期</th>
+                <th data-column="1">輸入價格</th>
+                <th data-column="2">輸出價格</th>
+                <th data-column="3">總價格</th>
+                <th data-column="4">模型</th>
+                <th data-column="5">輸入token</th>
+                <th data-column="6">輸出token</th>
+                <th data-column="7">API金鑰</th>
+                <th data-column="8">運算時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here by JavaScript -->
+        </tbody>
+    </table>
+    <script src="script.js"></script>
+</body>
+
+</html>

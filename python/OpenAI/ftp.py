@@ -8,24 +8,6 @@ load_dotenv()
 ftp_user = os.getenv("FTP_USER")
 ftp_password = os.getenv("FTP_PASSWORD")
 
-def upload_file(image_binary):
-    try:
-        # 使用FTP將圖表上傳到檔案伺服器
-        ftp = FTP('files.000webhost.com')
-        ftp.login(user=ftp_user, passwd=ftp_password)
-
-        # 切換到目標目錄
-        ftp.cwd('/public_html/py_image')
-
-        # 將圖表數據上傳到FTP伺服器
-        ftp.storbinary('STOR chart123.png', io.BytesIO(image_binary))
-
-        # 關閉FTP連接
-        ftp.quit()
-    except Exception as e:
-        print(f"上傳圖表時發生錯誤: {e}")
-        return False
-    return True
 
 def upload_openai_api_record(record_file_path):
     try:
@@ -51,6 +33,3 @@ def upload_openai_api_record(record_file_path):
     except Exception as e:
         print(f"上傳記錄時發生錯誤: {e}")
         return False
-
-if __name__ == "__main__":
-    upload_openai_api_record("python/OpenAI/record.txt")

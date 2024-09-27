@@ -90,6 +90,9 @@ if __name__ == "__main__":
     }
 
     # 調用函數生成Word文件
-    generate_word_document(sample_data)
-
+    # generate_word_document(sample_data)
+    print("當前路徑:", os.getcwd())
+    # 當前路徑 退一層
+    # os.chdir("../")
+    # print("當前路徑:", os.getcwd())
 

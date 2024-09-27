@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import json
 
+# 從專案根目錄的 .env 文件中讀取環境變數
 load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
@@ -67,3 +68,9 @@ def generate_leader(prompt_content, leader_message):
 
 # with open("../output.txt", "w", encoding="utf-8") as f:
 #     f.write(output)
+
+if __name__ == "__main__":
+    print("當前路徑:", os.getcwd())
+    # 當前路徑 退一層
+    os.chdir("../")
+    print("當前路徑:", os.getcwd())

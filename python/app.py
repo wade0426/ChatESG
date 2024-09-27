@@ -1,8 +1,8 @@
 # pip install flask
 from flask import Flask, request, jsonify, render_template
 from title_classification import title_classification
-from leader_agent import generate_leader
-from SustainableGovernance import SustainableGovernance
+# 從 Gemini 資料夾 引入 generate_leader
+# from Gemini.leader_agent import generate_leader
 from generate_esg_report import generate_esg_report
 from ftp import upload_file
 import base64
