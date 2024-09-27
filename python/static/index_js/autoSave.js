@@ -14,6 +14,7 @@ function autoSave() {
         group.querySelectorAll('.chart-container').forEach(chartContainer => {
             charts.push({
                 base64: chartContainer.querySelector('.chart-preview').src,
+                imageTitle: chartContainer.querySelector('.chart-title').value,
                 imageDescription: chartContainer.querySelector('.chart-description').value,
                 url: "" // 暫時為空
             });
@@ -31,6 +32,7 @@ function autoSave() {
         group.querySelectorAll('.chart-container').forEach(chartContainer => {
             charts.push({
                 base64: chartContainer.querySelector('.chart-preview').src,
+                imageTitle: chartContainer.querySelector('.chart-title').value,
                 imageDescription: chartContainer.querySelector('.chart-description').value,
                 url: "" // 暫時為空
             });

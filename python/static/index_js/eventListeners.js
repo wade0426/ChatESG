@@ -91,13 +91,16 @@ function restoreFormData(title) {
             groupData.charts.forEach(chartData => {
                 const chartContainer = createChartContainer();
                 const chartPreview = chartContainer.querySelector('.chart-preview');
+                const chartTitle = chartContainer.querySelector('.chart-title');
                 const chartDescription = chartContainer.querySelector('.chart-description');
+                const chartPreviewTitle = chartContainer.querySelector('.chart-preview-title');
                 const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
 
                 chartPreview.src = chartData.base64;
+                chartTitle.value = chartData.imageTitle;
                 chartDescription.value = chartData.imageDescription;
 
-                // 更新預覽文本
+                updateChartPreviewTitle(chartTitle, chartPreviewTitle);
                 updateChartPreviewText(chartDescription, chartPreviewText);
 
                 // 將新創建的圖表容器添加到圖表容器區域
@@ -124,13 +127,16 @@ function restoreFormData(title) {
                 chapterData.charts.forEach(chartData => {
                     const chartContainer = createChartContainer();
                     const chartPreview = chartContainer.querySelector('.chart-preview');
+                    const chartTitle = chartContainer.querySelector('.chart-title');
                     const chartDescription = chartContainer.querySelector('.chart-description');
+                    const chartPreviewTitle = chartContainer.querySelector('.chart-preview-title');
                     const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
 
                     chartPreview.src = chartData.base64;
+                    chartTitle.value = chartData.imageTitle;
                     chartDescription.value = chartData.imageDescription;
 
-                    // 更新預覽文本
+                    updateChartPreviewTitle(chartTitle, chartPreviewTitle);
                     updateChartPreviewText(chartDescription, chartPreviewText);
 
                     // 將新創建的圖表容器添加到圖表容器區域 一定要加
@@ -161,6 +167,10 @@ function createChartContainer() {
             <div class="col-md-6 d-flex flex-column justify-content-center" style="background-color: white;">
                 <div class="mb-3">設定圖表</div>
                 <div class="form-floating mb-3">
+                    <input type="text" class="form-control chart-title" placeholder="Enter chart title...">
+                    <label>圖表標題</label>
+                </div>
+                <div class="form-floating mb-3">
                     <textarea class="form-control chart-description" placeholder="Enter chart description..." style="height: 5rem"></textarea>
                     <label>圖表描述</label>
                 </div>
@@ -173,7 +183,8 @@ function createChartContainer() {
                 <div class="card h-100">
                     <img src="../static/index_js/image/picture_file.png" class="card-img-top chart-preview" alt="圖表預覽" style="cursor: pointer; width: 100%; height: 300px; object-fit: contain;">
                     <div class="card-body" style="padding-top: 5px;">
-                        <p class="card-text chart-preview-text mb-0" style="text-align: center;"></p> <!-- 添加 text-align: center; -->
+                        <h5 class="card-title chart-preview-title mb-1" style="text-align: center;"></h5>
+                        <p class="card-text chart-preview-text mb-0" style="text-align: center;"></p>
                     </div>
                 </div>
                 <input class="form-control chart-upload mt-2" type="file" accept="image/*" style="display: none;">
@@ -181,16 +192,20 @@ function createChartContainer() {
         </div>
     `;
 
-    // 添加圖表描述輸入事件
+    const chartTitle = chartContainer.querySelector('.chart-title');
     const chartDescription = chartContainer.querySelector('.chart-description');
+    const chartPreviewTitle = chartContainer.querySelector('.chart-preview-title');
     const chartPreviewText = chartContainer.querySelector('.chart-preview-text');
 
-    // 為圖表描述文本框添加輸入事件監聽器
+    chartTitle.addEventListener('input', function () {
+        updateChartPreviewTitle(this, chartPreviewTitle);
+    });
+
     chartDescription.addEventListener('input', function () {
         updateChartPreviewText(this, chartPreviewText);
     });
 
-    // 初始化時也更新預覽文本
+    updateChartPreviewTitle(chartTitle, chartPreviewTitle);
     updateChartPreviewText(chartDescription, chartPreviewText);
 
     // 添加移除圖表按鈕的事件監聽器
@@ -234,9 +249,17 @@ function createChartContainer() {
         }
     });
 
+    chartTitle.addEventListener('blur', autoSave);
     chartDescription.addEventListener('blur', autoSave);
 
     return chartContainer;
+}
+
+// 新增一個輔助函數來更新預覽標題
+function updateChartPreviewTitle(titleElement, previewElement) {
+    previewElement.textContent = titleElement.value;
+    autoSave();
+    console.log("更新圖表標題呼叫自動保存", isInitialLoad);
 }
 
 // 新增一個輔助函數來更新預覽文本
