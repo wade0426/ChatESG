@@ -39,10 +39,11 @@ def calculate_price(input_tokens, output_tokens, model, start_time):
         file.write(f"{time.strftime('%Y/%m/%d-%H:%M:%S')}, {input_price:.6f}, {output_price:.6f}, {total_price:.6f}, {model}, {input_tokens}, {output_tokens}, {api_key[:3]}***{api_key[-3:]}, {duration:.2f}\n")
     
     # 將記錄上傳到FTP
-    if upload_openai_api_record(record_file_path):
-        print("記錄上傳成功")
-    else:
-        print("記錄上傳失敗")
+    upload_openai_api_record(record_file_path)
+    # if upload_openai_api_record(record_file_path):
+    #     print("記錄上傳成功")
+    # else:
+    #     print("記錄上傳失敗")
     
     return total_price
 
@@ -72,7 +73,7 @@ def openai_generate(prompt):
 
 # 使用示例
 if __name__ == "__main__":
-    user_prompt = "输出:no"
+    user_prompt = "output:no"
     result, price = openai_generate(user_prompt)
     print(f"生成的內容: {result}")
     print(f"API調用價格: ${price:.6f}")

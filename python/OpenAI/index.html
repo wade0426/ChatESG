@@ -29,6 +29,9 @@
 
 <body>
     <h1>OpenAI API 使用情況</h1>
+    <div id="stats" style="font-size: 1.2em; font-weight: bold;">
+        已使用 <span id="usageCount">0</span> 次，總共花費 <span id="totalCost">0</span> 美金
+    </div>
     <div>
         <label><input type="checkbox" class="column-toggle" data-column="0" checked> 時間</label>
         <label><input type="checkbox" class="column-toggle" data-column="1" checked> 輸入價格</label>
@@ -40,7 +43,7 @@
         <label><input type="checkbox" class="column-toggle" data-column="7" checked> API金鑰</label>
         <label><input type="checkbox" class="column-toggle" data-column="8" checked> 運算時間</label>
     </div>
-    <table id="usageTable">
+    <table id="usageTable" data-sort-order="desc">
         <thead>
             <tr>
                 <th data-column="0">日期</th>
