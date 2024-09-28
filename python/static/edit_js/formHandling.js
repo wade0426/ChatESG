@@ -54,6 +54,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
 
     const input = group.querySelector('input');
     const textarea = group.querySelector('textarea');
+    const generatedResult = group.querySelectorAll('textarea')[1];
 
     input.addEventListener('input', validateField);
     input.addEventListener('input', () => updatePrompt(input, textarea));
@@ -68,6 +69,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 添加 input 事件監聽器來觸發自動保存
     input.addEventListener('input', autoSave);
     textarea.addEventListener('input', autoSave);
+    generatedResult.addEventListener('input', autoSave);
 
     // 新增圖表按鈕
     const addChartButton = document.createElement('button');

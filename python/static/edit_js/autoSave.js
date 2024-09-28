@@ -27,8 +27,8 @@ function autoSave() {
     document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
+        const generatedResult = group.querySelectorAll('textarea')[1].value;
         const charts = [];
-        const generatedResult = "";
 
         group.querySelectorAll('.chart-container').forEach(chartContainer => {
             charts.push({
@@ -41,6 +41,26 @@ function autoSave() {
 
         chaptersData.push({ title, content, charts, generatedResult });
     });
+
+    // 保存response
+    const response_data = {
+        data: {
+            groupCount: chaptersData.length,
+            infoCount: groupsData.length,
+            章節: chaptersData.map(chapter => ({
+                title: chapter.title,
+                prompt: chapter.content,
+                charts: chapter.charts,
+                generatedResult: chapter.generatedResult
+            })),
+            資訊: groupsData.reduce((acc, info) => {
+                acc[info.title] = info.content;
+                return acc;
+            }, {})
+        }
+    };
+    console.log("response_data", response_data);
+    localStorage.setItem('response', JSON.stringify(response_data));
 
     localStorage.setItem('groupsData', JSON.stringify(groupsData));
     console.log("groupsData", groupsData);

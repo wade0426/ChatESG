@@ -17,7 +17,7 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
         return;
     }
     else {
-        // alert('提交成功！');
+        alert('提交成功！');
         document.getElementById('wating_start-btn').click();
 
         // 將所有input標籤 和 text 加入disabled屬性，避免重複提交
@@ -31,6 +31,6 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
         });
 
         // console.log(valid);
-        sendMessage();
+        // sendMessage();
     }
 });
