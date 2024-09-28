@@ -18,6 +18,9 @@ if (response_json) {
 
 } else {
     console.log('在localStorage中找不到response');
+    // 重新導向到index.html
+    alert("在localStorage中找不到response");
+    window.location.href = '/';
 }
 
 // 等待DOM加載完成後，再執行以下程式碼，加入"添加新資料"的監聽器
@@ -28,6 +31,14 @@ document.addEventListener('DOMContentLoaded', function () {
             createFormGroup();
         });
     }
+});
+
+// 等待DOM加載完成後，再執行以下程式碼，加入"添加新資料"的監聽器
+document.addEventListener('DOMContentLoaded', function () {
+    const addGroupButton = document.getElementById('addGroup');
+    addGroupButton.addEventListener('click', function () {
+        createGroup();
+    });
 });
 
 // 監聽資訊顯示關閉的事件
