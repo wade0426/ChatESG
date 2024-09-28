@@ -62,7 +62,17 @@ def use_chart():
         return jsonify({"message": "Chart saved successfully"}), 200
     else:
         return jsonify({"message": "Chart saved failed"}), 500
+    
+@app.route('/generate_word', methods=['POST'])
+def generate_word():
+    # 生成word檔案
+    data = request.json
+    response = {
+        "data": "測試word"
+    }
 
+    print(f"Output: {response}")
+    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
 # 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。

@@ -46,13 +46,17 @@ function generate_word() {
     })
         .then(response => response.json())
         .then(data => {
-            // 關閉等待提示
-            document.getElementById('wating_cancel-btn').click();
 
-            alert("word generate success");
+            // alert("word generate success");
 
             // 測試p標籤
-            // console.log(data);
+            console.log(data);
+
+            setTimeout(() => {
+                document.getElementById("wating_cancel-btn").click();
+            }, 500);
+
+            // location.reload();
             // document.getElementById('response').textContent = JSON.stringify(data, null, 2);
 
             // // 使用 LocalStorage

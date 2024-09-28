@@ -18,19 +18,24 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
     }
     else {
         alert('提交成功！');
-        document.getElementById('wating_start-btn').click();
 
-        // 將所有input標籤 和 text 加入disabled屬性，避免重複提交
-        const inputs = document.querySelectorAll('input');
-        const textareas = document.querySelectorAll('textarea');
-        inputs.forEach((input) => {
-            input.disabled = true;
-        });
-        textareas.forEach((textarea) => {
-            textarea.disabled = true;
-        });
+        // 使用 Bootstrap 的 JavaScript API 来显示 Modal
+        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        myModal.show();
 
-        // console.log(valid);
-        // sendMessage();
+        generate_word();
+    }
+});
+
+// 为调试目的添加这些事件监听器
+document.getElementById('wating_start-btn').addEventListener('click', function () {
+    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    myModal.show();
+});
+
+document.getElementById('wating_cancel-btn').addEventListener('click', function () {
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+    if (myModal) {
+        myModal.hide();
     }
 });
