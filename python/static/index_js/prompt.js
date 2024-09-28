@@ -31,12 +31,12 @@ function getPrompt(key) {
 }
 
 const btnTips = {
-    '公司名稱': true,
+    '公司名稱': '建議加入圖表',
 }
 
 
 function get_btnTip(key) {
-    return btnTips[key] || false;
+    return btnTips[key] || '';
 }
 
 // export { getPrompt };

@@ -51,10 +51,10 @@ function createFormGroup(title = '', textarea_value = '') {
             }, 1000);
         });
 
-        popoverTriggerEl.addEventListener('input', function () {
-            clearTimeout(hideTimeout);
-            popover.show();
-        });
+        // popoverTriggerEl.addEventListener('input', function () {
+        //     clearTimeout(hideTimeout);
+        //     popover.show();
+        // });
     });
 
 

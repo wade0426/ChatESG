@@ -26,9 +26,9 @@ function autoSave() {
     // 保存 chapters 數據（章節、prompt 和圖表）
     document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
-        const prompt = group.querySelector('textarea').value;
-        const generatedResult = "";
+        const content = group.querySelector('textarea').value;
         const charts = [];
+        const generatedResult = "";
 
         group.querySelectorAll('.chart-container').forEach(chartContainer => {
             charts.push({
@@ -39,7 +39,7 @@ function autoSave() {
             });
         });
 
-        chaptersData.push({ title, prompt, generatedResult, charts });
+        chaptersData.push({ title, content, charts, generatedResult });
     });
 
     localStorage.setItem('groupsData', JSON.stringify(groupsData));

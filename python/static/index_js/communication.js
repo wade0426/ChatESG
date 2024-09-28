@@ -30,11 +30,12 @@ function sendMessage() {
     groups.forEach((group, index) => {
         data.章節[`group${index + 1}`] = {
             title: group.title,
-            content: group.content,
+            prompt: group.prompt,
+            generatedResult: group.generatedResult,
             charts: group.charts
         };
         // console.log(data);
-        localStorage.setItem('edit', JSON.stringify(data));
+        // localStorage.setItem('edit', JSON.stringify(data));
         // console.log(localStorage.getItem('edit'));
     });
 
@@ -71,7 +72,7 @@ function sendMessage() {
             }
 
             // 打開main頁面
-            openOrNavigate('/main');
+            // openOrNavigate('/main');
 
             // 打開edit頁面
             openOrNavigate('/edit');

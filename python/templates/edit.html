@@ -21,8 +21,6 @@
     <!-- <link href="css/styles.css" rel="stylesheet" /> -->
     <!-- 修改CSS檔案的位置 -->
     <link rel="stylesheet" href="../static/styles.css">
-    <!-- bulma -->
-    <link rel="stylesheet" href="../static/my_bulma.css">
 </head>
 
 <body id="page-top">
@@ -45,59 +43,24 @@
     </nav>
     <!-- Masthead-->
 
-    <!-- 問題-->
-    <!-- 可以直接移除 -->
-    <section class="page-section" id="question"
-        style="background-color: lightslategray; padding-bottom: 5%; display: none;">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="text-white mt-0">讓我們先了解你！</h2>
-                    <hr class="divider divider-light" />
-                    <p class="text-white-75" style="font-size: 150%; margin-bottom: 0%;">你想要製作哪一個產業類別的ESG報告書?</p>
-
-                    <!-- button -->
-                    <div class="btn-group" style="margin: 3%;">
-                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            選擇你的產業類別
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#about" id="industry-finance">金融業</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-education">教育</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-food">食品工業</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-electric">電器電纜</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-machinery">電器機械</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-biotech">生技醫療</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-textile">紡織纖維</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-chemical">化學工業</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-plastic">塑膠工業</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-cement">水泥工業</a></li>
-                            <li><a class="dropdown-item" href="#about" id="industry-glass">玻璃陶瓷</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#" id="industry-general">通用</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
     <!-- About-->
     <section class="page-section" id="about" style="background-color: lightslategray; padding-top: 10%;">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2 class="text-white mt-0">再次產生符合您風格的文字！</h2>
+                    <h2 class="text-white mt-0">最終確認您的報告書！</h2>
                     <hr class="divider divider-light" />
 
-                    <!-- 輸入表單 -->
-                    <div id="industry-form" style="display: none;">
+                    <!-- 添加一个切换按钮 -->
+                    <button class="btn btn-success mb-3" type="button" data-bs-toggle="collapse" id="myCollapsible"
+                        data-bs-target="#industry-form" aria-expanded="true" aria-controls="industry-form">
+                        顯示資訊
+                    </button>
+
+                    <!-- 将 industry-form 包装在 collapse div 中 -->
+                    <div class="collapse show" id="industry-form">
                         <div id="form-fields">
-                            <!-- 動態生成的表單字段將在這裡 -->
+                            <!-- 动态生成的表单字段将在这里 -->
                         </div>
                         <button type="button" class="btn btn-primary btn-sm mb-3 add-group btn-xl"
                             style="padding: 1% 5% 1% 5%;">添加新資料</button>
@@ -110,49 +73,14 @@
         </div>
     </section>
     <!-- Services-->
-    <section class="page-section" id="services" style="background-color: bisque; display: none;">
-        <div class="container px-4 px-lg-5">
-            <h2 class="text-center mt-0">技術</h2>
-            <hr class="divider" />
-            <div class="row gx-4 gx-lg-5">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
-                        <h3 class="h4 mb-2">Sturdy Themes</h3>
-                        <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
-                        <h3 class="h4 mb-2">Up to Date</h3>
-                        <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
-                        <h3 class="h4 mb-2">Ready to Publish</h3>
-                        <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
-                        <h3 class="h4 mb-2">Made with Love</h3>
-                        <p class="text-muted mb-0">Is it really open source if it's not made with love?</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="page-section" id="contact" style="background-color: floralwhite; display: none;">
+
+    <section class="page-section" id="contact" style="background-color: floralwhite;">
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6 text-center">
-                    <h2 class="mt-0">輸入你想要製作的章節！</h2>
+                    <h2 class="mt-0">不滿意可以使用重新生成！</h2>
                     <hr class="divider" />
-                    <p class="text-muted mb-5">請詳細的輸入以下資訊！</p>
+                    <p class="text-muted mb-5">請注意AI的回答可能不夠精確，請再三確認！</p>
                 </div>
             </div>
             <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -162,8 +90,8 @@
                             <!-- 動態產生的表單群組將在這裡 -->
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-xl btn-success --bs-teal" id="addGroup">添加新组</button>
-                            <button class="btn btn-primary btn-xl" id="my_submitButton" type="submit">提交</button>
+                            <!-- <button type="button" class="btn btn-xl btn-success --bs-teal" id="addGroup">添加新组</button> -->
+                            <button class="btn btn-primary btn-xl" id="my_submitButton" type="submit">下載成檔案</button>
                         </div>
 
                         <div class="d-none" id="submitSuccessMessage">
@@ -171,8 +99,6 @@
                                 <div class="fw-bolder">填寫完成！</div>
                                 正字生成內容。
                                 <br />
-                                <!-- <a -->
-                                <!-- href="https://">https://</a> -->
                             </div>
                         </div>
                         <div class="d-none" id="submitErrorMessage">
@@ -222,326 +148,24 @@
     </div>
 
     <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SimpleLightbox plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
     <!-- Core theme JS-->
     <script src="../static/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
+    <script src="../static/edit_js/autoSave.js"></script>
+    <script src="../static/edit_js/info_data_Handling.js"></script>
+    <script src="../static/edit_js/formHandling.js"></script>
+    <script src="../static/edit_js/loadSavedDataOnPageLoad.js"></script>
+    <script src="../static/edit_js/init.js"></script>
+
+    <script src="../static/edit_js/Chapter_Move.js"></script>
+
     <script>
-        // 建立一個變數，統計有多少個群組
-        let groupCount = 0;
-
-        // 全域變數
-        let createGroup;
-        document.addEventListener('DOMContentLoaded', function () {
-            const formGroups = document.getElementById('form-groups');
-            const addGroupButton = document.getElementById('addGroup');
-            const my_submitButton = document.getElementById('my_submitButton');
-
-            createGroup = function createGroup(title = '', className_title = 'is-invalid', className_content = 'is-invalid', demo_text = '') {
-                groupCount++;
-
-                const group = document.createElement('div');
-                group.className = 'form-group mb-3';
-                group.innerHTML = `
-                    <div class="form-floating mb-3">
-                        <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
-                            placeholder="Enter your name..." data-sb-validations="required" />
-                        <label for="name${groupCount}">章節</label>
-                        <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
-                            data-sb-validations="required">${demo_text}</textarea>
-                        <label for="message${groupCount}">Prompt</label>
-                        <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group btn-xl" style="padding: 1% 5% 1% 5%">删除</button>
-                `;
-                formGroups.appendChild(group);
-
-                const input = group.querySelector('input');
-                const textarea = group.querySelector('textarea');
-
-                input.addEventListener('input', validateField);
-                textarea.addEventListener('input', validateField);
-
-                group.querySelector('.delete-group').addEventListener('click', function () {
-                    formGroups.removeChild(group);
-                    groupCount--;
-                    validateForm();
-                });
-
-                validateForm();
-            }
-
-            function validateField() {
-                if (this.value.trim() === '') {
-                    this.classList.add('is-invalid');
-                } else {
-                    this.classList.remove('is-invalid');
-                }
-                validateForm();
-            }
-
-            function validateForm() {
-                const groups = formGroups.querySelectorAll('.form-group');
-                let isValid = true;
-
-                groups.forEach((group) => {
-                    const input = group.querySelector('input');
-                    const textarea = group.querySelector('textarea');
-
-                    if (input.value.trim() === '' || textarea.value.trim() === '') {
-                        isValid = false;
-                    }
-                });
-
-                my_submitButton.disabled = !isValid;
-            }
-
-            addGroupButton.addEventListener('click', function () {
-                createGroup();
-            });
-
-            // 初始化建立群組
-            // createGroup('關於本報告書', '', 'is-invalid', "");
-            // createGroup('長官的話', '', 'is-invalid', '');
-            // createGroup('關於公司', '', 'is-invalid', "");
-            // createGroup('永續發展策略', '', 'is-invalid', "");
-            // createGroup('公司治理', '', 'is-invalid', "");
-            // createGroup('永續金融', '', 'is-invalid', "");
-            // createGroup('永續環境', '', 'is-invalid', "");
-            // createGroup('員工關懷', '', 'is-invalid', "");
-
-            // 初始驗證表單
-            // validateForm();
-        });
-
-        // 用於傳送訊息到py
-        // 傳送的訊息要包含 infoCount 和 groupCount 這個變數，以及每個群組的標題和內容
-        // 請注意處理動態個 infoCount 和 groupCount因為使用者可能會新增或刪除
-        // 需要修改這段函數，使其能夠傳送所有群組的標題和內容
-        // 給py的資料 JSON 格式應該是這樣：{"infoCount":"X","groupCount":"X","資訊":{"公司名稱":"臺灣產物保險股份有限公司","成立時間":"1990年","報告年度":"2024年"},"章節":{"group1":{"title":"前言","content":"內容"},"group2":{"title":"關於公司","content":"內容"},"group3":{"title":"公司治理","content":"內容"}}}
-        function sendMessage() {
-            const formGroups = document.getElementById('form-groups');
-            const groups = formGroups.querySelectorAll('.form-group');
-            const formFields = document.getElementById('form-fields');
-            const infoGroups = formFields.querySelectorAll('.form-group');
-
-            let data = {
-                infoCount: infoGroups.length,
-                groupCount: groups.length,
-                資訊: {},
-                章節: {}
-            };
-
-            // 處理"資訊"部分
-            infoGroups.forEach((group) => {
-                const title = group.querySelector('input[type="text"]').value;
-                const content = group.querySelector('textarea').value;
-                data.資訊[title] = content;
-            });
-
-            // 處理"章節"部分
-            groups.forEach((group, index) => {
-                const title = group.querySelector('input[type="text"]').value;
-                const content = group.querySelector('textarea').value;
-                data.章節[`group${index + 1}`] = {
-                    title: title,
-                    content: content
-                };
-            });
-
-            // console.log(data);
-
-            fetch('/send_message', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // 顯示回應訊息
-                    // alert("取得回應！");
-                    document.getElementById('wating_cancel-btn').click();
-
-                    // 測試p標籤
-                    console.log(data);
-                    data_json = JSON.stringify(data, null, 2);
-                    document.getElementById('response').textContent = data_json;
-
-                    // 使用 LocalStorage
-                    localStorage.setItem('response', data_json);
-                    // 改變網頁位置
-                    // window.location.href = "/main";
-
-                    // 開啟一個新的視窗
-                    // window.open("/edit", "_blank");
-                    alert(data_json);
-
-                    // 測試
-                    // console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // 監聽提交按鈕
-        document.getElementById('my_submitButton').addEventListener('click', function (event) {
-            event.preventDefault();  // 防止表單默認提交
-            // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
-            const formGroups = document.getElementById('form-groups');
-            const groups = formGroups.querySelectorAll('.form-group');
-            let valid = true;
-            groups.forEach((group) => {
-                const title = group.querySelector('input[type="text"]').value;
-                const content = group.querySelector('textarea').value;
-                if (title === '' || content === '') {
-                    valid = false;
-                }
-            });
-            if (!valid) {
-                alert('請填寫所有群組的標題和內容！');
-                return;
-            }
-            else {
-                // alert('提交成功！');
-                document.getElementById('wating_start-btn').click();
-
-                // 將所有input標籤 和 text 加入disabled屬性，避免重複提交
-                const inputs = document.querySelectorAll('input');
-                const textareas = document.querySelectorAll('textarea');
-                inputs.forEach((input) => {
-                    input.disabled = true;
-                });
-                textareas.forEach((textarea) => {
-                    textarea.disabled = true;
-                });
-
-                // console.log(valid);
-                sendMessage();
-            }
-        });
-
-        // 全域變數
-        let createFormGroup;
-        // about的產業類別選單
-        document.addEventListener('DOMContentLoaded', function () {
-            // 統計infoCount
-            let infoCount = 0;
-            // const question_area = document.getElementById('question');
-            const about_area = document.getElementById('about');
-            const about_next = document.getElementById('about_next');
-            const contact = document.getElementById('contact');
-
-            const formFields = document.getElementById('form-fields');
-            const addGroupButton = document.querySelector('.add-group');
-            const industryForm = document.getElementById('industry-form');
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-            createFormGroup = function createFormGroup(title = '', placeholder = '') {
-                infoCount++;
-                const group = document.createElement('div');
-                group.className = 'form-group mb-3';
-                group.innerHTML = `
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="title${Date.now()}" type="text" placeholder="Enter title..." value="${title}" required />
-                        <label for="title${Date.now()}">標題</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control" id="content${Date.now()}" placeholder="Enter content..." style="height: 10rem" required>${placeholder}</textarea>
-                        <label for="content${Date.now()}">內容</label>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mb-3 delete-group">刪除</button>
-                `;
-                formFields.appendChild(group);
-
-                group.querySelector('.delete-group').addEventListener('click', function () {
-                    formFields.removeChild(group);
-                });
-            }
-
-            function clearFormFields() {
-                formFields.innerHTML = '';
-            }
-
-            const showIndustryForm = function showIndustryForm() {
-                // 這段程式碼將 industryForm 元素的 display 樣式設置為 'block'
-                // 這意味著將使 industryForm 元素變為可見
-                // 通常用於在特定條件下顯示一個之前被隱藏的表單或區域
-                industryForm.style.display = 'block';
-            }
-
-            // 直接顯示成立時間的表單
-            clearFormFields();
-            showIndustryForm();
-
-            // 移除 display: none 的屬性
-            // question_area.style.paddingBottom = '0%';
-            about_next.style.display = 'math';
-            about_area.style.display = 'block';
-            contact.style.display = 'block';
-
-            // 去 #contact
-            window.location.href = "#about";
-
-            // createFormGroup('成立時間', "填寫您的公司成立時間，例如：「1990年」。");
-
-            addGroupButton.addEventListener('click', () => createFormGroup());
-        });
-
-        let edit_json = "";
-        // 網頁開啟時，讀取 localStorage.getItem('edit')
-        document.addEventListener('DOMContentLoaded', function () {
-            const editData = localStorage.getItem('edit');
-            if (editData) {
-                edit_json = editData;
-                // console.log(edit_json);
-            } else {
-                console.log('No edit data found in localStorage');
-            }
-
-            if (edit_json) {
-                console.log(edit_json);
-                // 格式化JSON {"infoCount":1,"groupCount":1,"資訊":{"a":"a"},"章節":{"group1":{"title":"1","content":"1"}}}
-                const parsedData = JSON.parse(edit_json);
-                console.log(parsedData);
-
-                // 清空現有表單
-                // clearFormFields();
-
-                // 添加资讯字段
-                if (parsedData.資訊) {
-                    Object.entries(parsedData.資訊).forEach(([key, value]) => {
-                        createFormGroup(key, value);
-                    });
-                }
-
-                // 添加章节
-                if (parsedData.章節) {
-                    Object.values(parsedData.章節).forEach(chapter => {
-                        createGroup(chapter.title, 'is-invalid', 'is-invalid', demo_text = chapter.content);
-                    });
-                }
-
-                // 更新表單顯示
-                showIndustryForm();
-                about_next.style.display = 'inline-block';
-                about_area.style.display = 'block';
-                contact.style.display = 'block';
-
-                // 滾動到表單位置
-                window.location.href = "#about";
-            }
-        });
-
     </script>
+
 </body>
 
 </html>

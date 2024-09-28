@@ -1,49 +1,55 @@
 # pip install flask 
 from title_classification import title_classification
-# 從 Gemini 資料夾 引入 generate_leader
-from Gemini.leader_agent import generate_leader
+from Gemini.generate import * # type: ignore
 import re
 
+# 長官的話:["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"]
+# 永續績效 : ["環境", "社會", "治理"]
+def process_info_message(title_name, info_data):
+    title_info_mapping = {
+        "長官的話": ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"],
+        "永續績效": ["環境", "社會", "治理"]
+    }
+    
+    if title_name in title_info_mapping:
+        relevant_keys = title_info_mapping[title_name]
+        info_message = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in relevant_keys])
+    else:
+        info_message = ", ".join([f"{key}: {value}" for key, value in info_data.items()])
+    
+    return info_message
+
+
 # 修改生成 ESG 报告的函数
-def generate_esg_report(groups_data, leader_message=""):
+def generate_esg_report(title_name, prompt, info_data):
     print("處理中...")
 
-    print(f"有{len(groups_data)}個章節")
+    # print(f"有{len(groups_data)}個章節")
     # print(groups_data)
 
-    # 處理章節內容
-    for group in groups_data:
-        # 取得章節名稱
-        title_name = group['title']
-        # 將章節名稱分類
-        title_agent = title_classification(title_name)
-        # title_agent = "長官的話"
-        # title_agent = "無法分類"
-        # print(f"暫時將AI功能關閉")
-        # print(type(title_agent))
-        
-        # 取代 title_agent 所有不是中文字的內容
-        title_agent = re.sub(r'[^\u4e00-\u9fff]', '', title_agent)
-        
-        # 提示
-        print(f"章節名稱：{title_name} 分類：{title_agent}")
+    title_agent = title_classification(title_name)
 
-        if (title_agent == "長官的話"):
-            tmp = generate_leader(group['content'], leader_message)
-            tmp = tmp.replace('\n', '<br> ')
-            tmp = tmp.replace(' ', '')
-            group['content'] = f"{tmp}"
-            print("長官的話生成成功")
+    # 取代 title_agent 所有不是中文字的內容
+    title_agent = re.sub(r'[^\u4e00-\u9fff]', '', title_agent)
 
-        else:
-            # group['content'] = f"無法分類：{group['content']}"
-            group['content'] = f"無法分類：{title_agent}"
+    print(f"章節名稱：{title_name} 分類：{title_agent}")
 
-            
+    if title_agent == "長官的話":
+        info_message = process_info_message(title_name, info_data)
+        print(f"{title_agent} 的 info_message: {info_message}\n")
 
-    print(groups_data)
-    print(f"ESG 報告生成成功！")
+        # generate_leader 在 generate.py 裡面
+        response = generate_leader(prompt, info_message) # type: ignore
+        print("長官的話生成完成")
+        return response
+
+    else:
+        return "通用分類"
+    
+    
+
 
 
 if __name__ == '__main__':
+    # print(generate_leader("測試", "測試")) # type: ignore
     pass

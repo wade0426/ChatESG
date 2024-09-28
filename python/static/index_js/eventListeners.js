@@ -308,7 +308,8 @@ dropdownItems.forEach(item => {
         if (!isInitialLoad) {
             const industry = this.id.split('-')[1];
             if (industry === 'finance') {
-                createFormGroup('報告年度');
+                createFormGroup('報告期間');
+                createFormGroup('報告書範疇');
                 createFormGroup('公司名稱');
                 createFormGroup('公司歷史與成就');
                 createFormGroup('經營成果與財務績效');
