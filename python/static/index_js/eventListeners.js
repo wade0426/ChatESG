@@ -119,7 +119,7 @@ function restoreFormData(title) {
         chaptersData.forEach((chapterData) => {
             // 這樣可以正常獲取到base64
             // console.log("base64", chapterData.charts[0].base64);
-            const group = createGroup(chapterData.title, chapterData.content);
+            const group = createGroup(chapterData.title, chapterData.prompt);
 
             // 恢復圖表數據
             if (chapterData.charts.length > 0) {
