@@ -89,6 +89,15 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     regenerateButton.textContent = '重新生成';
     regenerateButton.style.padding = '1% 5% 1% 5%';
 
+    // 歷史紀錄按鈕
+    const historyButton = document.createElement('button');
+    historyButton.type = 'button';
+    historyButton.className = 'btn btn-success btn-sm mb-3 history-group btn-xl';
+    historyButton.setAttribute('data-bs-toggle', 'popover');
+    historyButton.setAttribute('data-bs-content', '歷史紀錄');
+    historyButton.textContent = '歷史紀錄';
+    historyButton.style.padding = '1% 5% 1% 5%';
+
     // 切換章節順序 上移 按鈕
     const upButton = document.createElement('button');
     upButton.type = 'button';
@@ -121,6 +130,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 將按鈕添加到按鈕容器
     buttonContainer.appendChild(addChartButton);
     buttonContainer.appendChild(regenerateButton);
+    buttonContainer.appendChild(historyButton);
     buttonContainer.appendChild(upButton);
     buttonContainer.appendChild(downButton);
     buttonContainer.appendChild(deleteButton);
