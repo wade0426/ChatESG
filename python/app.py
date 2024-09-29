@@ -62,17 +62,6 @@ def use_chart():
         return jsonify({"message": "Chart saved successfully"}), 200
     else:
         return jsonify({"message": "Chart saved failed"}), 500
-    
-@app.route('/generate_word', methods=['POST'])
-def generate_word():
-    # 生成word檔案
-    data = request.json
-    response = {
-        "data": "測試word"
-    }
-
-    print(f"Output: {response}")
-    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
 # 表示當用戶使用 POST 方法訪問 /send_message 路徑時，會執行 send_message 函數。
@@ -136,6 +125,34 @@ def send_message():
     return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
+# edit 頁面
+@app.route('/generate_word', methods=['POST'])
+def generate_word():
+    # 生成word檔案
+    data = request.json
+    response = {
+        "data": "測試word"
+    }
+
+    print(f"Output: {response}")
+    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
+
+@app.route('/again_generate_response', methods=['POST'])
+def again_generate_response():
+    data = request.json
+    # 輸出 收到的 data
+    print(f"Received data: {data}")
+    response = {
+        "data": "再次生成"
+    }
+
+    print(f"Output: {response}")
+    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
+
+
+
+
+# 處理長官的話
 def process_leader_message(info_data):
     leader_message = ", ".join([f"{key}: {value}" for key, value in info_data.items() if key in ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"]])
     return leader_message

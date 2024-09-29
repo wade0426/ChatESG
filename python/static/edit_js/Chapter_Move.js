@@ -34,6 +34,11 @@ function updateChapterOrder() {
             textarea.id = `message${index + 1}`;
             textarea.name = `message${index + 1}`;
         }
+        const generatedResult = group.querySelectorAll('textarea')[1];
+        if (generatedResult) {
+            generatedResult.id = `generatedResult${index + 1}`;
+            generatedResult.name = `generatedResult${index + 1}`;
+        }
     });
 }
 

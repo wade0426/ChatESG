@@ -38,10 +38,10 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
             <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
         </div>
         <div class="form-floating mb-3" style="width: 100%;">
-            <textarea class="form-control ${className_generatedData}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
+            <textarea class="form-control ${className_generatedData}" id="generatedResult${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
                 data-sb-validations="required">${generatedData}</textarea>
-            <label for="message${groupCount}">生成結果</label>
-            <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
+            <label for="generatedResult${groupCount}">生成結果</label>
+            <div class="invalid-feedback" data-sb-feedback="generatedResult${groupCount}:required">必填</div>
         </div>
     `;
 
@@ -85,7 +85,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     regenerateButton.type = 'button';
     regenerateButton.className = 'btn btn-success btn-sm mb-3 regenerate-group btn-xl';
     regenerateButton.setAttribute('data-bs-toggle', 'popover');
-    regenerateButton.setAttribute('data-bs-content', '重新生成');
+    regenerateButton.setAttribute('data-bs-content', '重新生成此章節');
     regenerateButton.textContent = '重新生成';
     regenerateButton.style.padding = '1% 5% 1% 5%';
 
@@ -103,7 +103,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     upButton.type = 'button';
     upButton.className = 'btn btn-success btn-sm mb-3 up-group btn-xl';
     upButton.setAttribute('data-bs-toggle', 'popover');
-    upButton.setAttribute('data-bs-content', '上移');
+    upButton.setAttribute('data-bs-content', '將章節上移');
     upButton.textContent = '上移';
     upButton.style.padding = '1% 5% 1% 5%';
 
@@ -112,7 +112,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     downButton.type = 'button';
     downButton.className = 'btn btn-success btn-sm mb-3 down-group btn-xl';
     downButton.setAttribute('data-bs-toggle', 'popover');
-    downButton.setAttribute('data-bs-content', '下移');
+    downButton.setAttribute('data-bs-content', '將章節下移');
     downButton.textContent = '下移';
     downButton.style.padding = '1% 5% 1% 5%';
 
@@ -120,7 +120,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'btn btn-danger btn-sm mb-3 delete-group btn-xl';
-    deleteButton.textContent = '删除';
+    deleteButton.textContent = '刪除';
     deleteButton.style.padding = '1% 5% 1% 5%';
 
     // 按鈕容器
@@ -148,6 +148,11 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
         const newChartContainer = createChartContainer();
         chartsContainer.appendChild(newChartContainer);
         autoSave(); // 添加自動保存
+    });
+
+    // 重新生成按鈕事件
+    regenerateButton.addEventListener('click', function () {
+        again_generate_response(group);
     });
 
     // 修改上移按钮事件

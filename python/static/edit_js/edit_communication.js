@@ -1,4 +1,4 @@
-// 用於傳送訊息到py
+// 用於傳送訊息到py 當按下"下載成檔案"按鈕時，會執行此函數
 function generate_word() {
     const formGroups = document.getElementById('form-groups');
     // const groups = formGroups.querySelectorAll('.form-group');
@@ -81,8 +81,9 @@ function generate_word() {
 
 
 
-// 當使用者按下"重生成"按鈕時，會執行此函數
-function again_generate_response(title, prompt) {
+// 當使用者按下"重新生成"按鈕時，會執行此函數
+function again_generate_response(group) {
+    document.getElementById("wating_start-btn").click();
     const formGroups = document.getElementById('form-groups');
     // const groups = formGroups.querySelectorAll('.form-group');
     const groups = JSON.parse(localStorage.getItem('chaptersData'));
@@ -93,8 +94,8 @@ function again_generate_response(title, prompt) {
         infoCount: infoGroups.length,
         groupCount: groups.length,
         資訊: {},
-        標題: title,
-        提示: prompt
+        標題: group.querySelector('input[type="text"]').value,
+        prompt: group.querySelector('textarea').value
     };
 
     // 處理"資訊"部分
@@ -117,7 +118,7 @@ function again_generate_response(title, prompt) {
             // 關閉等待提示
             document.getElementById('wating_cancel-btn').click();
 
-            alert("response generate success");
+            console.log(data);
 
             // 測試p標籤
             // console.log(data);
@@ -134,6 +135,10 @@ function again_generate_response(title, prompt) {
                     window.location.href = url;
                 }
             }
+
+            setTimeout(() => {
+                document.getElementById("wating_cancel-btn").click();
+            }, 500);
 
             // openOrNavigate('/edit');
 
