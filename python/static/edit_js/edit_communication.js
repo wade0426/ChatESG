@@ -93,8 +93,8 @@ function again_generate_response(group) {
     let data = {
         infoCount: infoGroups.length,
         groupCount: groups.length,
-        資訊: {},
-        標題: group.querySelector('input[type="text"]').value,
+        info: {},
+        title: group.querySelector('input[type="text"]').value,
         prompt: group.querySelector('textarea').value
     };
 
@@ -102,7 +102,7 @@ function again_generate_response(group) {
     infoGroups.forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
-        data.資訊[title] = content;
+        data.info[title] = content;
     });
 
 
@@ -135,6 +135,8 @@ function again_generate_response(group) {
                     window.location.href = url;
                 }
             }
+
+            group.querySelectorAll('textarea')[1].value = data.generatedResult;
 
             setTimeout(() => {
                 document.getElementById("wating_cancel-btn").click();

@@ -142,8 +142,13 @@ def again_generate_response():
     data = request.json
     # 輸出 收到的 data
     print(f"Received data: {data}")
+
+    # generate_esg_report(標題, prompt, info訊息)
+    generate_response = generate_esg_report(data['title'], data['prompt'], data['info'])
+
+
     response = {
-        "data": "再次生成"
+        "generatedResult": generate_response
     }
 
     print(f"Output: {response}")
