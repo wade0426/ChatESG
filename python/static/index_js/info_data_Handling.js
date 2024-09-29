@@ -20,7 +20,7 @@ function createFormGroup(title = '', textarea_value = '') {
                 <label for="content${Date.now()}">內容</label>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <button type="button" class="btn btn-primary btn-sm add-chart" data-bs-content="${btnTip}">新增圖表</button>
+                <button style="display:none" type="button" class="btn btn-primary btn-sm add-chart" data-bs-content="${btnTip}">新增圖表</button>
                 <button type="button" class="btn btn-danger btn-sm delete-group">刪除</button>
             </div>
             <div class="charts-container mb-5">
