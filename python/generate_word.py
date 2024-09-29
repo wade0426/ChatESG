@@ -1,50 +1,62 @@
-# 會輸入這段程式，幫我生成 word 檔案
-# 不同的title要加入換頁符號
-# title 和 content 要換行
-# title要有標題1的格式
-# content 要有標題2的格式
-# 圖片要放在 word 裡面
-# 圖片要加上說明 說明要在圖片置中下方
-
-# {'groups': [{'title': '關於本報告書', 'content': '無法分類：關於本報告書', 'charts': [{'base64': 'base64編碼的圖片', 'imageDescription': '圖', 'url': ''}, {'base64': 'base64編碼的圖片', 'imageDescription': '', 'url': ''}]}, {'title': '測試', 'content': '內文', 'charts': []}]}
 
 # pip install python-docx Pillow
+
 from docx import Document
 from docx.shared import Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
-from PIL import Image
+from docx.enum.section import WD_SECTION
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 import os
 import datetime
 
 def generate_word_document(data):
     document = Document()
     
-    for group in data['groups']:
+    for group_key, group_data in data.items():
         # 添加標題
-        title = document.add_paragraph(group['title'])
+        title = document.add_paragraph(group_data['title'])
         title.style = 'Heading 1'
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         
         # 添加內文
         # 將 <br> 轉換成換行符
-        content = document.add_paragraph(group['content'].replace('<br>', '\n'))
+        content = document.add_paragraph(group_data['generatedResult'].replace('<br>', '\n'))
         content.style = 'Heading 2'
         
         # 添加圖片
-        for chart in group['charts']:
+        for chart in group_data['charts']:
             if chart['base64']:
                 image_path = chart['base64']
                 
                 if os.path.exists(image_path):
-                    # 添加圖片到文件
-                    document.add_picture(image_path, width=Inches(6))
+                    # 創建一個新的段落來包含圖片和相關文本
+                    p = document.add_paragraph()
+                    p.keep_together = True
+
+                    # 添加圖片標題
+                    if chart['imageTitle']:
+                        run = p.add_run(chart['imageTitle'] + '\n')
+                        run.font.size = Pt(16)
+                        run.font.bold = True
+                        run.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+                    # 添加圖片
+                    run = p.add_run()  # 在段落中創建一個新的文本運行(run)
+                    run.add_picture(image_path, width=Inches(6))  # 在運行中添加圖片，設置寬度為6英寸
+                    # 解釋：
+                    # 1. p.add_run() 創建一個新的文本運行，這允許我們在段落中添加內容
+                    # 2. run.add_picture() 方法用於在運行中添加圖片
+                    # 4. width=Inches(6) 設置圖片寬度為6英寸，這有助於保持文檔中圖片大小的一致性
                     
                     # 添加圖片說明
                     if chart['imageDescription']:
-                        caption = document.add_paragraph(chart['imageDescription'])
-                        caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                        caption.runs[0].font.size = Pt(10)
+                        run = p.add_run('\n' + chart['imageDescription'])
+                        run.font.size = Pt(12)
+                    
+                    # 設置段落對齊方式為居中
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 else:
                     print(f"警告: 圖片文件 {image_path} 不存在")
         
@@ -72,21 +84,21 @@ def generate_word_document(data):
 if __name__ == "__main__":
     # 示例數據
     sample_data = {
-        'groups': [
-            {
-                'title': '關於本報告書',
-                'content': '無法分類：關於本報告書',
-                'charts': [
-                    {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\0.png', 'imageDescription': '圖1', 'url': ''},
-                    {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\2.png', 'imageDescription': '圖2', 'url': ''}
-                ]
-            },
-            {
-                'title': '測試',
-                'content': '內文',
-                'charts': []
-            }
-        ]
+        'group1': {
+            'title': '長官的話',
+            'generatedResult': '中科金控 矢志永續  共創價值 \n',
+            'charts': [
+                {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\0.png', 'imageTitle': '1', 'imageDescription': '1', 'url': ''},
+                {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\1.png', 'imageTitle': '2', 'imageDescription': '2', 'url': ''}
+            ]
+        },
+        'group2': {
+            'title': '測試',
+            'generatedResult': '測試',
+            'charts': [
+                {'base64': 'D:\\NTCUST\\Project\\ESG\\ChatESG\\python\\temp_image\\2.png', 'imageTitle': '1', 'imageDescription': '2', 'url': ''}
+            ]
+        }
     }
 
     # 調用函數生成Word文件

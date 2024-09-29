@@ -125,11 +125,23 @@ def send_message():
     return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
-# edit 頁面
+# edit 頁面 生成word
 @app.route('/generate_word', methods=['POST'])
 def generate_word():
-    # 生成word檔案
     data = request.json
+    # print(f"Received data: {data}\n")
+    # Received data: {'groupCount': 1, '章節': {'group1': {'title': '長官的話', 'generatedResult': '中科金控秉持永續發展理念，致力創造企業價值，與 社會共榮共好。 \n', 'charts': [{'base64': 'http://127.0.0.1:5000/static/index_js/image/picture_file.png', 'imageTitle': '測試', 'imageDescription': '測試', ' url': ''}]}}}
+    # 抓 data 章節
+    groups_data = data['章節']
+    groups_data = process_chapter_data(groups_data, ImageCount)
+
+
+
+    print("\n word_data", groups_data, "\n")
+
+    # 生成word檔案
+    generate_word_document(groups_data)
+    
     response = {
         "data": "測試word"
     }
@@ -137,6 +149,8 @@ def generate_word():
     print(f"Output: {response}")
     return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
+
+# edit 頁面 再次生成s
 @app.route('/again_generate_response', methods=['POST'])
 def again_generate_response():
     data = request.json

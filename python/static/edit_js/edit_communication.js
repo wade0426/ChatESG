@@ -7,20 +7,20 @@ function generate_word() {
     const infoGroups = formFields.querySelectorAll('.form-group');
 
     let data = {
-        infoCount: infoGroups.length,
+        // infoCount: infoGroups.length,
         groupCount: groups.length,
-        資訊: {},
+        // 資訊: {},
         章節: {}
     };
 
     // 處理"資訊"部分
-    infoGroups.forEach((group) => {
-        const title = group.querySelector('input[type="text"]').value;
-        const content = group.querySelector('textarea').value;
-        data.資訊[title] = content;
-        // console.log(data);
+    // infoGroups.forEach((group) => {
+    //     const title = group.querySelector('input[type="text"]').value;
+    //     const content = group.querySelector('textarea').value;
+    //     data.資訊[title] = content;
+    //     // console.log(data);
 
-    });
+    // });
 
     // 處理"章節"部分
     groups.forEach((group, index) => {
@@ -71,11 +71,24 @@ function generate_word() {
                 }
             }
 
+            // 關閉模態框並重置滾動狀態
+            const modal = document.getElementById('staticBackdrop');
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+
+            // 使用 setTimeout 確保在模態框完全關閉後執行清理
+            setTimeout(() => {
+                cleanupModalEffects();
+            }, 500);
+
             // openOrNavigate('/edit');
 
         })
         .catch(error => {
             console.error('Error:', error);
+            cleanupModalEffects(); // 即使出錯也嘗試清理
         });
 }
 

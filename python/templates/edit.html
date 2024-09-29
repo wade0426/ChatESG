@@ -147,6 +147,22 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="csvPieChartModal" tabindex="-1" aria-labelledby="csvPieChartModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="csvPieChartModalLabel">圖表生成器</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="../static/Chart.html" width="100%" height="100%" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 顯示歷史紀錄 offcanvas -->
 
     <button style="display: none;" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
@@ -194,6 +210,22 @@
     <script src="../static/edit_js/Chapter_Move.js"></script>
     <script src="../static/edit_js/edit_communication.js"></script>
     <script src="../static/edit_js/eventListeners.js"></script>
+
+    <!-- 用來關閉Modal -->
+    <script>
+        window.addEventListener('message', function (event) {
+            if (event.data.startsWith('closeModal')) {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('csvPieChartModal'));
+                if (modal) {
+                    modal.hide();
+                    console.log("關閉");
+                    const imageData = event.data.split(',')[2];
+                    return_chartButtons.src = 'data:image/png;base64,' + imageData;
+                    autoSave();
+                }
+            }
+        });
+    </script>
 
 </body>
 

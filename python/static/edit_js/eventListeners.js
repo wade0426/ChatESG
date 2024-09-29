@@ -1,4 +1,4 @@
-// 監聽提交按鈕
+// 監聽 "下載成檔案" 按鈕
 document.getElementById('my_submitButton').addEventListener('click', function (event) {
     event.preventDefault();  // 防止表單默認提交
     // 先檢查是否所有群組都有填寫標題和內容 不要有空字串""
