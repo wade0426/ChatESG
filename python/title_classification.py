@@ -9,10 +9,12 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai # type: ignore
 
-load_dotenv()
-
-# .env
-api_key = os.getenv("GEMINI_API_KEY")
+try:
+    # 從專案根目錄的 .env 文件中讀取環境變數
+    load_dotenv()
+    api_key = os.getenv("GEMINI_API_KEY")
+except Exception as e:
+    print(f"取得Gemini API Key發生錯誤，請檢查.env檔案是否正確: {e}")
 
 # genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 genai.configure(api_key=api_key)
