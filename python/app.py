@@ -1,16 +1,13 @@
 # pip install flask
-from flask import Flask, request, jsonify, render_template
-from title_classification import title_classification
-# 從 Gemini 資料夾 引入 generate_leader
-# from Gemini.leader_agent import generate_leader
+from flask import Flask, request, jsonify, render_template, send_file
 from generate_esg_report import generate_esg_report
 from ftp import upload_file
 import base64
-# import io
-# import re
-# from ftplib import FTP
 from process_chapter_data import process_chapter_data
 from generate_word import generate_word_document
+import os
+# import re
+# import io
 
 
 class ImageCount:
@@ -89,35 +86,7 @@ def send_message():
             # generate_esg_report(標題, prompt, info訊息)
             data['章節'][group_key]['generatedResult'] = generate_esg_report(data['章節'][group_key]['title'], data['章節'][group_key]['prompt'], info_data)
 
-            
-            # processed_group = process_chapter_data(group_data, ImageCount)
-            # groups_data.append(processed_group)
-
-    # print(f"公司訊息：{info_data}")
-    # print()
-    # print(f"章節：{groups_data}")
-    # print()
-    
-    # 這裡可以調用函數處理數據
-    # info_str, preamble_str, Sustainable_Governance_str = process_info_data(info_data)
-
-    # leader_message = process_leader_message(info_data)
-
-    # generate_esg_report(groups_data, leader_message)
-
-    # word_data = {
-    #     'groups': groups_data
-    # }
-
-    # print("\n word_data", word_data, "\n")
-
-    # # 生成word檔案
-    # generate_word_document(word_data)
-
     response = {
-        # 暫時不回傳 info_str
-        # "info": info_str,
-        # "groups": groups_data
         "data": data
     }
 
@@ -125,32 +94,29 @@ def send_message():
     return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
 
 
+
 # edit 頁面 生成word
 @app.route('/generate_word', methods=['POST'])
 def generate_word():
     data = request.json
-    # print(f"Received data: {data}\n")
-    # Received data: {'groupCount': 1, '章節': {'group1': {'title': '長官的話', 'generatedResult': '中科金控秉持永續發展理念，致力創造企業價值，與 社會共榮共好。 \n', 'charts': [{'base64': 'http://127.0.0.1:5000/static/index_js/image/picture_file.png', 'imageTitle': '測試', 'imageDescription': '測試', ' url': ''}]}}}
-    # 抓 data 章節
+    print(f"Received data: {data}")
     groups_data = data['章節']
     groups_data = process_chapter_data(groups_data, ImageCount)
-
-
 
     print("\n word_data", groups_data, "\n")
 
     # 生成word檔案
-    generate_word_document(groups_data)
+    file_path = generate_word_document(groups_data)
     
-    response = {
-        "data": "測試word"
-    }
+    response = send_file(file_path, 
+                         as_attachment=True, 
+                         download_name='generated_report.docx',
+                         mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
 
-    print(f"Output: {response}")
-    return jsonify(response)  # 直接返回 response 字典，jsonify 會自動使用雙引號
+    return response
 
 
-# edit 頁面 再次生成s
+# edit 頁面 再次生成
 @app.route('/again_generate_response', methods=['POST'])
 def again_generate_response():
     data = request.json

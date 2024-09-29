@@ -53,12 +53,14 @@ function loadSavedDataOnPageLoad(response_data) {
         }
         // 存過歷史紀錄 這樣重整不會再存
         is_history_records = true;
+
     } else {
         console.error('無法找到章節數據或數據格式不正確');
     }
 
     // 用於判斷是否在載入資料
     isInitialLoad = false; //載入資料完成
+    autoSave();
 }
 
 

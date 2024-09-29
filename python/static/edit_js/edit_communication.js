@@ -24,6 +24,7 @@ function generate_word() {
 
     // 處理"章節"部分
     groups.forEach((group, index) => {
+        console.log(group);
         data.章節[`group${index + 1}`] = {
             title: group.title,
             prompt: group.prompt,
@@ -44,32 +45,16 @@ function generate_word() {
         },
         body: JSON.stringify(data),
     })
-        .then(response => response.json())
-        .then(data => {
-
-            // alert("word generate success");
-
-            // 測試p標籤
-            console.log(data);
-
-            // setTimeout(() => {
-            //     document.getElementById("wating_cancel-btn").click();
-            // }, 500);
-
-            // location.reload();
-            // document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-
-            // // 使用 LocalStorage
-            // localStorage.setItem('response', JSON.stringify(data));
-
-            // 嘗試打開新頁面，如果被封鎖則在當前頁面導航
-            function openOrNavigate(url) {
-                const newWindow = window.open(url, '_blank');
-                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                    // 彈出窗口被阻擋，在當前頁面導航
-                    window.location.href = url;
-                }
-            }
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'generated_report.docx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
 
             // 關閉模態框並重置滾動狀態
             const modal = document.getElementById('staticBackdrop');
@@ -82,9 +67,6 @@ function generate_word() {
             setTimeout(() => {
                 cleanupModalEffects();
             }, 500);
-
-            // openOrNavigate('/edit');
-
         })
         .catch(error => {
             console.error('Error:', error);
@@ -129,6 +111,8 @@ function again_generate_response(group) {
             console.log(data);
 
             group.querySelectorAll('textarea')[1].value = data.generatedResult;
+
+            autoSave();
 
             // 歷史紀錄
             append_historical_records(group.querySelector('input').value, group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);

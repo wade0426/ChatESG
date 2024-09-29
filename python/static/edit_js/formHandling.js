@@ -222,6 +222,9 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
         });
     });
 
+    console.log("createGroup 呼叫 autoSave");
+    autoSave();
+
     return group;
 }
 
