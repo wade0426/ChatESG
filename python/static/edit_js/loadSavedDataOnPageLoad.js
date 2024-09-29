@@ -25,7 +25,7 @@ function loadSavedDataOnPageLoad(response_data) {
             // 如果 localStorage.getItem('historical_records') 不存在，則存入，代表使用者第一次進入edit
             // 避免重整時，重複存檔
             if (!is_history_records) {
-                historical_records(value.title, value.prompt, value.generatedResult);
+                append_historical_records(value.title, value.prompt, value.generatedResult);
             }
 
             // 恢復圖表數據

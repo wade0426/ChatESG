@@ -118,7 +118,7 @@ function again_generate_response(group) {
             group.querySelectorAll('textarea')[1].value = data.generatedResult;
 
             // 歷史紀錄
-            historical_records(group.querySelector('input').value, group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);
+            append_historical_records(group.querySelector('input').value, group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);
 
             // 關閉模態框並重置滾動狀態
             const modal = document.getElementById('staticBackdrop');
