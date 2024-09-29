@@ -138,6 +138,9 @@ function again_generate_response(group) {
 
             group.querySelectorAll('textarea')[1].value = data.generatedResult;
 
+            // 歷史紀錄
+            historical_records(group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);
+
             setTimeout(() => {
                 document.getElementById("wating_cancel-btn").click();
             }, 500);

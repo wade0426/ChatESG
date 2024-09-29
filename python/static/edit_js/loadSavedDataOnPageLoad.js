@@ -14,6 +14,12 @@ function loadSavedDataOnPageLoad(response_data) {
         const chapterData = response_data.data.章節;
         for (const [key, value] of Object.entries(chapterData)) {
             const group = createGroup(value.title, value.prompt, value.generatedResult);
+            // 首次存檔僅一次 歷史紀錄
+            // 如果 localStorage.getItem('historical_records') 不存在，則存入，代表使用者第一次進入edit
+            // 避免重整時，重複存檔
+            if (!localStorage.getItem('historical_records')) {
+                historical_records(value.prompt, value.generatedResult);
+            }
 
             // 恢復圖表數據
             if (value.charts.length > 0) {

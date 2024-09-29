@@ -155,6 +155,11 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
         again_generate_response(group);
     });
 
+    // 歷史紀錄按鈕事件
+    historyButton.addEventListener('click', function () {
+        console.log(localStorage.getItem('historical_records'));
+    });
+
     // 修改上移按钮事件
     upButton.addEventListener('click', function () {
         moveChapterUp(group);
