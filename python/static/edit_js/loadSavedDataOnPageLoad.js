@@ -8,6 +8,13 @@ function loadSavedDataOnPageLoad(response_data) {
     } else {
         console.error('無法找到資訊數據或數據格式不正確');
     }
+    // 紀錄存history_records的狀態 false == 還沒存過
+    let is_history_records = false;
+
+    // 重整不會再存歷史紀錄
+    if (localStorage.getItem('historical_records')) {
+        is_history_records = true;
+    }
 
     // 章節
     if (response_data && response_data.data && response_data.data.章節) {
@@ -17,8 +24,8 @@ function loadSavedDataOnPageLoad(response_data) {
             // 首次存檔僅一次 歷史紀錄
             // 如果 localStorage.getItem('historical_records') 不存在，則存入，代表使用者第一次進入edit
             // 避免重整時，重複存檔
-            if (!localStorage.getItem('historical_records')) {
-                historical_records(value.prompt, value.generatedResult);
+            if (!is_history_records) {
+                historical_records(value.title, value.prompt, value.generatedResult);
             }
 
             // 恢復圖表數據
@@ -44,6 +51,8 @@ function loadSavedDataOnPageLoad(response_data) {
                 });
             }
         }
+        // 存過歷史紀錄 這樣重整不會再存
+        is_history_records = true;
     } else {
         console.error('無法找到章節數據或數據格式不正確');
     }

@@ -19,7 +19,7 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
     else {
         alert('提交成功！');
 
-        // 使用 Bootstrap 的 JavaScript API 来显示 Modal
+        // 使用 Bootstrap 的 JavaScript API 來顯示 Modal
         var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
         myModal.show();
 
@@ -27,7 +27,7 @@ document.getElementById('my_submitButton').addEventListener('click', function (e
     }
 });
 
-// 为调试目的添加这些事件监听器
+// 為調適目的添加這些事件監聽器
 document.getElementById('wating_start-btn').addEventListener('click', function () {
     var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
     myModal.show();

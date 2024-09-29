@@ -1,8 +1,9 @@
-function historical_records(prompt, generatedResult) {
+function historical_records(title, prompt, generatedResult) {
     // 定義historical_records
     let records = JSON.parse(localStorage.getItem('historical_records')) || [];
     const newRecord = {
         index: records.length + 1,
+        title: title,
         prompt: prompt,
         generatedResult: generatedResult
     };

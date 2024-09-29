@@ -52,9 +52,9 @@ function generate_word() {
             // 測試p標籤
             console.log(data);
 
-            setTimeout(() => {
-                document.getElementById("wating_cancel-btn").click();
-            }, 500);
+            // setTimeout(() => {
+            //     document.getElementById("wating_cancel-btn").click();
+            // }, 500);
 
             // location.reload();
             // document.getElementById('response').textContent = JSON.stringify(data, null, 2);
@@ -85,7 +85,6 @@ function generate_word() {
 function again_generate_response(group) {
     document.getElementById("wating_start-btn").click();
     const formGroups = document.getElementById('form-groups');
-    // const groups = formGroups.querySelectorAll('.form-group');
     const groups = JSON.parse(localStorage.getItem('chaptersData'));
     const formFields = document.getElementById('form-fields');
     const infoGroups = formFields.querySelectorAll('.form-group');
@@ -105,7 +104,6 @@ function again_generate_response(group) {
         data.info[title] = content;
     });
 
-
     fetch('/again_generate_response', {
         method: 'POST',
         headers: {
@@ -115,40 +113,48 @@ function again_generate_response(group) {
     })
         .then(response => response.json())
         .then(data => {
-            // 關閉等待提示
-            document.getElementById('wating_cancel-btn').click();
-
             console.log(data);
-
-            // 測試p標籤
-            // console.log(data);
-            // document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-
-            // // 使用 LocalStorage
-            // localStorage.setItem('response', JSON.stringify(data));
-
-            // 嘗試打開新頁面，如果被封鎖則在當前頁面導航
-            function openOrNavigate(url) {
-                const newWindow = window.open(url, '_blank');
-                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                    // 彈出窗口被阻擋，在當前頁面導航
-                    window.location.href = url;
-                }
-            }
 
             group.querySelectorAll('textarea')[1].value = data.generatedResult;
 
             // 歷史紀錄
-            historical_records(group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);
+            historical_records(group.querySelector('input').value, group.querySelectorAll('textarea')[0].value, group.querySelectorAll('textarea')[1].value);
 
+            // 關閉模態框並重置滾動狀態
+            const modal = document.getElementById('staticBackdrop');
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+
+            // 使用 setTimeout 確保在模態框完全關閉後執行清理
             setTimeout(() => {
-                document.getElementById("wating_cancel-btn").click();
+                cleanupModalEffects();
             }, 500);
-
-            // openOrNavigate('/edit');
-
         })
         .catch(error => {
             console.error('Error:', error);
+            cleanupModalEffects(); // 即使出錯也嘗試清理
         });
+}
+
+// 新增函數用於清理模態框效果
+function cleanupModalEffects() {
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+
+    // 移除模態框背景
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    if (modalBackdrop) {
+        modalBackdrop.remove();
+    }
+
+    // 重置所有滾動容器
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.display = 'none';
+    });
+
+    // 強制重新計算佈局
+    window.dispatchEvent(new Event('resize'));
 }

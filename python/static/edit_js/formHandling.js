@@ -158,6 +158,8 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 歷史紀錄按鈕事件
     historyButton.addEventListener('click', function () {
         console.log(localStorage.getItem('historical_records'));
+        // 顯示歷史紀錄 offcanvas
+        show_history_records(group);
     });
 
     // 修改上移按钮事件
