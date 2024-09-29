@@ -696,7 +696,23 @@ progress {
 
   .container-sm,
   .container {
-    max-width: 540px;
+    /* max-width: 540px; */
+    max-width: none;
+  }
+}
+
+/* 685以下 */
+@media (max-width: 700px) {
+
+  /* 因為寬度不夠 三個三個換行 */
+  .d-flex {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .d-flex>* {
+    flex-basis: 33.333%;
+    max-width: 33.333%;
   }
 }
 
@@ -1469,7 +1485,7 @@ progress {
 
   .col-lg-6 {
     flex: 0 0 auto;
-    width: 70%;
+    width: 90%;
   }
 
   .col-lg-7 {
@@ -1479,7 +1495,8 @@ progress {
 
   .col-lg-8 {
     flex: 0 0 auto;
-    width: 66.66666667%;
+    /* width: 66.66666667%; */
+    width: 80%;
   }
 
   .col-lg-9 {
