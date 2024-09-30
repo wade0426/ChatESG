@@ -84,7 +84,11 @@ def send_message():
         if group_key in data.get('章節', {}): # type: ignore
             group_data = data['章節'][group_key]
             # generate_esg_report(標題, prompt, info訊息)
-            data['章節'][group_key]['generatedResult'] = generate_esg_report(data['章節'][group_key]['title'], data['章節'][group_key]['prompt'], info_data)
+            try:
+                data['章節'][group_key]['generatedResult'] = generate_esg_report(data['章節'][group_key]['title'], data['章節'][group_key]['prompt'], info_data)
+            except Exception as e:
+                print(f"Error generating ESG report: {str(e)}")
+                data['章節'][group_key]['generatedResult'] = "生成報告時發生錯誤，請稍後再試。"
 
     response = {
         "data": data

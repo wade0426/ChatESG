@@ -8,7 +8,7 @@ import re
 def process_info_message(title_name, info_data):
     title_info_mapping = {
         "長官的話": ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"],
-        "永續績效": ["環境", "社會", "治理"]
+        "永續績效": ["公司名稱", "環境", "社會", "治理"]
     }
     
     if title_name in title_info_mapping:
@@ -20,7 +20,7 @@ def process_info_message(title_name, info_data):
     return info_message
 
 
-# 修改生成 ESG 报告的函数
+# 修改生成 ESG 報告的函數
 def generate_esg_report(title_name, prompt, info_data):
     print("處理中...")
 
@@ -41,6 +41,15 @@ def generate_esg_report(title_name, prompt, info_data):
         # generate_leader 在 generate.py 裡面
         response = generate_leader(prompt, info_message) # type: ignore
         print("長官的話生成完成")
+        return response
+    
+    elif title_agent == "永續績效":
+        info_message = process_info_message(title_name, info_data)
+        print(f"{title_agent} 的 info_message: {info_message}\n")
+
+        # generate_leader 在 generate.py 裡面
+        response = generate_SustainabilityPerformance(prompt, info_message) # type: ignore
+        print("永續績效生成完成")
         return response
 
     else:

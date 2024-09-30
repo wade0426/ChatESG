@@ -127,7 +127,7 @@ function again_generate_response(group) {
             // 使用 setTimeout 確保在模態框完全關閉後執行清理
             setTimeout(() => {
                 cleanupModalEffects();
-            }, 500);
+            }, 800);
         })
         .catch(error => {
             console.error('Error:', error);

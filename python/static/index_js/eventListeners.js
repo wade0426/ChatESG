@@ -308,8 +308,12 @@ dropdownItems.forEach(item => {
         if (!isInitialLoad) {
             const industry = this.id.split('-')[1];
             if (industry === 'finance') {
-                createFormGroup('報告期間');
-                createFormGroup('報告書範疇');
+                // 關於本報告書
+                // createFormGroup('報告期間');
+                // createFormGroup('報告書範疇');
+                // createFormGroup('報告書撰寫原則');
+                // createFormGroup('報告書查證與確信');
+                // 長官的話
                 createFormGroup('公司名稱');
                 createFormGroup('公司歷史與成就');
                 createFormGroup('經營成果與財務績效');
@@ -318,16 +322,23 @@ dropdownItems.forEach(item => {
                 createFormGroup('數位轉型與創新');
                 createFormGroup('社會責任與公益');
                 createFormGroup('未來展望');
+                // 永續績效
+                createFormGroup('環境');
+                createFormGroup('社會');
+                createFormGroup('治理');
 
                 // 建立章節
-                createGroup('關於本報告書', "");
+                createGroup('關於本報告書', getPrompt('關於本報告書'));
                 createGroup('長官的話', getPrompt('長官的話'));
-                createGroup('關於公司', "");
-                createGroup('永續發展策略', "");
-                createGroup('公司治理', "");
-                createGroup('永續金融', "");
-                createGroup('永續環境', "");
-                createGroup('員工關懷', "");
+                createGroup('永續績效', getPrompt('永續績效'));
+                createGroup('關於本公司', getPrompt('關於本公司'));
+                createGroup('營運績效', getPrompt('營運績效'));
+
+                // createGroup('永續發展策略', "");
+                // createGroup('公司治理', "");
+                // createGroup('永續金融', "");
+                // createGroup('永續環境', "");
+                // createGroup('員工關懷', "");
             }
             else if (industry === 'education') {
                 createFormGroup('學校名稱');
@@ -428,6 +439,9 @@ loadDefaultDataButton.addEventListener('click', () => {
         // '報告年度': '2024年',
         '公司名稱': '中科金控',
         '公司歷史與成就': '中科金控自成立以來已有30餘年歷史，憑藉穩健的經營策略，逐步成為業界的領導者。我們成功地在國內外市場取得優異的成績，並持續擴展業務版圖，在永續金融領域有顯著影響力的台灣金融控股公司，為台灣唯一加入世界經濟論壇 (WEF) 的金融業會員，致力於推動永續發展及實踐 ESG 承諾。',
+        '環境': '我們在2023年成功降低了公司總碳排放量15%，並達成了年度能源使用效率提升的目標，將50%的電力來源轉換為再生能源。此外，我們積極推動廢棄物管理，回收再利用率達到85%，為公司永續發展奠定了環保基礎。',
+        '社會': '公司持續關注員工的福祉與職業發展，2023年內部培訓時數達到人均40小時，並實施了多項職場健康計畫。同時，我們積極參與社會 公益活動，捐助了超過500萬元，支持弱勢族群教育與環保項目，促進社會和諧。',
+
         // '經營成果與財務績效': '過去一年，我們的營收達到新高，實現了30億元的收入，淨利潤也比去年增長了148%。',
         // '永續發展策略與目標': '我們始終致力於推動永續發展，並將此理念融入公司的長期策略。未來五年，我們將持續降低碳排放，並將50%的能源轉換為再生能源，以達到我們的永續目標。',
         // '氣候變遷與環境承諾': '在應對氣候變遷方面，我們承諾在2030年實現碳中和，並持續投資於綠色科技與低碳創新，為環境保護盡一份心力。',
@@ -436,7 +450,7 @@ loadDefaultDataButton.addEventListener('click', () => {
         // '未來展望': '展望未來，我們將繼續朝著永續與創新的方向前進，持續強化公司的核心競爭力，並積極應對全球變遷帶來的挑戰，與各界攜手共創更美好的未來。',
         // 章節
         // '關於本報告書': '本報告書涵蓋中科金控2024年度的永續發展成果。',
-        '長官的話': '',
+        // '長官的話': '',
         // '關於公司': '中科金控是一家領先的金融服務提供商，專注於創新和可持續發展。',
         // '永續發展策略': '我們的策略基於三大支柱：金融創新、環境責任和社會影響。',
         // '公司治理': '我們堅持最高標準的公司治理，確保透明度和問責制。',
@@ -450,9 +464,14 @@ loadDefaultDataButton.addEventListener('click', () => {
     formGroups.forEach((group, index) => {
         const input = group.querySelector('input[type="text"]');
         const textarea = group.querySelector('textarea');
+        const deleteGroup = group.querySelector('.delete-group');
+
         if (input && textarea) {
             // 根據索引從defaultData對象中獲取對應的鍵名
             const key = Object.keys(defaultData)[index];
+            if (key === undefined) {
+                deleteGroup.click();
+            }
             input.value = key;
             textarea.value = defaultData[key];
         }

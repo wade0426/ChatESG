@@ -83,7 +83,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 重新生成按鈕
     const regenerateButton = document.createElement('button');
     regenerateButton.type = 'button';
-    regenerateButton.className = 'btn btn-success btn-sm mb-3 regenerate-group btn-xl';
+    regenerateButton.className = 'btn btn-dark btn-sm mb-3 regenerate-group btn-xl';
     regenerateButton.setAttribute('data-bs-toggle', 'popover');
     regenerateButton.setAttribute('data-bs-content', '重新生成此章節');
     regenerateButton.textContent = '重新生成';
@@ -101,7 +101,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 切換章節順序 上移 按鈕
     const upButton = document.createElement('button');
     upButton.type = 'button';
-    upButton.className = 'btn btn-success btn-sm mb-3 up-group btn-xl';
+    upButton.className = 'btn btn-dark btn-sm mb-3 up-group btn-xl';
     upButton.setAttribute('data-bs-toggle', 'popover');
     upButton.setAttribute('data-bs-content', '將章節上移');
     upButton.textContent = '上移';
