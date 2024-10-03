@@ -18,8 +18,6 @@ function sendMessage() {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
         data.資訊[title] = content;
-        // console.log(data);
-
     });
 
     // 處理"章節"部分
@@ -37,12 +35,15 @@ function sendMessage() {
 
     // console.log(data);
 
+    console.log('送出 data:', data);
     fetch('/send_message', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        // body: JSON.stringify(data),
         body: JSON.stringify(data),
+
     })
         .then(response => response.json())
         .then(data => {
@@ -50,7 +51,13 @@ function sendMessage() {
             document.getElementById('wating_cancel-btn').click();
 
             // 測試p標籤
-            console.log(data);
+            // console.log(data);
+            // 轉換為格式化的 JSON 字符串，並顯示在頁面上
+            // 1. JSON.stringify(data, null, 2) 將 data 對象轉換為 JSON 字符串
+            //    - 第二個參數 null 表示不替換任何值
+            //    - 第三個參數 2 表示使用 2 個空格進行縮進，使輸出更易讀
+            // 2. document.getElementById('response') 獲取 ID 為 'response' 的 HTML 元素
+            // 3. .textContent 將格式化後的 JSON 字符串設置為該元素的文本內容
             document.getElementById('response').textContent = JSON.stringify(data, null, 2);
 
             // 使用 LocalStorage
@@ -72,7 +79,7 @@ function sendMessage() {
 
             // 打開edit頁面
             // openOrNavigate('/edit');
-            window.location.href = '/edit';
+            // window.location.href = '/edit';
 
             // 關閉當前index頁面
             // window.close();
