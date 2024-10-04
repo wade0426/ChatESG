@@ -78,7 +78,7 @@ function sendMessage() {
 
             // 打開edit頁面
             // openOrNavigate('/edit');
-            // window.location.href = '/edit';
+            window.location.href = '/edit';
 
             // 關閉當前index頁面
             // window.close();
