@@ -74,7 +74,7 @@ def send_message():
     info_count = int(data.get('infoCount', 0)) # type: ignore
     group_count = int(data.get('groupCount', 0)) # type: ignore
     # 用來存放公司訊息
-    info_data = data.get('資訊', {}) # type: ignore
+    info_data = {item['title']: item['content'] for item in data.get('資訊', [])} # type: ignore
     # 用來存放章節
     groups_data = []
 

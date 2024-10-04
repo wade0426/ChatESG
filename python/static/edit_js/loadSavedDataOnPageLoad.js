@@ -2,8 +2,9 @@ function loadSavedDataOnPageLoad(response_data) {
     // 資訊
     if (response_data && response_data.data && response_data.data.資訊) {
         const infoData = response_data.data.資訊;
-        for (const [key, value] of Object.entries(infoData)) {
-            createFormGroup(key, value);
+        console.log("infoData", infoData);
+        for (const item of infoData) {
+            createFormGroup(item.title, item.content);
         }
     } else {
         console.error('無法找到資訊數據或數據格式不正確');

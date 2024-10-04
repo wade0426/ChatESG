@@ -1,7 +1,6 @@
 // 用於傳送訊息到py
 function sendMessage() {
     const formGroups = document.getElementById('form-groups');
-    // const groups = formGroups.querySelectorAll('.form-group');
     const groups = JSON.parse(localStorage.getItem('chaptersData'));
     const formFields = document.getElementById('form-fields');
     const infoGroups = formFields.querySelectorAll('.form-group');
@@ -9,15 +8,15 @@ function sendMessage() {
     let data = {
         infoCount: infoGroups.length,
         groupCount: groups.length,
-        資訊: {},
+        資訊: [],
         章節: {}
     };
 
     // 處理"資訊"部分
-    infoGroups.forEach((group) => {
+    infoGroups.forEach((group, index) => {
         const title = group.querySelector('input[type="text"]').value;
         const content = group.querySelector('textarea').value;
-        data.資訊[title] = content;
+        data.資訊[index] = { title: title, content: content };
     });
 
     // 處理"章節"部分
@@ -50,6 +49,8 @@ function sendMessage() {
             // 關閉等待提示
             document.getElementById('wating_cancel-btn').click();
 
+            console.log(data);
+
             // 測試p標籤
             // console.log(data);
             // 轉換為格式化的 JSON 字符串，並顯示在頁面上
@@ -63,8 +64,6 @@ function sendMessage() {
             // 使用 LocalStorage
             localStorage.setItem('response', JSON.stringify(data));
 
-            // 打開main頁面
-            // 打開main頁面
             // 嘗試打開新頁面，如果被封鎖則在當前頁面導航
             function openOrNavigate(url) {
                 const newWindow = window.open(url, '_blank');
