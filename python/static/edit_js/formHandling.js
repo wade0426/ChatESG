@@ -56,15 +56,23 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     const textarea = group.querySelector('textarea');
     const generatedResult = group.querySelectorAll('textarea')[1];
 
+    // 章節的input
     input.addEventListener('input', validateField);
     input.addEventListener('input', () => updatePrompt(input, textarea));
     input.setAttribute('data-bs-toggle', 'popover');
     input.setAttribute('data-bs-content', '設定產生的章節');
     input.setAttribute('data-bs-placement', 'left');
+    // prompt的textarea
     textarea.addEventListener('input', validateField);
     textarea.setAttribute('data-bs-toggle', 'popover');
     textarea.setAttribute('data-bs-content', '撰寫與LLM的生成prompt');
     textarea.setAttribute('data-bs-placement', 'left');
+    // 生成結果的textarea
+    generatedResult.addEventListener('input', validateField);
+    generatedResult.setAttribute('data-bs-toggle', 'popover');
+    generatedResult.setAttribute('data-bs-content', '這邊可以直接修改AI的生成結果');
+    generatedResult.setAttribute('data-bs-placement', 'left');
+
 
     // 添加 input 事件監聽器來觸發自動保存
     input.addEventListener('input', autoSave);
@@ -251,10 +259,11 @@ function validateForm() {
         // 獲取當前組的輸入框和文本區域
         const input = group.querySelector('input');
         const textarea = group.querySelector('textarea');
+        const generatedResult = group.querySelectorAll('textarea')[1];
 
         // 檢查輸入框和文本區域是否為空
         // 如果任一為空，則將表單狀態設為無效
-        if (input.value.trim() === '' || textarea.value.trim() === '') {
+        if (input.value.trim() === '' || textarea.value.trim() === '' || generatedResult.value.trim() === '') {
             isValid = false;
         }
     });
