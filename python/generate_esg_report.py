@@ -17,10 +17,10 @@ def process_info_message(title_name, info_data):
     
     if title_name in title_info_mapping:
         relevant_keys = title_info_mapping[title_name]
-        info_message = "\n\n".join([f"{key}: {value}" for key, value in info_data.items() if key in relevant_keys])
+        info_message = "\n\n".join([f"{key}:\n {value}" for key, value in info_data.items() if key in relevant_keys])
     else:
         print("title_name 不在 title_info_mapping 中")
-        info_message = "\n\n".join([f"{key}: {value}" for key, value in info_data.items()])
+        info_message = "\n\n".join([f"{key}:\n {value}" for key, value in info_data.items()])
     
     return info_message
 
@@ -44,7 +44,7 @@ def generate_esg_report(title_name, prompt, info_data):
     info_message = process_info_message(title_agent, info_data)
     print(f"{title_agent} 的 info_message: {info_message}\n")
     response = gemini_generate_response(title_agent, prompt, info_message)
-    print(f"{title_agent} 生成完成\n")
+    print(f"chapter: {title_agent} 生成完成\n")
     return response
 
     # if title_agent == "長官的話":
