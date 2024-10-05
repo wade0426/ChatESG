@@ -1,4 +1,5 @@
 function show_history_records(group) {
+    const group_id = group.getAttribute('id');
     const group_input_value = group.querySelector('input').value;
 
     const historical_records = localStorage.getItem('historical_records');
@@ -36,7 +37,7 @@ function show_history_records(group) {
                 const recordId = recordElement.getAttribute('data-record-id');
                 // 确保 historical_records 是字符串形式
                 const historicalRecordsString = localStorage.getItem('historical_records');
-                select_history_record(recordId, historicalRecordsString, group);
+                select_history_record(recordId, historicalRecordsString, group, group_id);
 
             } else if (event.target.classList.contains('delete-history-record')) {
                 const recordElement = event.target.closest('.record');
@@ -50,7 +51,7 @@ function show_history_records(group) {
 }
 
 // 選擇紀錄
-function select_history_record(recordId, historicalRecordsString, group) {
+function select_history_record(recordId, historicalRecordsString, group, group_id) {
     // 當使用者按下恢復紀錄時，幫使用者把紀錄加入歷史紀錄
     append_historical_records(group.querySelector('input').value, group.querySelector('textarea').value, group.querySelectorAll('textarea')[1].value);
 
@@ -70,16 +71,9 @@ function select_history_record(recordId, historicalRecordsString, group) {
         return;
     }
 
-    console.log(group);
-    // 在 group 中找到 id
-    let id = group.querySelector('input').getAttribute('id');
-    id = id.replace('name', '');
-
-    // 將 name${id} 的值設置為 record.title
-    group.querySelector(`input[id="name${id}"]`).value = record.title || '';
-    group.querySelector(`textarea[id="message${id}"]`).value = record.prompt || '';
-    const generatedResultTextarea = group.querySelector(`textarea[id="generatedResult${id}"]`);
-    generatedResultTextarea.value = record.generatedResult || '';
+    document.getElementById(`${group_id}`).querySelector('input').value = record.title || '';
+    document.getElementById(`${group_id}`).querySelector('textarea').value = record.prompt || '';
+    document.getElementById(`${group_id}`).querySelectorAll('textarea')[1].value = record.generatedResult || '';
 
     // 使用 Bootstrap API 關閉 offcanvas
     const offcanvasElement = document.getElementById('offcanvasExample');

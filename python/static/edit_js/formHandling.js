@@ -18,12 +18,13 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     let className_generatedData = '';
     if (title === '') className_title = 'is-invalid';
     if (demo_text === '') className_content = 'is-invalid';
-    if (generatedData === '') className_generatedData = 'is-invalid';
+    // if (generatedData === '') className_generatedData = 'is-invalid';
 
     groupCount++;
 
     const group = document.createElement('div');
     group.className = 'form-group';
+    group.id = `group${groupCount}`;
     group.innerHTML = `
         <div class="form-floating mb-3" style="width: 100%;">
             <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
@@ -68,7 +69,8 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     textarea.setAttribute('data-bs-content', '撰寫與LLM的生成prompt');
     textarea.setAttribute('data-bs-placement', 'left');
     // 生成結果的textarea
-    generatedResult.addEventListener('input', validateField);
+    // 生成結果的，所以不加validateField
+    // generatedResult.addEventListener('input', validateField);
     generatedResult.setAttribute('data-bs-toggle', 'popover');
     generatedResult.setAttribute('data-bs-content', '這邊可以直接修改AI的生成結果');
     generatedResult.setAttribute('data-bs-placement', 'left');
@@ -259,11 +261,11 @@ function validateForm() {
         // 獲取當前組的輸入框和文本區域
         const input = group.querySelector('input');
         const textarea = group.querySelector('textarea');
-        const generatedResult = group.querySelectorAll('textarea')[1];
+        // const generatedResult = group.querySelectorAll('textarea')[1];
 
         // 檢查輸入框和文本區域是否為空
         // 如果任一為空，則將表單狀態設為無效
-        if (input.value.trim() === '' || textarea.value.trim() === '' || generatedResult.value.trim() === '') {
+        if (input.value.trim() === '' || textarea.value.trim() === '') {
             isValid = false;
         }
     });
@@ -275,12 +277,12 @@ function validateForm() {
 
 // 更新prompt
 function updatePrompt(input, textarea) {
-    const title = input.value.trim();
-    const prompt = getPrompt(title);
-    if (prompt) {
-        textarea.value = prompt;
-        textarea.classList.remove('is-invalid');
-    }
+    // const title = input.value.trim();
+    // const prompt = getPrompt(title);
+    // if (prompt) {
+    //     textarea.value = prompt;
+    //     textarea.classList.remove('is-invalid');
+    // }
     // 驗證表單 是否為空
     validateForm();
 }
