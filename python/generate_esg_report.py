@@ -6,6 +6,9 @@ import re
 # 長官的話:["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"]
 # 永續績效 : ["環境", "社會", "治理"]
 def process_info_message(title_name, info_data):
+
+    # print(f"info_data: {info_data}")
+
     title_info_mapping = {
         "長官的話": ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"],
         "永續績效": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
@@ -14,10 +17,10 @@ def process_info_message(title_name, info_data):
     
     if title_name in title_info_mapping:
         relevant_keys = title_info_mapping[title_name]
-        info_message = "& ".join([f"{key}: {value}" for key, value in info_data.items() if key in relevant_keys])
+        info_message = "\n\n".join([f"{key}: {value}" for key, value in info_data.items() if key in relevant_keys])
     else:
         print("title_name 不在 title_info_mapping 中")
-        info_message = "& ".join([f"{key}: {value}" for key, value in info_data.items()])
+        info_message = "\n\n".join([f"{key}: {value}" for key, value in info_data.items()])
     
     return info_message
 

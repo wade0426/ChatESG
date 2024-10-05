@@ -47,16 +47,19 @@ function autoSave() {
         data: {
             groupCount: chaptersData.length,
             infoCount: groupsData.length,
-            章節: chaptersData.map(chapter => ({
-                title: chapter.title,
-                prompt: chapter.content,
-                charts: chapter.charts,
-                generatedResult: chapter.generatedResult
-            })),
-            資訊: groupsData.reduce((acc, info) => {
-                acc[info.title] = info.content;
+            章節: chaptersData.reduce((acc, chapter, index) => {
+                acc[`group${index + 1}`] = {
+                    title: chapter.title,
+                    prompt: chapter.content,
+                    charts: chapter.charts,
+                    generatedResult: chapter.generatedResult
+                };
                 return acc;
-            }, {})
+            }, {}),
+            資訊: groupsData.map(info => ({
+                title: info.title,
+                content: info.content
+            }))
         }
     };
     console.log("response_data", response_data);

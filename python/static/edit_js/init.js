@@ -12,7 +12,7 @@ let response_json = localStorage.getItem('response');
 if (response_json) {
     // 將 response_json 轉換為 JSON 物件
     const response_data = JSON.parse(response_json);
-    console.log("response_data", response_data);
+    console.log("init call response_data", response_data);
     // 呼叫 loadSavedDataOnPageLoad 函數
     loadSavedDataOnPageLoad(response_data);
 
