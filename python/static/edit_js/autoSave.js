@@ -26,7 +26,7 @@ function autoSave() {
     // 保存 chapters 數據（章節、prompt 和圖表）
     document.getElementById('form-groups').querySelectorAll('.form-group').forEach((group) => {
         const title = group.querySelector('input[type="text"]').value;
-        const content = group.querySelector('textarea').value;
+        const prompt = group.querySelector('textarea').value;
         const generatedResult = group.querySelectorAll('textarea')[1].value;
         const charts = [];
 
@@ -39,7 +39,7 @@ function autoSave() {
             });
         });
 
-        chaptersData.push({ title, content, charts, generatedResult });
+        chaptersData.push({ title, prompt, charts, generatedResult });
     });
 
     // 保存response
@@ -50,7 +50,7 @@ function autoSave() {
             章節: chaptersData.reduce((acc, chapter, index) => {
                 acc[`group${index + 1}`] = {
                     title: chapter.title,
-                    prompt: chapter.content,
+                    prompt: chapter.prompt,
                     charts: chapter.charts,
                     generatedResult: chapter.generatedResult
                 };
