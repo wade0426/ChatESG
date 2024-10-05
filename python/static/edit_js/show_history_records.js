@@ -8,6 +8,9 @@ function show_history_records(group) {
         const reversedRecords = records.slice().reverse();
         let index = records.filter(record => record.title === group_input_value).length;
 
+        const offcanvasExampleLabel = document.getElementById('offcanvasExampleLabel');
+        offcanvasExampleLabel.textContent = `${group_input_value} 的歷史紀錄`;
+
         reversedRecords.forEach(record => {
             if (record.title === group_input_value) {
                 html += `
