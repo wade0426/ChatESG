@@ -12,12 +12,13 @@ function show_history_records(group, historyButton_id) {
         offcanvasExampleLabel.textContent = `${group_input_value} 的歷史紀錄`;
 
         reversedRecords.forEach(record => {
+            // const historyButton_id_number = historyButton_id.replace('historyButton', '');
             if (record.title === group_input_value) {
                 html += `
                 <div class="record" data-record-id="${record.index}">
                     <p style="margin-bottom: 2%; text-align: center;">版本: ${index--}</p>
                     <p>Prompt:<br> ${record.prompt}</p>
-                    <p style="margin-bottom: 2%;">生成結果:<br> ${record.generatedResult}</p>
+                    <p>生成結果:<br> ${record.generatedResult}</p>
                     <button style="margin-bottom: 5%; width: 49%;" class="btn btn-success select-history-record">恢復此紀錄</button>
                     <button style="margin-bottom: 5%; width: 49%;" class="btn btn-danger delete-history-record">刪除此紀錄</button>
                 </div>
@@ -29,20 +30,20 @@ function show_history_records(group, historyButton_id) {
         const historicalRecordsElement = document.getElementById('historical_records');
         historicalRecordsElement.innerHTML = html;
 
-        // 事件監聽器，選擇或刪除紀錄
-        historicalRecordsElement.addEventListener('click', function (event) {
-            if (event.target.classList.contains('select-history-record')) {
-                const recordElement = event.target.closest('.record');
-                const recordId = recordElement.getAttribute('data-record-id');
-                // 确保 historical_records 是字符串形式
+        // 為每個記錄添加事件監聽器
+        historicalRecordsElement.querySelectorAll('.record').forEach(recordElement => {
+            const selectButton = recordElement.querySelector('.select-history-record');
+            const deleteButton = recordElement.querySelector('.delete-history-record');
+            const recordId = recordElement.getAttribute('data-record-id');
+
+            selectButton.addEventListener('click', function () {
                 const historicalRecordsString = localStorage.getItem('historical_records');
                 select_history_record(recordId, historicalRecordsString, group, historyButton_id);
+            });
 
-            } else if (event.target.classList.contains('delete-history-record')) {
-                const recordElement = event.target.closest('.record');
-                const recordId = recordElement.getAttribute('data-record-id');
+            deleteButton.addEventListener('click', function () {
                 delete_history_record(recordId, recordElement);
-            }
+            });
         });
 
         document.querySelector('[data-bs-toggle="offcanvas"]').click();
@@ -52,10 +53,11 @@ function show_history_records(group, historyButton_id) {
 // 選擇紀錄
 function select_history_record(recordId, historicalRecordsString, group, historyButton_id) {
 
-    // console.log("historyButton_id", historyButton_id);
-    // console.log("group", group.getAttribute('id'));
+    console.log("historyButton_id", historyButton_id);
+    console.log("group", group.getAttribute('id'));
 
-    if (group.getAttribute('id') === historyButton_id) {
+    historyButton_id = historyButton_id.replace('historyButton', '');
+    if (group.getAttribute('id').replace('group', '') === historyButton_id) {
         // 當使用者按下恢復紀錄時，幫使用者把紀錄加入歷史紀錄
         append_historical_records(group.querySelector('input').value, group.querySelector('textarea').value, group.querySelectorAll('textarea')[1].value);
 
@@ -75,7 +77,6 @@ function select_history_record(recordId, historicalRecordsString, group, history
             return;
         }
 
-        historyButton_id = historyButton_id.replace('historyButton', '');
         document.getElementById(`name${historyButton_id}`).value = record.title || '';
         document.getElementById(`prompt${historyButton_id}`).value = record.prompt || '';
         document.getElementById(`generatedResult${historyButton_id}`).value = record.generatedResult || '';
