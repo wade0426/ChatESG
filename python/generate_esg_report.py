@@ -10,6 +10,7 @@ def process_info_message(title_name, info_data):
     # print(f"info_data: {info_data}")
 
     title_info_mapping = {
+        "關於本報告書": ["公司名稱", "報告期間", "報告書範疇", "報告書撰寫原則", "聯絡資訊"],
         "長官的話": ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"],
         "永續績效": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
         "永續績效v3": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
@@ -33,6 +34,7 @@ def generate_esg_report(title_name, prompt, info_data):
     # print(f"有{len(groups_data)}個章節")
     # print(groups_data)
 
+    # AI 分類已被註解暫時關閉
     # title_agent = title_classification(title_name)
     title_agent = title_name
 

@@ -5,10 +5,6 @@ from ftp import upload_file
 import base64
 from process_chapter_data import process_chapter_data
 from generate_word import generate_word_document
-import os
-# import re
-# import io
-
 
 class ImageCount:
     image_count = 0
