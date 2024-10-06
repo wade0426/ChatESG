@@ -62,13 +62,13 @@ function autoSave() {
             }))
         }
     };
-    console.log("response_data", response_data);
+    // console.log("response_data", response_data);
     localStorage.setItem('response', JSON.stringify(response_data));
 
     localStorage.setItem('groupsData', JSON.stringify(groupsData));
-    console.log("groupsData", groupsData);
+    // console.log("groupsData", groupsData);
     localStorage.setItem('chaptersData', JSON.stringify(chaptersData));
-    console.log("chaptersData", chaptersData);
+    // console.log("chaptersData", chaptersData);
 
     // 保存選擇的行業類別
     const activeIndustry = document.querySelector('.dropdown-item.active');

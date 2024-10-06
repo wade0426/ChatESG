@@ -171,7 +171,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     historyButton.addEventListener('click', function () {
         // console.log(localStorage.getItem('historical_records'));
         // 顯示歷史紀錄 offcanvas
-        show_history_records(group, historyButton.getAttribute('id'));
+        show_history_records(group);
     });
 
     // 修改上移按钮事件
