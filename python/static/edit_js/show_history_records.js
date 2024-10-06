@@ -1,5 +1,4 @@
-function show_history_records(group) {
-    const group_id = group.getAttribute('id');
+function show_history_records(group, historyButton_id) {
     const group_input_value = group.querySelector('input').value;
 
     const historical_records = localStorage.getItem('historical_records');
@@ -37,7 +36,7 @@ function show_history_records(group) {
                 const recordId = recordElement.getAttribute('data-record-id');
                 // 确保 historical_records 是字符串形式
                 const historicalRecordsString = localStorage.getItem('historical_records');
-                select_history_record(recordId, historicalRecordsString, group, group_id);
+                select_history_record(recordId, historicalRecordsString, group, historyButton_id);
 
             } else if (event.target.classList.contains('delete-history-record')) {
                 const recordElement = event.target.closest('.record');
@@ -51,29 +50,39 @@ function show_history_records(group) {
 }
 
 // 選擇紀錄
-function select_history_record(recordId, historicalRecordsString, group, group_id) {
-    // 當使用者按下恢復紀錄時，幫使用者把紀錄加入歷史紀錄
-    append_historical_records(group.querySelector('input').value, group.querySelector('textarea').value, group.querySelectorAll('textarea')[1].value);
+function select_history_record(recordId, historicalRecordsString, group, historyButton_id) {
 
-    let parsedRecords;
-    try {
-        parsedRecords = JSON.parse(historicalRecordsString);
-    } catch (error) {
-        console.error('Error parsing historical records:', error);
-        return;
+    // console.log("historyButton_id", historyButton_id);
+    // console.log("group", group.getAttribute('id'));
+
+    if (group.getAttribute('id') === historyButton_id) {
+        // 當使用者按下恢復紀錄時，幫使用者把紀錄加入歷史紀錄
+        append_historical_records(group.querySelector('input').value, group.querySelector('textarea').value, group.querySelectorAll('textarea')[1].value);
+
+        let parsedRecords;
+        try {
+            parsedRecords = JSON.parse(historicalRecordsString);
+        } catch (error) {
+            console.error('Error parsing historical records:', error);
+            return;
+        }
+
+        // 根據 recordId 找到對應的紀錄
+        const record = parsedRecords.find(record => record.index === parseInt(recordId));
+
+        if (!record) {
+            console.error(`No record found with id ${recordId}`);
+            return;
+        }
+
+        historyButton_id = historyButton_id.replace('historyButton', '');
+        document.getElementById(`name${historyButton_id}`).value = record.title || '';
+        document.getElementById(`prompt${historyButton_id}`).value = record.prompt || '';
+        document.getElementById(`generatedResult${historyButton_id}`).value = record.generatedResult || '';
     }
-
-    // 根據 recordId 找到對應的紀錄
-    const record = parsedRecords.find(record => record.index === parseInt(recordId));
-
-    if (!record) {
-        console.error(`No record found with id ${recordId}`);
-        return;
+    else {
+        console.log("historyButton_id", historyButton_id, "group_id", group.getAttribute('id'), "不相等");
     }
-
-    document.getElementById(`${group_id}`).querySelector('input').value = record.title || '';
-    document.getElementById(`${group_id}`).querySelector('textarea').value = record.prompt || '';
-    document.getElementById(`${group_id}`).querySelectorAll('textarea')[1].value = record.generatedResult || '';
 
     // 使用 Bootstrap API 關閉 offcanvas
     const offcanvasElement = document.getElementById('offcanvasExample');

@@ -33,10 +33,10 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
             <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
         </div>
         <div class="form-floating mb-3" style="width: 100%;">
-            <textarea class="form-control ${className_content}" id="message${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
+            <textarea class="form-control ${className_content}" id="prompt${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
                 data-sb-validations="required">${demo_text}</textarea>
-            <label for="message${groupCount}">Prompt</label>
-            <div class="invalid-feedback" data-sb-feedback="message${groupCount}:required">必填</div>
+            <label for="prompt${groupCount}">Prompt</label>
+            <div class="invalid-feedback" data-sb-feedback="prompt${groupCount}:required">必填</div>
         </div>
         <div class="form-floating mb-3" style="width: 100%;">
             <textarea class="form-control ${className_generatedData}" id="generatedResult${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
@@ -107,6 +107,8 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     historyButton.setAttribute('data-bs-content', '歷史紀錄');
     historyButton.textContent = '歷史紀錄';
     historyButton.style.padding = '1% 5% 1% 5%';
+    // 加入 id
+    historyButton.setAttribute('id', `historyButton${groupCount}`);
 
     // 切換章節順序 上移 按鈕
     const upButton = document.createElement('button');
@@ -167,9 +169,9 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
 
     // 歷史紀錄按鈕事件
     historyButton.addEventListener('click', function () {
-        console.log(localStorage.getItem('historical_records'));
+        // console.log(localStorage.getItem('historical_records'));
         // 顯示歷史紀錄 offcanvas
-        show_history_records(group);
+        show_history_records(group, historyButton.getAttribute('id'));
     });
 
     // 修改上移按钮事件
