@@ -356,11 +356,13 @@ dropdownItems.forEach(item => {
 
 
                 // 建立章節
-                createGroup('關於本報告書', getPrompt('關於本報告書'));
-                createGroup('長官的話', getPrompt('長官的話'));
-                createGroup('永續績效', getPrompt('永續績效'));
-                createGroup('關於本公司', getPrompt('關於本公司'));
-                createGroup('經營績效', getPrompt('經營績效'));
+                createGroup('關於本報告書', "使用預設");
+                createGroup('長官的話', "使用預設");
+                createGroup('永續績效', "使用預設");
+                createGroup('關於本公司', "使用預設");
+                createGroup('經營績效', "使用預設");
+                createGroup('稅務管理', "使用預設");
+                createGroup('永續發展策略', "使用預設");
 
                 // createGroup('永續發展策略', "");
                 // createGroup('公司治理', "");
