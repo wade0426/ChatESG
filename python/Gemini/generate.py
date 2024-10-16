@@ -56,8 +56,8 @@ model = genai.GenerativeModel(
 
 def gemini_generate_response(title, prompt_content, info_message):
     global current_api_key
-    # API調用失敗 最大重試次數為3(3組API)。處理暫時性錯誤，提高程序的穩定性
-    max_retries = 3
+    # API調用失敗 最大重試次數為4(4組API)。處理暫時性錯誤，提高程序的穩定性
+    max_retries = 4
     for attempt in range(max_retries):
         try:
             if title == "關於本報告書":
