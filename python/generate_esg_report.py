@@ -12,8 +12,8 @@ def process_info_message(title_name, info_data):
     title_info_mapping = {
         "關於本報告書": ["公司名稱", "報告期間", "報告書範疇", "報告書撰寫原則", "聯絡資訊"],
         "長官的話": ["公司名稱", "公司歷史與成就", "經營成果與財務績效", "永續發展策略與目標", "氣候變遷與環境承諾", "數位轉型與創新", "社會責任與公益", "未來展望"],
+        "永續績效_Bad": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
         "永續績效": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
-        "永續績效v3": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
         "永續績效v4": ["公司名稱", "環境", "社會", "治理", "榮耀與肯定"],
         "關於本公司": ["公司名稱", "產業類別", "總部位置", "成立日期", "資本額", "實收資本額", "資產總額", "員工人數", "股票代號", "業務範圍", "經營據點"],
         "經營績效": ["公司名稱", "營運績效", "財務績效"],
@@ -50,6 +50,7 @@ def generate_esg_report(title_name, prompt, info_data):
     # 這邊使用 title_agent 而非 title_name
     info_message = process_info_message(title_agent, info_data)
     print(f"{title_agent} 的 info_message: {info_message}\n")
+    prompt = "" if prompt == "使用預設" else prompt
     response = gemini_generate_response(title_agent, prompt, info_message)
     print(f"chapter: {title_agent} 生成完成\n")
     return response

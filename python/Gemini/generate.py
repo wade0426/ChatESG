@@ -83,8 +83,8 @@ def gemini_generate_response(title, prompt_content, info_message):
                 ])
                 return response.text
             
-            elif title == "永續績效":
-                print("*永續績效*生成中...")
+            elif title == "永續績效_Bad":
+                print("*永續績效_Bad*生成中...")
                 response = model.generate_content([
                     f"{prompt_content}",
                     f"input: {info_message}",
@@ -93,8 +93,8 @@ def gemini_generate_response(title, prompt_content, info_message):
                 response_text = response.text.replace("#", "").replace("*", "")
                 return response_text
             
-            elif title == "永續績效v3":
-                print("*永續績效v3*生成中...")
+            elif title == "永續績效":
+                print("*永續績效*生成中...")
                 response = model.generate_content([
                     f"{prompt_content}",
                     "input: 公司名稱: 彰化銀行& 環境: 2022 年共計 34 個營業單位參與「全面汰換為 LED 照明設備」策略，預估節省約 184.55 公噸 CO2e。& 社會: 員工發展：員工取得外語證照之比率將從 2022 年的 24% 提升至 2023 年的 25%，並於 2027 年達到 33%。客戶滿意度：2022 年網路銀行客戶滿意度調查中，「企業網銀及企業行動網」獲 87.61% 滿意以上評價；「個人網銀及彰銀行動網」使用滿意度達 87.79%。供應鏈管理：2022 年新供應商簽署供應商社會責任承諾書及自評表，簽署率達 100%。& 治理:公司治理：在臺灣證券交易所第 8 屆及第 9 屆公司治理評鑑中名列整體上市公司前 5%，金融保險類前 4 名。資訊安全：推動 ISO27001 資安管理系統升版作業，APP 通過資安檢測，取得工業局合檢證書，認證標章數量達 90%。& 榮耀與肯定:責任投資：2022 年投資國內上市櫃公司 45 家，其中入選道瓊永續指數 (DJSI) 及臺灣永續指數成份股 32 家，投資金額占比約為 79.14%。",
