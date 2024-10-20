@@ -88,6 +88,7 @@
     padding: 5px;
     margin-bottom: 5px;
     color: #888;
+    text-decoration: none;
 }
 
 .toc-item.active {

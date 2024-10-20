@@ -23,8 +23,10 @@ function updateNavigationBar() {
     // 抓到 const sections = document.querySelectorAll('.form-group [id^="name"]') 裡面的所有 value;
     const sections = document.querySelectorAll('.form-group [id^="name"]');
     const sectionValues = [];
+    const sectionIds = [];
     sections.forEach(section => {
         sectionValues.push(section.value);
+        sectionIds.push(section.id);
     });
     // console.log(sectionValues);
     // id="toc-list"
@@ -32,21 +34,17 @@ function updateNavigationBar() {
     tocList.innerHTML = `
     <li><a href="#about" class="toc-item" data-section="about">您的資訊</a></li>
     <h3>章節大綱</h3>
-    ${sectionValues.map(value => `<li><a href="#${value}" class="toc-item" data-section="${value}">${value}</a></li>`).join('')}
+    ${sectionIds.map((id, index) => `<li><a href="#${id}" class="toc-item" data-section="${id}">${sectionValues[index]}</a></li>`).join('')}
     `;
 }
 
 
-
-
-
-
 // 導覽列的JS程式
 
-
+// 導覽列
 const tocItems = document.querySelectorAll('.toc-item');
-
-console.log(sections);
+// 輸入框
+const sections = document.querySelectorAll('.form-group [id^="name"]');
 
 tocItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -64,18 +62,22 @@ const observer = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             tocItems.forEach(item => item.classList.remove('active'));
             correspondingTocItem.classList.add('active');
+        } else {
+            correspondingTocItem.classList.remove('active');
         }
     });
 }, {
-    threshold: 0.1,  // 降低阈值，使其更容易触发
-    rootMargin: "-10% 0px -70% 0px"  // 调整观察区域，使其更接近页面顶部
+    // 降低閥值，使其更容易觸發
+    threshold: 0.1,
+    // 調整觀察區域，使其更接近頁面頂部
+    rootMargin: "-10% 0px -50% 0px"
 });
 
 sections.forEach(section => {
     observer.observe(section);
 });
 
-// 添加滚动事件监听器，以确保始终有一个活动项
+// 添加滾動事件監聽器，以確保始終有一個活動項
 window.addEventListener('scroll', () => {
     const scrollPosition = window.scrollY;
     let activeSection = sections[0];
