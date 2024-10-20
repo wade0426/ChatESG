@@ -248,12 +248,9 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
         detailsElements.forEach(el => {
             if (el.style.display === 'none') {
                 el.style.display = '';
-                el.style.animation = 'fadeIn 0.5s';
+                el.style.animation = 'fadeIn 0.8s';
             } else {
-                el.style.animation = 'fadeOut 0.5s';
-                setTimeout(() => {
-                    el.style.display = 'none';
-                }, 450);
+                el.style.display = 'none';
             }
         });
         this.textContent = this.textContent === '隱藏詳細資訊' ? '顯示詳細資訊' : '隱藏詳細資訊';
@@ -265,10 +262,6 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
         }
     `;
     document.head.appendChild(style);
