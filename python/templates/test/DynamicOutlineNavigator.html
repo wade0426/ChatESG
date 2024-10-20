@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寶藏傳說閱讀器</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100vh;
+            box-sizing: border-box;
+            margin-left: 200px;
+        }
+
+        .toc-item {
+            cursor: pointer;
+            padding: 5px;
+            margin-bottom: 5px;
+            color: #888;
+        }
+
+        .toc-item.active {
+            color: #ff8c00;
+            font-weight: bold;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        p {
+            margin: 80px 0;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar">
+        <h2>目錄</h2>
+        <div class="toc-item" data-section="intro">引言</div>
+        <div class="toc-item" data-section="start">探險的開始</div>
+        <div class="toc-item" data-section="danger">遇險與勇氣</div>
+        <div class="toc-item" data-section="treasure">發現寶藏</div>
+        <div class="toc-item" data-section="return">重回村莊</div>
+        <div class="toc-item" data-section="ending">結尾</div>
+    </div>
+    <div id="content">
+        <section id="intro">
+            <h2>引言</h2>
+            <p>在一個遙遠的小村莊，流傳著一個關於失落寶藏的傳說。
+            </p>
+        </section>
+        <section id="start">
+            <h2>探險的開始</h2>
+            <p>有一天，一位名叫小明的年輕冒險者決定展開尋寶之旅。他聽說這個寶藏是由古老的國王所隱藏，裡面裝滿了金銀珠寶和珍貴的文物。小明的心中充滿了激動與期待，他在心中幻想著自己找到寶藏後，將如何在
+            </p>
+        </section>
+        <section id="danger">
+            <h2>遇險與勇氣</h2>
+            <p>當小明走進森林後，樹木越來越高，光線變得黯淡。他沿著小路前行，四周環繞著奇異的聲音，似乎有什麼神秘的生物在注視著他。小明心中隱隱感到不安，但他告訴自己要保持冷靜。然而，事情並不如他所願。他在一處泥濘的地面上不小心跌倒，陷入了深深
+            </p>
+        </section>
+        <section id="treasure">
+            <h2>發現寶藏</h2>
+            <p>小明和小狐狸繼續深入森林，沿著神秘的小徑，他們感受到周圍的氣氛越來越奇異，彷彿
+            </p>
+        </section>
+        <section id="return">
+            <h2>重回村莊</h2>
+            <p>小明經過深思熟慮，決定只帶走一些珠寶，留下大部分寶藏，因為他明白
+            </p>
+        </section>
+        <section id="ending">
+            <h2>結尾</h2>
+            <p>從此以後，小明不再只是個冒險者，他成了村莊的英雄，將
+            </p>
+        </section>
+    </div>
+
+    <script>
+        const tocItems = document.querySelectorAll('.toc-item');
+        const sections = document.querySelectorAll('#content section');
+
+        tocItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetId = item.getAttribute('data-section');
+                document.getElementById(targetId).scrollIntoView({ behavior: "smooth" });
+            });
+        });
+
+        // 修改 Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const sectionId = entry.target.id;
+                const correspondingTocItem = document.querySelector(`.toc-item[data-section="${sectionId}"]`);
+
+                if (entry.isIntersecting) {
+                    tocItems.forEach(item => item.classList.remove('active'));
+                    correspondingTocItem.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,  // 降低阈值，使其更容易触发
+            rootMargin: "-10% 0px -70% 0px"  // 调整观察区域，使其更接近页面顶部
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // 添加滚动事件监听器，以确保始终有一个活动项
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            let activeSection = sections[0];
+
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition + 100) {
+                    activeSection = section;
+                }
+            });
+
+            tocItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-section') === activeSection.id) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

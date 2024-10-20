@@ -26,11 +26,14 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     group.className = 'form-group';
     group.id = `group${groupCount}`;
     group.innerHTML = `
-        <div class="form-floating mb-3" style="width: 100%;">
-            <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
-                placeholder="Enter your name..." data-sb-validations="required" />
-            <label for="name${groupCount}">章節</label>
-            <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
+        <div class="form-floating mb-3" style="width: 100%; position: relative;">
+        <input value="${title}" class="form-control ${className_title}" id="name${groupCount}" type="text"
+            placeholder="Enter your name..." data-sb-validations="required" />
+        <label for="name${groupCount}">章節</label>
+        <div class="invalid-feedback" data-sb-feedback="name${groupCount}:required">必填</div>
+        <button type="button" class="btn btn-outline-secondary btn-sm toggle-details" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 100;">
+            隱藏詳細資訊
+        </button>
         </div>
         <div class="form-floating mb-3" style="width: 100%;">
             <textarea class="form-control ${className_content}" id="prompt${groupCount}" placeholder="Enter your message here..." style="height: 10rem"
@@ -45,6 +48,8 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
             <div class="invalid-feedback" data-sb-feedback="generatedResult${groupCount}:required">必填</div>
         </div>
     `;
+
+
 
     // if groupCount aliceblue or fff
     group.style.backgroundColor = groupCount % 2 === 0 ? '#f0f0f0' : 'antiquewhite';
@@ -84,7 +89,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 新增圖表按鈕
     const addChartButton = document.createElement('button');
     addChartButton.type = 'button';
-    addChartButton.className = 'btn btn-success btn-sm mb-3 add-chart btn-xl';
+    addChartButton.className = 'btn btn-success btn-sm mb-3 add-chart btn-xl Toolbtn';
     addChartButton.setAttribute('data-bs-toggle', 'popover');
     addChartButton.setAttribute('data-bs-content', '除了文字敘述也可以加入圖表');
     addChartButton.textContent = '新增圖表';
@@ -93,7 +98,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 重新生成按鈕
     const regenerateButton = document.createElement('button');
     regenerateButton.type = 'button';
-    regenerateButton.className = 'btn btn-dark btn-sm mb-3 regenerate-group btn-xl';
+    regenerateButton.className = 'btn btn-dark btn-sm mb-3 regenerate-group btn-xl Toolbtn';
     regenerateButton.setAttribute('data-bs-toggle', 'popover');
     regenerateButton.setAttribute('data-bs-content', '重新生成此章節');
     regenerateButton.textContent = '重新生成';
@@ -102,7 +107,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 歷史紀錄按鈕
     const historyButton = document.createElement('button');
     historyButton.type = 'button';
-    historyButton.className = 'btn btn-success btn-sm mb-3 history-group btn-xl';
+    historyButton.className = 'btn btn-success btn-sm mb-3 history-group btn-xl Toolbtn';
     historyButton.setAttribute('data-bs-toggle', 'popover');
     historyButton.setAttribute('data-bs-content', '歷史紀錄');
     historyButton.textContent = '歷史紀錄';
@@ -113,7 +118,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 切換章節順序 上移 按鈕
     const upButton = document.createElement('button');
     upButton.type = 'button';
-    upButton.className = 'btn btn-dark btn-sm mb-3 up-group btn-xl';
+    upButton.className = 'btn btn-dark btn-sm mb-3 up-group btn-xl Toolbtn';
     upButton.setAttribute('data-bs-toggle', 'popover');
     upButton.setAttribute('data-bs-content', '將章節上移');
     upButton.textContent = '上移';
@@ -122,7 +127,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 切換章節順序 下移 按鈕
     const downButton = document.createElement('button');
     downButton.type = 'button';
-    downButton.className = 'btn btn-success btn-sm mb-3 down-group btn-xl';
+    downButton.className = 'btn btn-success btn-sm mb-3 down-group btn-xl Toolbtn';
     downButton.setAttribute('data-bs-toggle', 'popover');
     downButton.setAttribute('data-bs-content', '將章節下移');
     downButton.textContent = '下移';
@@ -131,7 +136,7 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 刪除按鈕
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
-    deleteButton.className = 'btn btn-danger btn-sm mb-3 delete-group btn-xl';
+    deleteButton.className = 'btn btn-danger btn-sm mb-3 delete-group btn-xl Toolbtn';
     deleteButton.textContent = '刪除';
     deleteButton.style.padding = '1% 5% 1% 5%';
 
@@ -233,6 +238,41 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
             }, 100);
         });
     });
+
+
+    // 隱藏詳細資訊
+    const toggleDetailsButton = group.querySelector('.toggle-details');
+    toggleDetailsButton.addEventListener('click', function () {
+        // 修改選擇器以確保包含所有需要隱藏的元素
+        const detailsElements = group.querySelectorAll('.form-floating:not(:first-child), .charts-container, .d-flex.justify-content-between, .Toolbtn');
+        detailsElements.forEach(el => {
+            if (el.style.display === 'none') {
+                el.style.display = '';
+                el.style.animation = 'fadeIn 0.5s';
+            } else {
+                el.style.animation = 'fadeOut 0.5s';
+                setTimeout(() => {
+                    el.style.display = 'none';
+                }, 450);
+            }
+        });
+        this.textContent = this.textContent === '隱藏詳細資訊' ? '顯示詳細資訊' : '隱藏詳細資訊';
+    });
+
+    // 添加動畫樣式
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
 
     console.log("createGroup 呼叫 autoSave");
     autoSave();
