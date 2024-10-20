@@ -24,6 +24,8 @@ if (response_json) {
 }
 
 // 等待DOM加載完成後，再執行以下程式碼，加入"添加新資料"的監聽器
+// 這裡是舊的
+// 沒有 add-group class name
 document.addEventListener('DOMContentLoaded', function () {
     const addGroupButtons = document.getElementsByClassName('add-group');
     for (let button of addGroupButtons) {

@@ -6,6 +6,7 @@ function initializeFormHandling() {
     my_submitButton = document.getElementById('my_submitButton');
 
     addGroupButton.addEventListener('click', () => {
+        // 新增章節
         createGroup();
     });
 }
@@ -65,14 +66,21 @@ function createGroup(title = '', demo_text = '', generatedData = '') {
     // 章節的input
     input.addEventListener('input', validateField);
     input.addEventListener('input', () => updatePrompt(input, textarea));
+    // input 呼叫 updateNavigationBar
+    // updateNavigationBar(); 有關導覽列
+    input.addEventListener('input', () => updateNavigationBar());
+    // bindTocItemEvents(); 有關導覽列
+    input.addEventListener('input', () => bindTocItemEvents());
     input.setAttribute('data-bs-toggle', 'popover');
     input.setAttribute('data-bs-content', '設定產生的章節');
     input.setAttribute('data-bs-placement', 'left');
+
     // prompt的textarea
     textarea.addEventListener('input', validateField);
     textarea.setAttribute('data-bs-toggle', 'popover');
     textarea.setAttribute('data-bs-content', '撰寫與LLM的生成prompt');
     textarea.setAttribute('data-bs-placement', 'left');
+
     // 生成結果的textarea
     // 生成結果的，所以不加validateField
     // generatedResult.addEventListener('input', validateField);

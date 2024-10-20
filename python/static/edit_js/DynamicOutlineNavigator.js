@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateNavigationBar();
     bindTocItemEvents();
 
-    // 监听输入框变化
+    // 監聽输入框變化
     const inputFields = document.querySelectorAll('.form-group [id^="name"]');
     inputFields.forEach(input => {
         input.addEventListener('input', () => {
@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
             bindTocItemEvents();
         });
     });
+
+    // 添加 MutationObserver 來監聽 form-groups 的變化
+    const formGroups = document.getElementById('form-groups');
+    const observer = new MutationObserver(() => {
+        updateNavigationBar();
+        bindTocItemEvents();
+    });
+    observer.observe(formGroups, { childList: true, subtree: true });
 });
 
 function updateNavigationBar() {
@@ -86,7 +94,7 @@ function bindTocItemEvents() {
         observer.observe(section);
     });
 
-    // 修改滚动事件监听器
+    // 修改滾動事件監聽器
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY;
         let activeSection = null;
