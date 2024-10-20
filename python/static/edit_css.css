@@ -1,0 +1,96 @@
+.chapter-nav {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 250px;
+    /* 增加宽度 */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.chapter-nav h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #333;
+}
+
+.nav-content h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.chapter-nav ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.chapter-nav ul li {
+    margin-bottom: 8px;
+}
+
+.chapter-nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 16px;
+}
+
+.chapter-nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.chapter-nav.hidden {
+    transform: translateX(-100%);
+}
+
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nav-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.open-nav-btn {
+    position: fixed;
+    top: 120px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    display: none;
+}
+
+.open-nav-btn.visible {
+    display: block;
+}
+
+/* 導覽列 */
+
+.toc-item {
+    cursor: pointer;
+    padding: 5px;
+    margin-bottom: 5px;
+    color: #888;
+}
+
+.toc-item.active {
+    color: #ff8c00;
+    font-weight: bold;
+}

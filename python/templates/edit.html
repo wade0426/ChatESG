@@ -21,6 +21,7 @@
     <!-- <link href="css/styles.css" rel="stylesheet" /> -->
     <!-- 修改CSS檔案的位置 -->
     <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/edit_css.css">
 </head>
 
 <body id="page-top">
@@ -42,6 +43,29 @@
         </div>
     </nav>
     <!-- Masthead-->
+
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <!-- ... 现有的导航栏代码 ... -->
+        <div id="chapter-nav" class="chapter-nav">
+            <div class="nav-header">
+                <h2>導覽列</h2>
+                <button id="close-nav" class="nav-toggle">×</button>
+            </div>
+            <div class="nav-content">
+                <!-- <h3>確認你的資訊</h3> -->
+                <ul id="toc-list">
+                    <!-- 使用js動態生成 -->
+                    <!-- <li><a href="#about" class="toc-item" data-section="about">您的資訊</a></li>
+                    <h3>章節大綱</h3>
+                    <li><a href="#name1" class="toc-item" data-section="name1">關於本報告書</a></li>
+                    <li><a href="#name2" class="toc-item" data-section="name2">長官的話</a></li>
+                    <li><a href="#name3" class="toc-item" data-section="name3">永續績效</a></li> -->
+                </ul>
+            </div>
+        </div>
+        <button id="open-nav" class="nav-toggle open-nav-btn">→</button>
+    </nav>
 
     <!-- About-->
     <section class="page-section" id="about" style="background-color: lightslategray; padding-top: 10%;">
@@ -210,16 +234,26 @@
     <script src="../static/edit_js/Chapter_Move.js"></script>
     <script src="../static/edit_js/edit_communication.js"></script>
     <script src="../static/edit_js/eventListeners.js"></script>
-
+    <!-- 導航列 -->
+    <script src="../static/edit_js/DynamicOutlineNavigator.js"></script>
     <!-- 用來關閉Modal -->
     <script>
         window.addEventListener('message', function (event) {
-            if (event.data.startsWith('closeModal')) {
+            if (typeof event.data === 'string' && event.data.startsWith('closeModal')) {
                 var modal = bootstrap.Modal.getInstance(document.getElementById('csvPieChartModal'));
                 if (modal) {
                     modal.hide();
                     console.log("關閉");
                     const imageData = event.data.split(',')[2];
+                    return_chartButtons.src = 'data:image/png;base64,' + imageData;
+                    autoSave();
+                }
+            } else if (event.data && typeof event.data === 'object' && event.data.action === 'closeModal') {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('csvPieChartModal'));
+                if (modal) {
+                    modal.hide();
+                    console.log("關閉");
+                    const imageData = event.data.imageData;
                     return_chartButtons.src = 'data:image/png;base64,' + imageData;
                     autoSave();
                 }
