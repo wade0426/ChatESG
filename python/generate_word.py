@@ -14,16 +14,24 @@ import datetime
 def generate_word_document(data):
     document = Document()
     
-    for group_key, group_data in data.items():
+    for index, (group_key, group_data) in enumerate(data.items()):
+
         # 添加標題
-        title = document.add_paragraph(group_data['title'])
-        title.style = 'Heading 1'
+        title = document.add_paragraph()
+        # 設定標題對齊方式為居中
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        # 創建run並設置格式
+        run = title.add_run(group_data['title'])
+        run.bold = True
+        # 設置字體大小應該在run上，而不是paragraph上
+        run.font.size = Pt(22)
         
         # 添加內文
-        # 將 <br> 轉換成換行符
-        content = document.add_paragraph(group_data['generatedResult'].replace('<br>', '\n'))
-        content.style = 'Heading 2'
+        # 先創建空段落 用於 run 設定格式
+        content = document.add_paragraph() 
+        # 添加格式化的文本
+        run = content.add_run(group_data['generatedResult'].replace('<br>', '\n'))
+        run.font.size = Pt(16)
         
         # 添加圖片
         for chart in group_data['charts']:
@@ -60,8 +68,10 @@ def generate_word_document(data):
                 else:
                     print(f"警告: 圖片文件 {image_path} 不存在")
         
-        # 在每個組（章節）結束後加換頁符
-        document.add_page_break()
+        # 檢查是否為最後一個元素
+        if index < len(data) - 1:
+            # 如果不是最後一個元素，才添加換頁符
+            document.add_page_break()
     
     # 指定一個新的目錄來保存文件
     save_dir = os.path.join(f"{os.getcwd()}", 'generated_reports')
